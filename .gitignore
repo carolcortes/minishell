@@ -1,0 +1,5 @@
+.build
+libft.a
+*.out
+.vscode
+minishell
