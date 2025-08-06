@@ -6,7 +6,7 @@
 #    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/23 10:20:02 by cade-oli          #+#    #+#              #
-#    Updated: 2025/08/04 22:34:35 by cade-oli         ###   ########.fr        #
+#    Updated: 2025/08/06 21:58:37 by cade-oli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,9 @@ NAME = libft.a
 #                                NAMES & PATHS                                 #
 #==============================================================================#
 
-BUILD_PATH		= .build
 
+BUILD_PATH		= .build
 LIBFT_PATH		= ./libft
-PRINTF_PATH		= ./ft_printf
 GNL_PATH 		= ./get_next_line
 
 FILES			= ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
@@ -39,10 +38,7 @@ BONUS_OBJ		= $(addprefix $(BUILD_PATH)/, $(notdir $(BONUS_FILES:.c=.o)))
 
 H_FILE			= libft.h
 
-PRINTF_FILES	= $(addprefix $(PRINTF_PATH)/, ft_printf.c print_hex.c print_utils.c)
-PRINTF_OBJS		= $(addprefix $(BUILD_PATH)/, $(notdir $(PRINTF_FILES:.c=.o)))
-
-GNL_FILES		= $(addprefix $(PRINTF_PATH)/, get_next_line.c get_next_line_utils.c)
+GNL_FILES		= $(addprefix $(GNL_PATH)/, get_next_line.c get_next_line_utils.c)
 GNL_OBJS		= $(addprefix $(BUILD_PATH)/, $(notdir $(GNL_FILES:.c=.o)))
 
 #==============================================================================#
@@ -74,9 +70,6 @@ $(BUILD_PATH):
 $(BUILD_PATH)/%.o: $(LIBFT_PATH)/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-$(BUILD_PATH)/%.o: $(PRINTF_PATH)/%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
 $(BUILD_PATH)/%.o: $(GNL_PATH)/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
@@ -88,13 +81,13 @@ bonus: $(BUILD_PATH) $(OBJ_FILES) $(BONUS_OBJ) ## Compile libft with bonus
 	$(AR) $(NAME) $(OBJ_FILES) $(BONUS_OBJ)
 	@echo "$(GREEN)✔ Bonus functions added to $(NAME)$(RESET)"
 
-extra: $(BUILD_PATH) $(OBJ_FILES) $(BONUS_OBJ) $(GNL_OBJS) $(PRINTF_OBJS) ## Compile libft with extra
+extra: $(BUILD_PATH) $(OBJ_FILES) $(BONUS_OBJ) $(GNL_OBJS) ## Compile libft with extra
 	@echo "* $(BLUE)Archiving $(NAME) w/ extras$(RESET)"
-	$(AR) $(NAME) $(OBJ_FILES) $(BONUS_OBJS) $(GNL_OBJS) $(PRINTF_OBJS)
+	$(AR) $(NAME) $(OBJ_FILES) $(BONUS_OBJS) $(GNL_OBJS)
 	@echo "* $(NAME) archived w/ extras $(CYAN)🖔$(RESET)"
 
 clean: ## Clean libft binaries
-	$(RM) $(OBJ_FILES) $(BONUS_OBJ) $(GNL_OBJS) $(PRINTF_OBJS)
+	$(RM) $(OBJ_FILES) $(BONUS_OBJ) $(GNL_OBJS)
 	@echo "🧹$(MAGENTA) Object files cleaned.$(RESET)"
 
 fclean: clean ## Clean libft archive
