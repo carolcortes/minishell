@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/07 21:53:30 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/07 22:48:32 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ char	*cell_read_line(void)
 	{
 		buf = NULL;
 		if (feof(stdin))
+		{
 			printf(RED"[EOF]"RST);
+			printf("TESTE");
+		}
 		else
 			printf(RED"Getline failed"RST);
 	}
@@ -38,7 +41,7 @@ int	main(void)
 
 	line = NULL;
 	printbanner();
-	while ((line == cell_read_line()))
+	while ((line = cell_read_line()) != NULL)
 	{
 		printf("%s\n", line);
 	}
