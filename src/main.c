@@ -12,7 +12,14 @@
 
 #include "../inc/minishell.h"
 
-//#define SPACE	"\t\n\v\f\r "
+/*
+t_builtin	g_builtin[] = 
+{
+	{.builtin_name = "echo", .foo=cell_echo},   // Echo text to stdout
+	{.builtin_name = "env", .foo=cell_env},     // Print environment
+	{.builtin_name = "exit", .foo=shell_exit},  // Exit the shell
+	{.builtin_name = NULL},                    	// Sentinel
+};*/
 
 char	*shell_read_line(void)
 {
@@ -110,35 +117,3 @@ int	main(void)
 	}
 	return (EXIT_SUCCESS);
 }
-
-/*int	main(void)
-{
-	char	*line;
-	char	**args;
-	int		i;
-
-	i = 0;
-	line = NULL;
-	printbanner();
-	while ((line = shell_read_line()) != NULL)
-	{
-		args = shell_split_line(line);
-		//while (*args)
-		//{
-
-		//}
-		//printf("%s\n", line);
-	}
-	return (EXIT_SUCCESS);
-}*/
-
-/*int	main(int ac, char **av)
-{
-	int	status;
-
-	(void)ac;
-	if (fork() == 0)
-		execvp(av[1], av + 1);
-	wait(&status);
-	return (EXIT_SUCCESS);
-}*/

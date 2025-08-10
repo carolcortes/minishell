@@ -31,8 +31,17 @@
 
 # define SPACE "\t\n\v\f\r "
 
+typedef struct s_builtin
+{
+    const char *builtin_name;	// Nome do comando (ex: "echo")
+	int (*foo)(char **av);	// Ponteiro para função que implementa o comando
+} t_builtin;
+
 //# define p(...)	printf(__VA_ARGS__)
 void	ft_getcwd(char *buf, size_t size); // Get current directory
 void	printbanner(void); // Shell banner display
+
+/* built-in commands */
+int	shell_exit(char **args); /* Shell exit command */
 
 #endif
