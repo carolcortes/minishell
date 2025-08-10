@@ -13,10 +13,11 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/wait.h>
+# include <stdio.h>		// Input/output operations
+# include <stdlib.h>	// General utilities (malloc, free, exit)
+# include <unistd.h>	// POSIX operating system API (fork, exec, etc.)
+# include <sys/wait.h>	// Process control (wait, waitpid)
+# include <stdbool.h>
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
@@ -28,8 +29,10 @@
 # define RED	"\033[1;31m"	// Red
 # define RST 	"\033[0m"		// Reset to default color
 
+# define SPACE "\t\n\v\f\r "
+
 //# define p(...)	printf(__VA_ARGS__)
-void	ft_getcwd(char *buf, size_t size);
-void	printbanner(void);
+void	ft_getcwd(char *buf, size_t size); // Get current directory
+void	printbanner(void); // Shell banner display
 
 #endif

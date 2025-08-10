@@ -20,7 +20,7 @@ INC_PATH		= inc
 BUILD_PATH		= .build
 LIBFT_PATH		= libft
 
-FILES			= main.c utils.c
+FILES			= main.c utils.c builtin.c
 
 SRCS			= $(addprefix $(SRC_PATH)/, $(FILES))
 OBJS			= $(SRCS:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
