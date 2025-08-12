@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
+#    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/08/04 23:18:43 by cade-oli         ###   ########.fr        #
+#    Updated: 2025/08/07 21:51:53 by cgross-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ INC_PATH		= inc
 BUILD_PATH		= .build
 LIBFT_PATH		= libft
 
-FILES			= main.c
+FILES			= main.c utils.c builtin.c
 
 SRCS			= $(addprefix $(SRC_PATH)/, $(FILES))
 OBJS			= $(SRCS:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
