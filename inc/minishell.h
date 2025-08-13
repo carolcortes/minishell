@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/13 22:01:22 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/08/13 23:03:44 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sysexits.h>
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
