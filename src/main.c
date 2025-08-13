@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/08 19:32:15 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/13 23:12:25 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*
-t_builtin	g_builtin[] = 
+t_builtin	g_builtin[] =
 {
-	{.builtin_name = "echo", .foo=cell_echo},   // Echo text to stdout
-	{.builtin_name = "env", .foo=cell_env},     // Print environment
+	// {.builtin_name = "echo", .foo=cell_echo},   // Echo text to stdout
+	// {.builtin_name = "env", .foo=cell_env},     // Print environment
 	{.builtin_name = "exit", .foo=shell_exit},  // Exit the shell
 	{.builtin_name = NULL},                    	// Sentinel
-};*/
+};
 
 char	*shell_read_line(void)
 {
@@ -49,9 +48,9 @@ static bool	is_delim(char c)
 	int	i;
 
 	i = 0;
-	while (SPACE[i])
+	while (DELIMITER[i])
 	{
-		if (c == SPACE[i])
+		if (c == DELIMITER[i])
 			return (true);
 		i++;
 	}
@@ -94,6 +93,7 @@ int	main(void)
 
 	line = NULL;
 	printbanner();
+	setup_signals();
 	while ((line = shell_read_line()) != NULL)
 	{
 		args = shell_split_line(line);
@@ -102,6 +102,10 @@ int	main(void)
 
 		// Percorre e imprime cada argumento
 		i = 0;
+
+		if (args[0] && strcmp(args[0], "exit") == 0)
+			shell_exit(args);
+
 		while (args[i])
 		{
 			printf("arg[%d]: %s\n", i, args[i]);

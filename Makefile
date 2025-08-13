@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
+#    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/08/07 21:51:53 by cgross-s         ###   ########.fr        #
+#    Updated: 2025/08/13 21:57:33 by cade-oli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ INC_PATH		= inc
 BUILD_PATH		= .build
 LIBFT_PATH		= libft
 
-FILES			= main.c utils.c builtin.c
+FILES			= main.c utils.c builtin.c signals.c
 
 SRCS			= $(addprefix $(SRC_PATH)/, $(FILES))
 OBJS			= $(SRCS:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
@@ -50,7 +50,7 @@ all: $(NAME)		## Compile All
 $(NAME): $(BUILD_PATH) $(OBJS) $(LIBFT_PATH)/libft.a
 	$(CC) $(CFLAGS) $(OBJS) \
 	$(LIBFT_PATH)/libft.a -I$(LIBFT_PATH) \
-	-o $(NAME)
+	-lreadline -o $(NAME)
 
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
 	@echo -n "$(MAG)█$(D)"
