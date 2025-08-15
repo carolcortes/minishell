@@ -30,6 +30,7 @@
 # define RST 	"\033[0m"		// Reset to default color
 
 # define SPACE "\t\n\v\f\r "
+# define DELIMITER "\"\'"
 
 typedef struct s_builtin
 {
