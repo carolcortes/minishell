@@ -6,11 +6,14 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/17 17:28:41 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:42:02 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../inc/minishell.h"
+#include <readline/readline.h> // readline, rl_on_new_line, rl_replace_line, rl_display_prompt
+#include <readline/history.h> // add_history, clear_history, history_expand
 // #include <ctype.h>
 
 /*
@@ -88,7 +91,22 @@ char	*expand_variables(const char *str, int last_status)
 	return (result);
 }
 
-char	*shell_read_line(void)
+char *shell_read_line(void)
+{
+    char *line;
+
+    line = readline("🏴‍☠️ minishell 🏴‍☠️ $> "); // É preciso dar um free
+    if (!line) // ctrl-D → retorna NULL
+    {
+        printf("exit\n");
+        return (NULL);
+    }
+    if (*line) // adiciona ao histórico se não for vazio
+        add_history(line);
+    return line; // precisa ser liberado com free()
+}
+
+/*char	*shell_read_line(void)
 {
 	char	*buf;
 	size_t	bufsize;
@@ -109,16 +127,16 @@ char	*shell_read_line(void)
 			printf(RED"Getline failed"RST);
 	}
 	return (buf);
-}
+}*/
 
 static bool	is_spaces(char c)
 {
 	int	i;
 
 	i = 0;
-	while (SPACE[i])
+	while (WHITESPACES[i])
 	{
-		if (c == SPACE[i])
+		if (c == WHITESPACES[i])
 			return (true);
 		i++;
 	}
@@ -239,7 +257,11 @@ int	main(void)
 		//shell_find_delim(line);
 		args = shell_split_line_quotes(line);
 		if (!args)
+		{
+			free(line); // modificado para liberar memória em caso de erro
 			continue;
+		}
+
 
 		// Expande variáveis antes de imprimir
 		expand_tokens(args, 0); // passar last_status real depois

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/06 23:25:52 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:42:08 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define RED	"\033[1;31m"	// Red
 # define RST 	"\033[0m"		// Reset to default color
 
-# define SPACE "\t\n\v\f\r "
+# define WHITESPACES "\t\n\v\f\r "
 # define DELIMITER "\"\'"
 
 typedef struct s_builtin

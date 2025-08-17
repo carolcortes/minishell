@@ -32,6 +32,8 @@ CC 		= cc
 CFLAGS	= -Wall -Wextra -Werror
 CFLAGS	+= -g
 CFLAGS	+= -I$(INC_PATH) -I$(LIBFT_PATH)
+LDFLAGS = -lreadline -lhistory -lncurses # readline e suas dependências
+# sudo apt-get install libreadline-dev
 
 #==============================================================================#
 #                                COMMANDS                                      #
@@ -50,7 +52,7 @@ all: $(NAME)		## Compile All
 $(NAME): $(BUILD_PATH) $(OBJS) $(LIBFT_PATH)/libft.a
 	$(CC) $(CFLAGS) $(OBJS) \
 	$(LIBFT_PATH)/libft.a -I$(LIBFT_PATH) \
-	-o $(NAME)
+	-o $(NAME) $(LDFLAGS)
 
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
 	@echo -n "$(MAG)█$(D)"
