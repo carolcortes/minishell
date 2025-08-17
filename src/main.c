@@ -6,12 +6,12 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/08 19:32:15 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/17 17:28:41 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include <ctype.h>
+// #include <ctype.h>
 
 /*
 t_builtin	g_builtin[] = 
@@ -60,10 +60,10 @@ char	*expand_variables(const char *str, int last_status)
 				i += 2;
 			}
 			// 2. Trata variáveis normais $VAR
-			else if (isalpha(str[i + 1]) || str[i + 1] == '_')
+			else if (ft_isalpha(str[i + 1]) || str[i + 1] == '_')
 			{
 				int start = ++i; // pula o $
-				while (isalnum(str[i]) || str[i] == '_')
+				while (ft_isalnum(str[i]) || str[i] == '_')
 					i++;
 				char *var_name = ft_substr(str, start, i - start);
 				char *var_value = getenv(var_name);
@@ -87,23 +87,6 @@ char	*expand_variables(const char *str, int last_status)
 	}
 	return (result);
 }
-
-/*static char	*extract_quoted(const char *line, int *i)
-{
-	char	quote;
-	int		start;
-	char	*result;
-
-	quote = line[*i];
-	(*i)++; // pula a aspa inicial
-	start = *i;
-	while (line[*i] && line[*i] != quote)
-		(*i)++;
-	result = ft_substr(line, start, *i - start); // conteúdo sem as aspas
-	if (line[*i] == quote)
-		(*i)++; // pula a aspa final
-	return (result);
-}*/
 
 char	*shell_read_line(void)
 {
@@ -141,104 +124,6 @@ static bool	is_spaces(char c)
 	}
 	return (false);
 }
-
-static bool is_delim(char c)
-{
-	int i;
-
-	i = 0;
-	while (DELIMITER[i])
-	{
-		if (c == DELIMITER[i])
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-/*char	**shell_split_line(char *line)
-{
-	int		i;
-	//int		start;
-	char	**tokens;
-	int		capacity;
-	int		count;
-	char	*token;
-	char	*part;
-
-	capacity = 8;
-	count = 0;
-	tokens = malloc(sizeof(char *) * capacity);
-	if (!tokens)
-		return (NULL);
-	i = 0;
-	while (line[i])
-	{
-		// pular espaços
-		while (line[i] && is_spaces(line[i]))
-			i++;
-		if (!line[i])
-			break;
-
-		token = ft_strdup("");
-		//start = i;
-		while (line[i] && !is_spaces(line[i]))
-		{
-			if (line[i] == '\'' || line[i] == '"')
-			{
-				part = extract_quoted(line, &i);
-				token = ft_strjoin_free(token, part, 3); // junta token + part e libera ambos
-			}
-			else
-			{
-				part = ft_substr(line, i, 1);
-				token = ft_strjoin_free(token, part, 3);
-				i++;
-			}
-		}
-
-		// aumenta capacidade se necessário
-		if (count >= capacity - 1)
-		{
-			capacity *= 2;
-			tokens = realloc(tokens, sizeof(char *) * capacity);
-		}
-		tokens[count++] = token;
-	}
-	tokens[count] = NULL;
-	return (tokens);
-}*/
-
-
-void	shell_find_delim(char *line)
-{
-	int		i;
-	//char	*copy;
-	//char	**tokens;
-
-	// Criar cópia editável da string
-	//copy = ft_strdup(line);
-	//if (!copy)
-	//	return (NULL);
-
-	// Substituir todos delimitadores por espaço
-	i = 0;
-	while (line[i])
-	{
-		//if (is_spaces(copy[i]))
-		//	copy[i] = ' ';
-		if (is_delim(line[i]))
-			printf(RED"DLMTR %d\t"RST,i);
-		i++;
-	}
-
-	// Agora podemos usar ft_split da libft
-	//tokens = ft_split(copy, ' ');
-
-	//free(copy);
-	//return (tokens);
-}
-
 
 typedef struct s_token
 {
@@ -324,12 +209,6 @@ t_token *shell_split_line_quotes(char *line)
     return tokens;
 }
 
-/*char *expand_variables(char *str)
-{
-    // implementar substituição de $VAR usando getenv()
-    // e de $? usando uma variável global de status
-}*/
-
 void expand_tokens(t_token *tokens, int last_status)
 {
 	(void)last_status; // evita warning
@@ -337,7 +216,6 @@ void expand_tokens(t_token *tokens, int last_status)
     {
         if (tokens[i].allow_expand)
         {
-//            char *expanded = expand_variables(tokens[i].value);
             char *expanded = expand_variables(tokens[i].value, last_status);
 
             free(tokens[i].value);
@@ -350,7 +228,6 @@ void expand_tokens(t_token *tokens, int last_status)
 int	main(void)
 {
 	char	*line;
-	//char	**args;
 	t_token *args;
 	int		i;
 
@@ -359,8 +236,7 @@ int	main(void)
 	while ((line = shell_read_line()) != NULL)
 	{
 
-		shell_find_delim(line);
-		//args = shell_split_line(line);
+		//shell_find_delim(line);
 		args = shell_split_line_quotes(line);
 		if (!args)
 			continue;
@@ -370,19 +246,15 @@ int	main(void)
 
 		// Percorre e imprime cada argumento
 		i = 0;
-		//while (args[i])
 		while (args[i].value)
 		{
-			// printf("arg[%d]: %s\n", i, args[i]);
 			printf("arg[%d]: %s\n", i, args[i].value);
 			i++;
 		}
 
 		// Libera memória
 		i = 0;
-		// while (args[i])
 		while (args[i].value)
-			//free(args[i++]);
 			free(args[i++].value);
 		free(args);
 		free(line);
