@@ -6,15 +6,14 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/17 19:42:02 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/18 22:03:17 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../inc/minishell.h"
-#include <readline/readline.h> // readline, rl_on_new_line, rl_replace_line, rl_display_prompt
-#include <readline/history.h> // add_history, clear_history, history_expand
-// #include <ctype.h>
+//#include <readline/readline.h> // readline, rl_on_new_line, rl_replace_line, rl_display_prompt
+//#include <readline/history.h> // add_history, clear_history, history_expand
 
 /*
 t_builtin	g_builtin[] = 
@@ -105,29 +104,6 @@ char *shell_read_line(void)
         add_history(line);
     return line; // precisa ser liberado com free()
 }
-
-/*char	*shell_read_line(void)
-{
-	char	*buf;
-	size_t	bufsize;
-	char	cwd[BUFSIZ];
-
-	buf = NULL;
-	ft_getcwd(cwd, sizeof(cwd));
-	printf(C"🏴‍☠️:: %s 🐗"RST"$>", cwd);
-	if (getline(&buf, &bufsize, stdin) == -1)
-	{
-		buf = NULL;
-		if (feof(stdin))
-		{
-			printf(RED"[EOF]"RST);
-			printf("TESTE");
-		}
-		else
-			printf(RED"Getline failed"RST);
-	}
-	return (buf);
-}*/
 
 static bool	is_spaces(char c)
 {

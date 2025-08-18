@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/17 19:42:08 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/18 22:03:04 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <unistd.h>	// POSIX operating system API (fork, exec, etc.)
 # include <sys/wait.h>	// Process control (wait, waitpid)
 # include <stdbool.h>
+
+#include <readline/readline.h> // readline, rl_on_new_line, rl_replace_line, rl_display_prompt
+#include <readline/history.h> // add_history, clear_history, history_expand
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
