@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/06 23:25:52 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/13 23:03:44 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <unistd.h>	// POSIX operating system API (fork, exec, etc.)
 # include <sys/wait.h>	// Process control (wait, waitpid)
 # include <stdbool.h>
+# include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sysexits.h>
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
@@ -29,7 +33,7 @@
 # define RED	"\033[1;31m"	// Red
 # define RST 	"\033[0m"		// Reset to default color
 
-# define SPACE "\t\n\v\f\r "
+# define DELIMITER "\t\n\v\f\r "
 
 typedef struct s_builtin
 {
@@ -43,5 +47,8 @@ void	printbanner(void); // Shell banner display
 
 /* built-in commands */
 int	shell_exit(char **args); /* Shell exit command */
+
+/* sinals.c */
+void	setup_signals(void);
 
 #endif
