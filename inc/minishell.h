@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/13 23:03:44 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/08/19 21:45:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 # include <readline/history.h>
 # include <sysexits.h>
 
+#include <readline/readline.h> // readline, rl_on_new_line, rl_replace_line, rl_display_prompt
+#include <readline/history.h> // add_history, clear_history, history_expand
+
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
 
@@ -33,7 +36,8 @@
 # define RED	"\033[1;31m"	// Red
 # define RST 	"\033[0m"		// Reset to default color
 
-# define DELIMITER "\t\n\v\f\r "
+# define WHITESPACES "\t\n\v\f\r "
+# define DELIMITER "\"\'"
 
 typedef struct s_builtin
 {
