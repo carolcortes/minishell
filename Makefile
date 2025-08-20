@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
+#    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/08/13 21:57:33 by cade-oli         ###   ########.fr        #
+#    Updated: 2025/08/19 21:51:06 by cgross-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,8 @@ CC 		= cc
 CFLAGS	= -Wall -Wextra -Werror
 CFLAGS	+= -g
 CFLAGS	+= -I$(INC_PATH) -I$(LIBFT_PATH)
+LDFLAGS = -lreadline -lhistory -lncurses # readline e suas dependências
+# sudo apt-get install libreadline-dev
 
 #==============================================================================#
 #                                COMMANDS                                      #
@@ -50,7 +52,7 @@ all: $(NAME)		## Compile All
 $(NAME): $(BUILD_PATH) $(OBJS) $(LIBFT_PATH)/libft.a
 	$(CC) $(CFLAGS) $(OBJS) \
 	$(LIBFT_PATH)/libft.a -I$(LIBFT_PATH) \
-	-lreadline -o $(NAME)
+	-o $(NAME) $(LDFLAGS)
 
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
 	@echo -n "$(MAG)█$(D)"
