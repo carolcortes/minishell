@@ -6,53 +6,70 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/19 21:45:54 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/21 22:34:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>		// Input/output operations
-# include <stdlib.h>	// General utilities (malloc, free, exit)
-# include <unistd.h>	// POSIX operating system API (fork, exec, etc.)
-# include <sys/wait.h>	// Process control (wait, waitpid)
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/wait.h>
 # include <stdbool.h>
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sysexits.h>
 
-#include <readline/readline.h> // readline, rl_on_new_line, rl_replace_line, rl_display_prompt
-#include <readline/history.h> // add_history, clear_history, history_expand
-
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
 
-// ANSI Color codes for terminal output formatting:
-# define Y		"\033[1;33m"	// Yellow
-# define G		"\033[1;32m"	// Green
-# define C 		"\033[1;36m"	// Cyan
-# define RED	"\033[1;31m"	// Red
-# define RST 	"\033[0m"		// Reset to default color
+// ANSI Color codes
+# define Y		"\033[1;33m"
+# define G		"\033[1;32m"
+# define C 		"\033[1;36m"
+# define RED	"\033[1;31m"
+# define RST 	"\033[0m"
 
 # define WHITESPACES "\t\n\v\f\r "
-# define DELIMITER "\"\'"
+
+// Struct para tokens
+typedef struct s_token
+{
+    char    *value;
+    bool    allow_expand;
+}   t_token;
 
 typedef struct s_builtin
 {
-    const char *builtin_name;	// Nome do comando (ex: "echo")
-	int (*foo)(char **av);	// Ponteiro para função que implementa o comando
-} t_builtin;
+    const char  *builtin_name;
+    int         (*foo)(char **av);
+}   t_builtin;
 
-//# define p(...)	printf(__VA_ARGS__)
-void	ft_getcwd(char *buf, size_t size); // Get current directory
-void	printbanner(void); // Shell banner display
+// Protótipos das funções
+void    ft_getcwd(char *buf, size_t size);
+void    printbanner(void);
+int     shell_exit(char **args);
+void    setup_signals(void);
 
-/* built-in commands */
-int	shell_exit(char **args); /* Shell exit command */
+// Funções de parsing e tokens
+char    *ft_strjoin_free(char *s1, char *s2, int mode);
+char    *expand_variables(const char *str, int last_status);
+char    *shell_read_line(void);
+t_token *shell_split_line_quotes(char *line);
+void    expand_tokens(t_token *tokens, int last_status);
+void    free_tokens(t_token *tokens);
 
-/* sinals.c */
-void	setup_signals(void);
+// Funções auxiliares
+char    *handle_env_var(const char *str, int *i, char *result);
+char    *handle_literal_char(const char *str, int *i, char *result);
+bool    process_token(char *line, int *i, t_token **tokens, int *count, int *capacity);
+bool    process_quoted_part(char *line, int *i, char **token, bool *allow_expand);
+bool    process_regular_char(char *line, int *i, char **token);
+char    *extract_quoted(const char *line, int *i, bool *allow_expand);
+bool    is_spaces(char c);
+char	*ft_strjoin_free(char *s1, char *s2, int mode);
 
 #endif
