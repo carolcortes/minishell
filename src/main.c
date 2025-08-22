@@ -6,11 +6,13 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/21 22:29:29 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/22 19:03:10 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+/*3 functions*/
 
 t_builtin	g_builtin[] =
 {

@@ -6,11 +6,13 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/08/21 22:28:07 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/22 19:01:50 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+/*7 functions*/
 
 bool	is_spaces(char c)
 {
