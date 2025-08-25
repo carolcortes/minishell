@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 23:22:35 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/08/13 22:01:04 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/08/22 19:00:01 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+/*3 functions*/
 
 void	ft_getcwd(char *buf, size_t size)
 {
@@ -26,4 +28,18 @@ void	printbanner(void)
 	printf(Y "Welcome to Minishell!\n" RST);
 	printf(G "This is a simple shell implementation.\n" RST);
 	printf(C "Type your commands below:\n" RST);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2, int mode)
+{
+	char	*result;
+
+	result = ft_strjoin(s1, s2);
+	if (!result)
+		return (NULL);
+	if (mode == 1 || mode == 3)
+		free(s1);
+	if (mode == 2 || mode == 3)
+		free(s2);
+	return (result);
 }

@@ -6,7 +6,7 @@
 #    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/08/19 21:51:06 by cgross-s         ###   ########.fr        #
+#    Updated: 2025/08/21 22:30:17 by cgross-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ INC_PATH		= inc
 BUILD_PATH		= .build
 LIBFT_PATH		= libft
 
-FILES			= main.c utils.c builtin.c signals.c
+FILES			= main.c builtin.c signals.c utils.c tokens.c expand.c
 
 SRCS			= $(addprefix $(SRC_PATH)/, $(FILES))
 OBJS			= $(SRCS:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
