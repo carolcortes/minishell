@@ -6,13 +6,40 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 23:22:35 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/08/22 19:00:01 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/26 18:40:07 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*3 functions*/
+bool	is_spaces(char c)
+{
+	int	i;
+
+	i = 0;
+	while (WHITESPACES[i])
+	{
+		if (c == WHITESPACES[i])
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+void	free_tokens(t_token *tokens)
+{
+	int	i;
+
+	if (!tokens)
+		return ;
+	i = 0;
+	while (tokens[i].value)
+	{
+		free(tokens[i].value);
+		i++;
+	}
+	free(tokens);
+}
 
 void	ft_getcwd(char *buf, size_t size)
 {

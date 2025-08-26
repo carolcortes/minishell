@@ -6,27 +6,12 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/08/22 19:01:50 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/26 19:14:14 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*7 functions*/
-
-bool	is_spaces(char c)
-{
-	int	i;
-
-	i = 0;
-	while (WHITESPACES[i])
-	{
-		if (c == WHITESPACES[i])
-			return (true);
-		i++;
-	}
-	return (false);
-}
 
 char	*extract_quoted(const char *line, int *i, bool *allow_expand)
 {
@@ -48,21 +33,6 @@ char	*extract_quoted(const char *line, int *i, bool *allow_expand)
 	result = ft_substr(line, start, *i - start);
 	(*i)++;
 	return (result);
-}
-
-void	free_tokens(t_token *tokens)
-{
-	int	i;
-
-	if (!tokens)
-		return ;
-	i = 0;
-	while (tokens[i].value)
-	{
-		free(tokens[i].value);
-		i++;
-	}
-	free(tokens);
 }
 
 bool	process_quoted_part(char *line, int *i, char **token, bool *allow_expand)
@@ -120,7 +90,7 @@ bool	process_token(char *line, int *i, t_token **tokens, int *count, int *capaci
 	if (*count >= *capacity - 1)
 	{
 		*capacity *= 2;
-		new_tokens = realloc(*tokens, sizeof(t_token) * (*capacity));
+		new_tokens = ft_realloc(*tokens, sizeof(t_token) * (*capacity));
 		if (!new_tokens)
 			return (free(token), false);
 		*tokens = new_tokens;
