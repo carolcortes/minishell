@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 23:22:35 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/08/22 19:00:01 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:50:55 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,16 @@ void	printbanner(void)
 	printf(C "Type your commands below:\n" RST);
 }
 
-char	*ft_strjoin_free(char *s1, char *s2, int mode)
+bool	is_spaces(char c)
 {
-	char	*result;
+	int	i;
 
-	result = ft_strjoin(s1, s2);
-	if (!result)
-		return (NULL);
-	if (mode == 1 || mode == 3)
-		free(s1);
-	if (mode == 2 || mode == 3)
-		free(s2);
-	return (result);
+	i = 0;
+	while (WHITESPACES[i])
+	{
+		if (c == WHITESPACES[i])
+			return (true);
+		i++;
+	}
+	return (false);
 }
