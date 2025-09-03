@@ -6,7 +6,7 @@
 #    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/08/28 22:39:23 by cade-oli         ###   ########.fr        #
+#    Updated: 2025/09/02 22:52:07 by cade-oli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIBFT_PATH		= libft
 
 FILES			= main.c signals.c utils.c tokens.c expand.c free.c
 
-BUILTINS		= exec_builtin.c ft_exit.c
+BUILTINS		= exec_builtin.c ft_exit.c ft_echo.c ft_cd.c ft_pwd.c ft_env.c ft_export.c ft_unset.c
 
 SRCS			= $(addprefix $(SRC_PATH)/, $(FILES)) \
 				$(addprefix $(SRC_PATH)/builtins/, $(BUILTINS))

@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/28 22:55:32 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/03 22:09:57 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,17 @@ void	expand_tokens(t_token *tokens, int last_status);
 void	setup_signals(void);
 
 // builtins
-int		exec_builtin(t_token **args);
+int		exec_builtin(t_token **args, char **envp);
 int		ft_exit(t_token **args);
+int		ft_echo(t_token **args);
+int		ft_cd(t_token **args);
+int		ft_pwd(t_token **args);
+int		ft_env(t_token **args, char **envp);
+int		ft_export(t_token **args);
+int		ft_unset(t_token **args);
+
+char	**dup_env(char **envp);
+void	free_env(char **env);
 
 // utils.c
 void	ft_getcwd(char *buf, size_t size);

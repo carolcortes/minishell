@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/28 22:10:30 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:59:13 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@ char	*shell_read_line(void)
 	return (line);
 }
 
-int	main(void)
+int main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	t_token	*args;
+	char	**env;
 
+	(void)argc;
+	(void)argv;
+	env = dup_env(envp);
 	line = NULL;
 	printbanner();
 	setup_signals();
@@ -49,7 +53,7 @@ int	main(void)
 		expand_tokens(args, 0);
 		if (args[0].value)
 		{
-			if (!exec_builtin(&args))
+			if (!exec_builtin(&args, env))
 				printf("comando externo: %s\n", args[0].value);
 			// não é builtin → TO DO: executar comando externo
 		}
