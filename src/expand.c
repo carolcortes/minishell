@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/08/22 19:00:45 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:51:30 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*4 functions*/
 
-char	*handle_env_var(const char *str, int *i, char *result)
+static char	*handle_env_var(const char *str, int *i, char *result)
 {
 	int		start;
 	char	*var_name;
@@ -40,7 +40,7 @@ char	*handle_env_var(const char *str, int *i, char *result)
 	return (result);
 }
 
-char	*handle_literal_char(const char *str, int *i, char *result)
+static char	*handle_literal_char(const char *str, int *i, char *result)
 {
 	char	*char_str;
 
@@ -52,7 +52,7 @@ char	*handle_literal_char(const char *str, int *i, char *result)
 	return (result);
 }
 
-char	*expand_variables(const char *str, int last_status)
+static char	*expand_variables(const char *str, int last_status)
 {
 	int		i;
 	char	*result;
