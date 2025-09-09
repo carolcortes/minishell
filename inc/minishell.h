@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/21 22:34:54 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/03 22:09:57 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,38 +38,50 @@
 // Struct para tokens
 typedef struct s_token
 {
-    char    *value;
-    bool    allow_expand;
-}   t_token;
+	char	*value;
+	bool	allow_expand;
+}	t_token;
 
 typedef struct s_builtin
 {
-    const char  *builtin_name;
-    int         (*foo)(char **av);
-}   t_builtin;
-
-// Protótipos das funções
-void    ft_getcwd(char *buf, size_t size);
-void    printbanner(void);
-int     shell_exit(char **args);
-void    setup_signals(void);
+	const char	*builtin_name;
+	int			(*builtin)(t_token **av);
+}	t_builtin;
 
 // Funções de parsing e tokens
-char    *ft_strjoin_free(char *s1, char *s2, int mode);
-char    *expand_variables(const char *str, int last_status);
-char    *shell_read_line(void);
-t_token *shell_split_line_quotes(char *line);
-void    expand_tokens(t_token *tokens, int last_status);
-void    free_tokens(t_token *tokens);
+// main.c
+char	*shell_read_line(void);
 
-// Funções auxiliares
-char    *handle_env_var(const char *str, int *i, char *result);
-char    *handle_literal_char(const char *str, int *i, char *result);
-bool    process_token(char *line, int *i, t_token **tokens, int *count, int *capacity);
-bool    process_quoted_part(char *line, int *i, char **token, bool *allow_expand);
-bool    process_regular_char(char *line, int *i, char **token);
-char    *extract_quoted(const char *line, int *i, bool *allow_expand);
-bool    is_spaces(char c);
+// tokens.c
+t_token	*shell_split_line_quotes(char *line);
+
+// expand.c
+void	expand_tokens(t_token *tokens, int last_status);
+
+// signals
+void	setup_signals(void);
+
+// builtins
+int		exec_builtin(t_token **args, char **envp);
+int		ft_exit(t_token **args);
+int		ft_echo(t_token **args);
+int		ft_cd(t_token **args);
+int		ft_pwd(t_token **args);
+int		ft_env(t_token **args, char **envp);
+int		ft_export(t_token **args);
+int		ft_unset(t_token **args);
+
+char	**dup_env(char **envp);
+void	free_env(char **env);
+
+// utils.c
+void	ft_getcwd(char *buf, size_t size);
+void	printbanner(void);
+bool	is_spaces(char c);
+
+// free.c
+void	free_array(char **arr);
+void	free_tokens(t_token *tokens);
 char	*ft_strjoin_free(char *s1, char *s2, int mode);
 
 #endif

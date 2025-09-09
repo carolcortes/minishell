@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/08/22 19:01:50 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:54:16 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,7 @@
 
 /*7 functions*/
 
-bool	is_spaces(char c)
-{
-	int	i;
-
-	i = 0;
-	while (WHITESPACES[i])
-	{
-		if (c == WHITESPACES[i])
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-char	*extract_quoted(const char *line, int *i, bool *allow_expand)
+static char	*extract_quoted(const char *line, int *i, bool *allow_expand)
 {
 	char	quote;
 	int		start;
@@ -50,22 +36,7 @@ char	*extract_quoted(const char *line, int *i, bool *allow_expand)
 	return (result);
 }
 
-void	free_tokens(t_token *tokens)
-{
-	int	i;
-
-	if (!tokens)
-		return ;
-	i = 0;
-	while (tokens[i].value)
-	{
-		free(tokens[i].value);
-		i++;
-	}
-	free(tokens);
-}
-
-bool	process_quoted_part(char *line, int *i, char **token, bool *allow_expand)
+static bool	process_quoted_part(char *line, int *i, char **token, bool *allow_expand)
 {
 	bool	local_expand;
 	char	*part;
@@ -82,7 +53,7 @@ bool	process_quoted_part(char *line, int *i, char **token, bool *allow_expand)
 	return (true);
 }
 
-bool	process_regular_char(char *line, int *i, char **token)
+static bool	process_regular_char(char *line, int *i, char **token)
 {
 	char	*part;
 
@@ -94,7 +65,7 @@ bool	process_regular_char(char *line, int *i, char **token)
 	return (true);
 }
 
-bool	process_token(char *line, int *i, t_token **tokens, int *count, int *capacity)
+static bool	process_token(char *line, int *i, t_token **tokens, int *count, int *capacity)
 {
 	char	*token;
 	bool	allow_expand;
@@ -151,10 +122,7 @@ t_token	*shell_split_line_quotes(char *line)
 		if (!line[i])
 			break ;
 		if (!process_token(line, &i, &tokens, &count, &capacity))
-		{
-			free_tokens(tokens);
-			return (NULL);
-		}
+			return (free_tokens(tokens), NULL);
 	}
 	tokens[count].value = NULL;
 	tokens[count].allow_expand = false;

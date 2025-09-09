@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/22 19:03:10 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:59:13 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /*3 functions*/
-
-t_builtin	g_builtin[] =
-{
-	{.builtin_name = "exit", .foo = shell_exit},
-	{.builtin_name = NULL},
-};
 
 char	*shell_read_line(void)
 {
@@ -35,16 +29,19 @@ char	*shell_read_line(void)
 	return (line);
 }
 
-int	main(void)
+int main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	t_token	*args;
-	int		i;
+	char	**env;
 
+	(void)argc;
+	(void)argv;
+	env = dup_env(envp);
 	line = NULL;
 	printbanner();
 	setup_signals();
-	while (1)
+	while (42)
 	{
 		line = shell_read_line();
 		if (!line)
@@ -54,11 +51,11 @@ int	main(void)
 		if (!args)
 			continue ;
 		expand_tokens(args, 0);
-		i = 0;
-		while (args[i].value)
+		if (args[0].value)
 		{
-			printf("arg[%d]: %s\n", i, args[i].value);
-			i++;
+			if (!exec_builtin(&args, env))
+				printf("comando externo: %s\n", args[0].value);
+			// não é builtin → TO DO: executar comando externo
 		}
 		free_tokens(args);
 	}
