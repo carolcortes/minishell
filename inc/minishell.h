@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/03 22:09:57 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:40:59 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,19 @@
 # define G		"\033[1;32m"
 # define C 		"\033[1;36m"
 # define RED	"\033[1;31m"
+# define MAG	"\033[1;95m"
 # define RST 	"\033[0m"
 
 # define WHITESPACES "\t\n\v\f\r "
 
 // Struct para tokens
+// Na struct s_token, adicione:
 typedef struct s_token
 {
-	char	*value;
-	bool	allow_expand;
+    char	*value;
+    bool	allow_expand;
+    bool	is_pipe;        // NOVO
+    bool	is_redirection; // NOVO (para futuro)
 }	t_token;
 
 typedef struct s_builtin
@@ -47,6 +51,19 @@ typedef struct s_builtin
 	const char	*builtin_name;
 	int			(*builtin)(t_token **av);
 }	t_builtin;
+
+
+// Adicione estas estruturas no minishell.h
+typedef struct s_command {
+    t_token      **args;     // Array de tokens deste comando
+    int          argc;       // Número de argumentos
+    struct s_command *next;  // Próximo comando na pipeline
+    struct s_command *prev;  // Comando anterior (opcional)
+} t_command;
+
+// Protótipo da nova função
+t_command *parse_pipeline(t_token *tokens);
+void       free_pipeline(t_command *pipeline);
 
 // Funções de parsing e tokens
 // main.c
@@ -83,5 +100,15 @@ bool	is_spaces(char c);
 void	free_array(char **arr);
 void	free_tokens(t_token *tokens);
 char	*ft_strjoin_free(char *s1, char *s2, int mode);
+
+// execution functions
+void    execute_pipeline(t_command *pipeline, char **envp);
+void    execute_external(t_token **args, char **envp);
+bool    is_builtin(t_token **args);
+char    **tokens_to_argv(t_token **tokens);
+void    free_argv(char **argv);
+
+// path finding (necessária para execute_external)
+char    *find_command_path(char *command, char **envp);
 
 #endif

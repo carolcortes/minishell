@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 22:35:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/28 22:51:00 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/10 20:52:36 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_array(char **arr)
 	free(arr);
 }
 
-void	free_tokens(t_token *tokens)
+/*void	free_tokens(t_token *tokens)
 {
 	int	i;
 
@@ -33,6 +33,22 @@ void	free_tokens(t_token *tokens)
 	i = 0;
 	while (tokens[i].value)
 		free(tokens[i++].value);
+	free(tokens);
+}*/
+
+// No free.c, atualize free_tokens:
+void	free_tokens(t_token *tokens)
+{
+	int	i;
+
+	if (!tokens)
+		return ;
+	i = 0;
+	while (tokens[i].value)
+	{
+		free(tokens[i].value);
+		i++;
+	}
 	free(tokens);
 }
 
@@ -48,4 +64,20 @@ char	*ft_strjoin_free(char *s1, char *s2, int mode)
 	if (mode == 2 || mode == 3)
 		free(s2);
 	return (result);
+}
+
+void free_pipeline(t_command *pipeline)
+{
+    t_command *current;
+    t_command *next;
+    
+    current = pipeline;
+    while (current)
+    {
+        next = current->next;
+        // Note: não free os tokens individuais, pois eles pertencem ao array original
+        free(current->args); // Apenas free o array de ponteiros
+        free(current);
+        current = next;
+    }
 }
