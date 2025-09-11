@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/11 17:40:59 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/11 21:32:25 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,16 @@ void	free_tokens(t_token *tokens);
 char	*ft_strjoin_free(char *s1, char *s2, int mode);
 
 // execution functions
-void    execute_pipeline(t_command *pipeline, char **envp);
-void    execute_external(t_token **args, char **envp);
-bool    is_builtin(t_token **args);
+//void    execute_pipeline(t_command *pipeline, char **envp);
+//void    execute_external(t_token **args, char **envp);
+//bool    is_builtin(t_token **args);
 char    **tokens_to_argv(t_token **tokens);
 void    free_argv(char **argv);
+
+// execution functions
+void    execute_pipeline(t_command *pipeline, char **envp);
+int     execute_external(t_token **args, char **envp); // ✅ Mude para int
+bool    is_builtin(t_token **args);
 
 // path finding (necessária para execute_external)
 char    *find_command_path(char *command, char **envp);

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/11 15:18:00 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/11 21:27:27 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int main(int argc, char **argv, char **envp)
         
         // NOVO: Parse da pipeline
         pipeline = parse_pipeline(tokens);
-        if (pipeline)
+        /* if (pipeline)
         {
             print_pipeline(pipeline); // Debug: mostra estrutura da pipeline
             
@@ -114,7 +114,34 @@ int main(int argc, char **argv, char **envp)
                 }
             }
             free_pipeline(pipeline);
-        }
+        }*/
+
+		// No main.c, modifique a parte da execução:
+		if (pipeline)
+		{
+			print_pipeline(pipeline); // Debug
+			
+			if (pipeline->next) // Tem pipes!
+			{
+				execute_pipeline(pipeline, env); // ✅ AGORA IMPLEMENTADO!
+			}
+			else // Comando único
+			{
+				if (pipeline->args[0]->value)
+				{
+					if (is_builtin(pipeline->args))
+					{
+						exec_builtin(pipeline->args, env);
+					}
+					else
+					{
+						execute_external(pipeline->args, env);
+					}
+				}
+			}
+			free_pipeline(pipeline);
+		}
+
         free_tokens(tokens);
     }
     free_env(env);
