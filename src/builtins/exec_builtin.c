@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 23:14:15 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/03 22:10:07 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/12 21:06:53 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ int	exec_builtin(t_token **args, char **envp)
 	while (g_builtin[i].builtin_name)
 	{
 		if (strcmp(args[0]->value, g_builtin[i].builtin_name) == 0)
-			return (g_builtin[i].builtin(args), 1);
+			return (g_builtin[i].builtin(args));
 		i++;
 	}
 	return (0);
 }
+

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/11 21:32:25 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/12 20:41:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
+
+//int g_last_status;
+// No minishell.h (após os includes)
+extern int g_last_status;  // ✅ EXTERN - apenas declaração
 
 // ANSI Color codes
 # define Y		"\033[1;33m"

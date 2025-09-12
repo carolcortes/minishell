@@ -6,13 +6,15 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/11 21:27:27 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/12 20:58:02 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*3 functions*/
+// Variável global para o último status (como permite o subject)
+//int g_last_status = 0;
+int g_last_status = 0;  // ✅ DEFINIÇÃO real da variável
 
 char	*shell_read_line(void)
 {
@@ -91,7 +93,8 @@ int main(int argc, char **argv, char **envp)
         if (!tokens)
             continue;
         
-        expand_tokens(tokens, 0);
+        //expand_tokens(tokens, 0);
+		expand_tokens(tokens, g_last_status); // ✅ Passa o último status
         print_tokens(tokens); // Debug: mostra tokens parseados
         
         // NOVO: Parse da pipeline
@@ -121,6 +124,8 @@ int main(int argc, char **argv, char **envp)
 		{
 			print_pipeline(pipeline); // Debug
 			
+/*
+
 			if (pipeline->next) // Tem pipes!
 			{
 				execute_pipeline(pipeline, env); // ✅ AGORA IMPLEMENTADO!
@@ -139,6 +144,27 @@ int main(int argc, char **argv, char **envp)
 					}
 				}
 			}
+
+*/
+			// No main.c, após executar qualquer comando:
+			if (pipeline->next) // Se for pipeline
+			{
+				execute_pipeline(pipeline, env);
+				// g_last_status será atualizado dentro de execute_pipeline
+			}
+			else // Comando único
+			{
+				if (is_builtin(pipeline->args))
+				{
+					g_last_status = exec_builtin(pipeline->args, env); // ✅ Deve retornar int
+					//g_last_status = exec_builtin(pipeline->args, env); // ✅ Builtins devem retornar int
+				}
+				else
+				{
+					g_last_status = execute_external(pipeline->args, env); // ✅ External retorna int
+				}
+			}
+
 			free_pipeline(pipeline);
 		}
 
