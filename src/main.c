@@ -6,14 +6,13 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/12 20:58:02 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/13 16:54:21 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 // Variável global para o último status (como permite o subject)
-//int g_last_status = 0;
 int g_last_status = 0;  // ✅ DEFINIÇÃO real da variável
 
 char	*shell_read_line(void)
@@ -47,7 +46,7 @@ void	print_tokens(t_token *tokens)
 	printf("=====================\n");
 }
 
-void print_pipeline(t_command *pipeline)
+void	print_pipeline(t_command *pipeline)
 {
     t_command *cmd = pipeline;
     int cmd_index = 0;
@@ -67,7 +66,7 @@ void print_pipeline(t_command *pipeline)
 }
 
 // No main.c, modifique o loop principal:
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
     char        *line;
     t_token     *tokens;
@@ -99,65 +98,22 @@ int main(int argc, char **argv, char **envp)
         
         // NOVO: Parse da pipeline
         pipeline = parse_pipeline(tokens);
-        /* if (pipeline)
-        {
-            print_pipeline(pipeline); // Debug: mostra estrutura da pipeline
-            
-            if (pipeline->next) // Tem pipes!
-            {
-                printf("Pipeline detectada! Precisamos implementar execute_pipeline()\n");
-                // execute_pipeline(pipeline, env); // TODO: Implementar
-            }
-            else // Comando único
-            {
-                if (pipeline->args[0]->value)
-                {
-                    if (!exec_builtin(pipeline->args, env))
-                        printf("comando externo: %s\n", pipeline->args[0]->value);
-                }
-            }
-            free_pipeline(pipeline);
-        }*/
 
 		// No main.c, modifique a parte da execução:
 		if (pipeline)
 		{
 			print_pipeline(pipeline); // Debug
 			
-/*
-
-			if (pipeline->next) // Tem pipes!
-			{
-				execute_pipeline(pipeline, env); // ✅ AGORA IMPLEMENTADO!
-			}
-			else // Comando único
-			{
-				if (pipeline->args[0]->value)
-				{
-					if (is_builtin(pipeline->args))
-					{
-						exec_builtin(pipeline->args, env);
-					}
-					else
-					{
-						execute_external(pipeline->args, env);
-					}
-				}
-			}
-
-*/
 			// No main.c, após executar qualquer comando:
 			if (pipeline->next) // Se for pipeline
 			{
 				execute_pipeline(pipeline, env);
-				// g_last_status será atualizado dentro de execute_pipeline
 			}
 			else // Comando único
 			{
 				if (is_builtin(pipeline->args))
 				{
 					g_last_status = exec_builtin(pipeline->args, env); // ✅ Deve retornar int
-					//g_last_status = exec_builtin(pipeline->args, env); // ✅ Builtins devem retornar int
 				}
 				else
 				{

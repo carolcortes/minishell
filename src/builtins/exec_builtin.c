@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 23:14:15 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/12 21:06:53 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/13 16:55:09 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,3 @@ int	exec_builtin(t_token **args, char **envp)
 	}
 	return (0);
 }
-

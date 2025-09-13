@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 22:35:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/10 20:52:36 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/13 16:52:58 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,6 @@ void	free_array(char **arr)
 		free(arr[i++]);
 	free(arr);
 }
-
-/*void	free_tokens(t_token *tokens)
-{
-	int	i;
-
-	if (!tokens)
-		return ;
-	i = 0;
-	while (tokens[i].value)
-		free(tokens[i++].value);
-	free(tokens);
-}*/
 
 // No free.c, atualize free_tokens:
 void	free_tokens(t_token *tokens)
