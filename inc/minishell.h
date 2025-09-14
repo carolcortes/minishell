@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/12 20:41:54 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/14 19:56:50 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
 
-//int g_last_status;
-// No minishell.h (após os includes)
-extern int g_last_status;  // ✅ EXTERN - apenas declaração
+extern int	g_last_status;	// ✅ EXTERN - apenas declaração
 
 // ANSI Color codes
 # define Y		"\033[1;33m"
@@ -41,13 +39,12 @@ extern int g_last_status;  // ✅ EXTERN - apenas declaração
 # define WHITESPACES "\t\n\v\f\r "
 
 // Struct para tokens
-// Na struct s_token, adicione:
 typedef struct s_token
 {
-    char	*value;
-    bool	allow_expand;
-    bool	is_pipe;        // NOVO
-    bool	is_redirection; // NOVO (para futuro)
+	char	*value;
+	bool	allow_expand;
+	bool	is_pipe;		// NOVO
+	bool	is_redirection; // NOVO (para futuro)
 }	t_token;
 
 typedef struct s_builtin
@@ -56,68 +53,62 @@ typedef struct s_builtin
 	int			(*builtin)(t_token **av);
 }	t_builtin;
 
-
-// Adicione estas estruturas no minishell.h
-typedef struct s_command {
-    t_token      **args;     // Array de tokens deste comando
-    int          argc;       // Número de argumentos
-    struct s_command *next;  // Próximo comando na pipeline
-    struct s_command *prev;  // Comando anterior (opcional)
-} t_command;
-
-// Protótipo da nova função
-t_command *parse_pipeline(t_token *tokens);
-void       free_pipeline(t_command *pipeline);
-
-// Funções de parsing e tokens
-// main.c
-char	*shell_read_line(void);
-
-// tokens.c
-t_token	*shell_split_line_quotes(char *line);
-
-// expand.c
-void	expand_tokens(t_token *tokens, int last_status);
-
-// signals
-void	setup_signals(void);
+typedef struct s_command
+{
+	t_token				**args;		// Array de tokens deste comando
+	int					argc;		// Número de argumentos
+	struct s_command	*next;		// Próximo comando na pipeline
+	struct s_command	*prev;		// Comando anterior (opcional)
+}	t_command;
 
 // builtins
-int		exec_builtin(t_token **args, char **envp);
-int		ft_exit(t_token **args);
-int		ft_echo(t_token **args);
-int		ft_cd(t_token **args);
-int		ft_pwd(t_token **args);
-int		ft_env(t_token **args, char **envp);
-int		ft_export(t_token **args);
-int		ft_unset(t_token **args);
+int			exec_builtin(t_token **args, char **envp);
+int			ft_cd(t_token **args);
+int			ft_echo(t_token **args);
+int			ft_env(t_token **args, char **envp);
+char		**dup_env(char **envp);
+void		free_env(char **env);
+int			ft_exit(t_token **args);
+int			ft_export(t_token **args);
+int			ft_pwd(t_token **args);
+int			ft_unset(t_token **args);
 
-char	**dup_env(char **envp);
-void	free_env(char **env);
+//	execution
+//		execute_pipeline.c
+void		execute_pipeline(t_command *pipeline, char **envp);
+//		external.c
+int			execute_external(t_token **args, char **envp);
+//		path.c
+char		*find_command_path(char *command, char **envp);
+//		utils.c
+bool		is_builtin(t_token **args);
+char		**tokens_to_argv(t_token **tokens);
+void		free_argv(char **argv);
 
-// utils.c
-void	ft_getcwd(char *buf, size_t size);
-void	printbanner(void);
-bool	is_spaces(char c);
+//	parsing
+//		parse_pipeline.c
+t_command	*parse_pipeline(t_token *tokens);
+//		tokens.c
+t_token		*shell_split_line_quotes(char *line);
+
+// expand.c
+void		expand_tokens(t_token *tokens, int last_status);
 
 // free.c
-void	free_array(char **arr);
-void	free_tokens(t_token *tokens);
-char	*ft_strjoin_free(char *s1, char *s2, int mode);
+void		free_array(char **arr);
+void		free_tokens(t_token *tokens);
+char		*ft_strjoin_free(char *s1, char *s2, int mode);
+void		free_pipeline(t_command *pipeline);
 
-// execution functions
-//void    execute_pipeline(t_command *pipeline, char **envp);
-//void    execute_external(t_token **args, char **envp);
-//bool    is_builtin(t_token **args);
-char    **tokens_to_argv(t_token **tokens);
-void    free_argv(char **argv);
+// main.c
+char		*shell_read_line(void);
 
-// execution functions
-void    execute_pipeline(t_command *pipeline, char **envp);
-int     execute_external(t_token **args, char **envp); // ✅ Mude para int
-bool    is_builtin(t_token **args);
+// signals
+void		setup_signals(void);
 
-// path finding (necessária para execute_external)
-char    *find_command_path(char *command, char **envp);
+// utils.c
+void		ft_getcwd(char *buf, size_t size);
+void		printbanner(void);
+bool		is_spaces(char c);
 
 #endif

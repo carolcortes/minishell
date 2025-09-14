@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:18 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/14 14:33:25 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/14 18:24:19 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	ft_echo(t_token **args)
 		return (1);
 	i = 1;
 	newline = 1;
-	//if (args[1] && strcmp(args[1]->value, "-n") == 0)
 	if (args[1] && ft_strcmp(args[1]->value, "-n") == 0)
 	{
 		newline = 0;
