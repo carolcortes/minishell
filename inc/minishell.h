@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/14 19:56:50 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/14 21:20:56 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,21 @@ void		setup_signals(void);
 void		ft_getcwd(char *buf, size_t size);
 void		printbanner(void);
 bool		is_spaces(char c);
+
+typedef struct s_exec_data
+{
+	int			*input_fd;
+	int			pipe_fd[2];
+	pid_t		*last_pid;
+	char		**envp;
+}	t_exec_data;
+
+typedef struct s_fork_data
+{
+	int			input_fd;
+	int			pipe_fd[2];
+	pid_t		*last_pid;
+	char		**envp;
+}	t_fork_data;
 
 #endif
