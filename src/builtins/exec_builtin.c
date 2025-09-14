@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 23:14:15 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/13 16:55:09 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/14 14:32:08 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int	exec_builtin(t_token **args, char **envp)
 	i = 0;
 	while (g_builtin[i].builtin_name)
 	{
-		if (strcmp(args[0]->value, g_builtin[i].builtin_name) == 0)
+		//if (strcmp(args[0]->value, g_builtin[i].builtin_name) == 0)
+		if (ft_strcmp(args[0]->value, g_builtin[i].builtin_name) == 0)
 			return (g_builtin[i].builtin(args));
 		i++;
 	}
