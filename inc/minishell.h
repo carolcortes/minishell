@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/14 21:20:56 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/15 16:50:26 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,22 @@ typedef struct s_command
 	struct s_command	*prev;		// Comando anterior (opcional)
 }	t_command;
 
+typedef struct s_exec_data
+{
+	int			*input_fd;
+	int			pipe_fd[2];
+	pid_t		*last_pid;
+	char		**envp;
+}	t_exec_data;
+
+typedef struct s_fork_data
+{
+	int			input_fd;
+	int			pipe_fd[2];
+	pid_t		*last_pid;
+	char		**envp;
+}	t_fork_data;
+
 // builtins
 int			exec_builtin(t_token **args, char **envp);
 int			ft_cd(t_token **args);
@@ -74,6 +90,13 @@ int			ft_pwd(t_token **args);
 int			ft_unset(t_token **args);
 
 //	execution
+//		execute_pipeline_ext.c
+void		redirect_input(int input_fd);
+void		redirect_output(int pipe_fd[2]);
+void		execute_command(t_command *cmd, char **envp);
+void		handle_child_process(t_command *cmd, int input_fd,
+		int pipe_fd[2], char **envp);
+void		update_fds_after_command(t_command *cmd, t_exec_data *data);
 //		execute_pipeline.c
 void		execute_pipeline(t_command *pipeline, char **envp);
 //		external.c
@@ -110,21 +133,5 @@ void		setup_signals(void);
 void		ft_getcwd(char *buf, size_t size);
 void		printbanner(void);
 bool		is_spaces(char c);
-
-typedef struct s_exec_data
-{
-	int			*input_fd;
-	int			pipe_fd[2];
-	pid_t		*last_pid;
-	char		**envp;
-}	t_exec_data;
-
-typedef struct s_fork_data
-{
-	int			input_fd;
-	int			pipe_fd[2];
-	pid_t		*last_pid;
-	char		**envp;
-}	t_fork_data;
 
 #endif

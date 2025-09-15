@@ -6,7 +6,7 @@
 #    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/09/11 17:44:19 by cgross-s         ###   ########.fr        #
+#    Updated: 2025/09/15 16:37:36 by cgross-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ LIBFT_PATH		= libft
 
 FILES			= 	main.c signals.c utils.c expand.c free.c \
 					parsing/tokens.c parsing/pipeline.c \
-					execution/execute_pipeline.c execution/external.c execution/utils.c execution/path.c
+					execution/execute_pipeline.c execution/execute_pipeline_ext.c \
+					execution/external.c execution/utils.c execution/path.c
 
 BUILTINS		= 	exec_builtin.c ft_exit.c ft_echo.c ft_cd.c ft_pwd.c ft_env.c \
 					ft_export.c ft_unset.c
