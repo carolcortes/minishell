@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/15 21:45:47 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/15 22:43:41 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 /*typedef struct s_token_data
 {
-	t_token	**tokens;
-	int		*count;
-	int		*capacity;
+	t_token	*tokens;
+	int		count;
+	int		capacity;
 }	t_token_data;
 
 typedef struct s_quote_data
@@ -44,12 +44,14 @@ static t_token	create_pipe_token(void)
 static bool	expand_token_array(t_token_data *data)
 {
 	t_token	*new_tokens;
+	int		new_capacity;
 
-	*data->capacity *= 2;
-	new_tokens = realloc(*data->tokens, sizeof(t_token) * (*data->capacity));
+	new_capacity = data->capacity * 2;
+	new_tokens = realloc(data->tokens, sizeof(t_token) * new_capacity);
 	if (!new_tokens)
 		return (false);
-	*data->tokens = new_tokens;
+	data->tokens = new_tokens;
+	data->capacity = new_capacity;
 	return (true);
 }
 
@@ -64,10 +66,10 @@ static bool	process_special_char(char *line, int *i, t_token_data *data)
 		(*i)++;
 		return (true);
 	}
-	if (*data->count >= *data->capacity - 1 && !expand_token_array(data))
+	if (data->count >= data->capacity - 1 && !expand_token_array(data))
 		return (false);
-	(*data->tokens)[*data->count] = special_token;
-	(*data->count)++;
+	data->tokens[data->count] = special_token;
+	data->count++;
 	(*i)++;
 	return (true);
 }
@@ -143,16 +145,16 @@ static bool	process_word_chars(char *line, int *i, t_quote_data *qdata)
 
 static bool	add_token_to_array(t_token_data *data, char *token, bool allow_expand)
 {
-	if (*data->count >= *data->capacity - 1)
+	if (data->count >= data->capacity - 1)
 	{
 		if (!expand_token_array(data))
 			return (false);
 	}
-	(*data->tokens)[*data->count].value = token;
-	(*data->tokens)[*data->count].allow_expand = allow_expand;
-	(*data->tokens)[*data->count].is_pipe = false;
-	(*data->tokens)[*data->count].is_redirection = false;
-	(*data->count)++;
+	data->tokens[data->count].value = token;
+	data->tokens[data->count].allow_expand = allow_expand;
+	data->tokens[data->count].is_pipe = false;
+	data->tokens[data->count].is_redirection = false;
+	data->count++;
 	return (true);
 }
 
@@ -175,17 +177,17 @@ static bool	process_word_token(char *line, int *i, t_token_data *data)
 	return (true);
 }
 
-static void	initialize_tokens_array(t_token **tokens, int capacity)
+static void	initialize_tokens_array(t_token *tokens, int capacity)
 {
 	int	i;
 
 	i = 0;
 	while (i < capacity)
 	{
-		(*tokens)[i].value = NULL;
-		(*tokens)[i].allow_expand = false;
-		(*tokens)[i].is_pipe = false;
-		(*tokens)[i].is_redirection = false;
+		tokens[i].value = NULL;
+		tokens[i].allow_expand = false;
+		tokens[i].is_pipe = false;
+		tokens[i].is_redirection = false;
 		i++;
 	}
 }
@@ -209,32 +211,48 @@ static bool	process_line_characters(char *line, int *i, t_token_data *data)
 	return (true);
 }
 
-t_token	*shell_split_line_quotes(char *line)
+static bool	initialize_parsing(t_token_data *data)
 {
-	int				i;
-	int				count;
-	int				capacity;
-	t_token			*tokens;
-	t_token_data	data;
+	data->capacity = 8;
+	data->tokens = malloc(sizeof(t_token) * data->capacity);
+	if (!data->tokens)
+		return (false);
+	initialize_tokens_array(data->tokens, data->capacity);
+	data->count = 0;
+	return (true);
+}
+
+static bool	process_entire_line(char *line, t_token_data *data)
+{
+	int	i;
 
 	i = 0;
-	count = 0;
-	capacity = 8;
-	tokens = malloc(sizeof(t_token) * capacity);
-	if (!tokens)
-		return (NULL);
-	initialize_tokens_array(&tokens, capacity);
-	data.tokens = &tokens;
-	data.count = &count;
-	data.capacity = &capacity;
 	while (line[i])
 	{
-		if (!process_line_characters(line, &i, &data))
-			return (free_tokens(tokens), NULL);
+		if (!process_line_characters(line, &i, data))
+			return (false);
 	}
-	tokens[count].value = NULL;
-	tokens[count].allow_expand = false;
-	tokens[count].is_pipe = false;
-	tokens[count].is_redirection = false;
+	return (true);
+}
+
+
+t_token	*shell_split_line_quotes(char *line)
+{
+	t_token_data	data;
+	t_token			*tokens;
+
+	if (!initialize_parsing(&data))
+		return (NULL);
+	if (!process_entire_line(line, &data))
+	{
+		free_tokens(data.tokens);
+		return (NULL);
+	}
+	tokens = data.tokens;
+	tokens[data.count].value = NULL;
+	tokens[data.count].allow_expand = false;
+	tokens[data.count].is_pipe = false;
+	tokens[data.count].is_redirection = false;
 	return (tokens);
 }
+
