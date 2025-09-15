@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/15 16:50:26 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/15 21:45:42 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,19 @@ typedef struct s_fork_data
 	pid_t		*last_pid;
 	char		**envp;
 }	t_fork_data;
+
+typedef struct s_token_data
+{
+	t_token	**tokens;
+	int		*count;
+	int		*capacity;
+}	t_token_data;
+
+typedef struct s_quote_data
+{
+	char	**token;
+	bool	*allow_expand;
+}	t_quote_data;
 
 // builtins
 int			exec_builtin(t_token **args, char **envp);
