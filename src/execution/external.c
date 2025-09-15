@@ -6,64 +6,118 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/14 14:11:51 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/15 14:57:13 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include "../../inc/minishell.h"
+
+int	execute_external(t_token **args, char **envp)
+{
+	pid_t	pid;
+	int		status;
+	char	*path;
+	char	**argv;
+
+	argv = tokens_to_argv(args);
+	if (!argv)
+		return (1);
+	path = find_command_path(argv[0], envp);
+	if (!path)
+	{
+		printf("minishell: %s: command not found\n", argv[0]);
+		free_argv(argv);
+		return (127);
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		execve(path, argv, envp);
+		printf("minishell: %s: execution failed\n", argv[0]);
+		free(path);
+		free_argv(argv);
+		exit(126);
+	}
+	else if (pid > 0)
+		waitpid(pid, &status, 0);
+	else
+	{
+		perror("minishell: fork");
+		free(path);
+		free_argv(argv);
+		return (1);
+	}
+	free(path);
+	free_argv(argv);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	else
+		return (1);
+}
+*/
+
 #include "../../inc/minishell.h"
 
-int execute_external(t_token **args, char **envp)
+static int	handle_child_process(char *path, char **argv, char **envp)
 {
-    pid_t pid;
-    int status;
-    char *path;
-    char **argv;
+	execve(path, argv, envp);
+	printf("minishell: %s: execution failed\n", argv[0]);
+	free(path);
+	free_argv(argv);
+	exit(126);
+}
 
-    // Converter t_token** para char** para execve
-    argv = tokens_to_argv(args);
-    if (!argv)
-        return (1);
-    
-    // Encontrar o caminho completo do executável
-    path = find_command_path(argv[0], envp);
-    
-    if (!path)
-    {
-        printf("minishell: %s: command not found\n", argv[0]);
-        free_argv(argv);
-        return (127); // ✅ Comando não encontrado
-    }
+static int	handle_fork_error(char *path, char **argv)
+{
+	perror("minishell: fork");
+	free(path);
+	free_argv(argv);
+	return (1);
+}
 
-    pid = fork();
-    if (pid == 0) // Processo filho
-    {
-        execve(path, argv, envp);
-        // Se execve retornar, é erro
-        printf("minishell: %s: execution failed\n", argv[0]);
-        free(path);
-        free_argv(argv);
-        exit(126); // ✅ Erro de execução
-    }
-    else if (pid > 0) // Processo pai
-    {
-        waitpid(pid, &status, 0);
-    }
-    else // Erro no fork
-    {
-        perror("minishell: fork");
-        free(path);
-        free_argv(argv);
-        return (1); // ✅ Erro de fork
-    }
+static int	execute_command(char *path, char **argv, char **envp)
+{
+	pid_t	pid;
+	int		status;
 
-    free(path);
-    free_argv(argv);
-    
-    // Retornar o status de saída do comando
-    if (WIFEXITED(status))
-        return (WEXITSTATUS(status)); // ✅ Status normal de saída
-    else if (WIFSIGNALED(status))
-        return (128 + WTERMSIG(status)); // ✅ Terminado por sinal
-    else
-        return (1); // ✅ Fallback
+	pid = fork();
+	if (pid == 0)
+		return (handle_child_process(path, argv, envp));
+	else if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		free(path);
+		free_argv(argv);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else if (WIFSIGNALED(status))
+			return (128 + WTERMSIG(status));
+		else
+			return (1);
+	}
+	else
+		return (handle_fork_error(path, argv));
+}
+
+static int	handle_command_not_found(char **argv)
+{
+	printf("minishell: %s: command not found\n", argv[0]);
+	free_argv(argv);
+	return (127);
+}
+
+int	execute_external(t_token **args, char **envp)
+{
+	char	*path;
+	char	**argv;
+
+	argv = tokens_to_argv(args);
+	if (!argv)
+		return (1);
+	path = find_command_path(argv[0], envp);
+	if (!path)
+		return (handle_command_not_found(argv));
+	return (execute_command(path, argv, envp));
 }
