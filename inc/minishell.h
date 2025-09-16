@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/16 16:36:36 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/16 17:37:39 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,10 @@ void		free_tokens(t_token *tokens);
 char		*ft_strjoin_free(char *s1, char *s2, int mode);
 void		free_pipeline(t_command *pipeline);
 
-// main.c
+// main_ext.c
 char		*shell_read_line(void);
+void		print_tokens(t_token *tokens);
+void		print_pipeline(t_command *pipeline);
 
 // signals
 void		setup_signals(void);
