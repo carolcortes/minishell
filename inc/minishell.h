@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/15 22:41:18 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:03:25 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,18 @@ void		free_argv(char **argv);
 t_command	*parse_pipeline(t_token *tokens);
 //		tokens.c
 t_token		*shell_split_line_quotes(char *line);
+//		tokens_ext1.c
+bool		is_special_char(char c);
+t_token		create_pipe_token(void);
+bool		expand_token_array(t_token_data *data);
+bool		process_special_char(char *line, int *i, t_token_data *data);
+char		*extract_quoted(const char *line, int *i, bool *allow_expand);
+//		tokens_ext2.c
+bool		process_quoted_part(char *line, int *i, t_quote_data *qdata);
+bool		process_regular_char(char *line, int *i, char **token);
+bool		process_word_chars(char *line, int *i, t_quote_data *qdata);
+bool		add_token_to_array(t_token_data *data, char *token, bool allow_expand);
+bool		process_word_token(char *line, int *i, t_token_data *data);
 
 // expand.c
 void		expand_tokens(t_token *tokens, int last_status);

@@ -6,26 +6,15 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/15 22:43:41 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:02:03 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-/*typedef struct s_token_data
-{
-	t_token	*tokens;
-	int		count;
-	int		capacity;
-}	t_token_data;
+// 15 functions
 
-typedef struct s_quote_data
-{
-	char	**token;
-	bool	*allow_expand;
-}	t_quote_data;*/
-
-static bool	is_special_char(char c)
+/*static bool	is_special_char(char c)
 {
 	return (c == '|');
 }
@@ -94,9 +83,9 @@ static char	*extract_quoted(const char *line, int *i, bool *allow_expand)
 	result = ft_substr(line, start, *i - start);
 	(*i)++;
 	return (result);
-}
+}*/
 
-static bool	process_quoted_part(char *line, int *i, t_quote_data *qdata)
+/*static bool	process_quoted_part(char *line, int *i, t_quote_data *qdata)
 {
 	bool	local_expand;
 	char	*part;
@@ -175,7 +164,7 @@ static bool	process_word_token(char *line, int *i, t_token_data *data)
 	if (!add_token_to_array(data, token, allow_expand))
 		return (free(token), false);
 	return (true);
-}
+}*/
 
 static void	initialize_tokens_array(t_token *tokens, int capacity)
 {
