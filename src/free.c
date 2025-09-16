@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 22:35:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/14 19:53:43 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/16 17:08:22 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,17 @@ char	*ft_strjoin_free(char *s1, char *s2, int mode)
 	return (result);
 }
 
-void free_pipeline(t_command *pipeline)
+void	free_pipeline(t_command *pipeline)
 {
-    t_command *current;
-    t_command *next;
-    
-    current = pipeline;
-    while (current)
-    {
-        next = current->next;
-        // Note: não free os tokens individuais, pois eles pertencem ao array original
-        free(current->args); // Apenas free o array de ponteiros
-        free(current);
-        current = next;
-    }
+	t_command	*current;
+	t_command	*next;
+
+	current = pipeline;
+	while (current)
+	{
+		next = current->next;
+		free(current->args);
+		free(current);
+		current = next;
+	}
 }

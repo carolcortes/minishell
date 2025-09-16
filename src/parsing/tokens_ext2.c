@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:01:43 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/16 16:03:28 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:53:18 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ bool	process_regular_char(char *line, int *i, char **token)
 	return (true);
 }
 
-bool	process_word_chars(char *line, int *i, t_quote_data *qdata)
+bool	process_word_chars(char *line, int *i,
+			t_quote_data *qdata)
 {
 	while (line[*i] && !is_spaces(line[*i]) && !is_special_char(line[*i]))
 	{
@@ -59,7 +60,8 @@ bool	process_word_chars(char *line, int *i, t_quote_data *qdata)
 	return (true);
 }
 
-bool	add_token_to_array(t_token_data *data, char *token, bool allow_expand)
+bool	add_token_to_array(t_token_data *data, char *token,
+			bool allow_expand)
 {
 	if (data->count >= data->capacity - 1)
 	{
@@ -76,8 +78,8 @@ bool	add_token_to_array(t_token_data *data, char *token, bool allow_expand)
 
 bool	process_word_token(char *line, int *i, t_token_data *data)
 {
-	char		*token;
-	bool		allow_expand;
+	char			*token;
+	bool			allow_expand;
 	t_quote_data	qdata;
 
 	token = ft_strdup("");

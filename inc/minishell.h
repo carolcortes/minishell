@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/16 16:03:25 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:36:36 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ typedef struct s_fork_data
 
 typedef struct s_token_data
 {
-	t_token	*tokens;    // ✅ Ponteiro para array
-	int		count;      // ✅ Inteiro (não ponteiro)
-	int		capacity;   // ✅ Inteiro (não ponteiro)
+	t_token	*tokens;	// ✅ Ponteiro para array
+	int		count;		// ✅ Inteiro (não ponteiro)
+	int		capacity;	// ✅ Inteiro (não ponteiro)
 }	t_token_data;
 
 typedef struct s_quote_data
@@ -108,7 +108,7 @@ void		redirect_input(int input_fd);
 void		redirect_output(int pipe_fd[2]);
 void		execute_command(t_command *cmd, char **envp);
 void		handle_child_process(t_command *cmd, int input_fd,
-		int pipe_fd[2], char **envp);
+				int pipe_fd[2], char **envp);
 void		update_fds_after_command(t_command *cmd, t_exec_data *data);
 //		execute_pipeline.c
 void		execute_pipeline(t_command *pipeline, char **envp);
@@ -135,8 +135,10 @@ char		*extract_quoted(const char *line, int *i, bool *allow_expand);
 //		tokens_ext2.c
 bool		process_quoted_part(char *line, int *i, t_quote_data *qdata);
 bool		process_regular_char(char *line, int *i, char **token);
-bool		process_word_chars(char *line, int *i, t_quote_data *qdata);
-bool		add_token_to_array(t_token_data *data, char *token, bool allow_expand);
+bool		process_word_chars(char *line, int *i,
+				t_quote_data *qdata);
+bool		add_token_to_array(t_token_data *data, char *token,
+				bool allow_expand);
 bool		process_word_token(char *line, int *i, t_token_data *data);
 
 // expand.c
