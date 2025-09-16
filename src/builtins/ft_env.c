@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/14 18:24:56 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/16 18:15:45 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,11 @@ char	**dup_env(char **envp)
  *            previously allocated by dup_env().
  */
 
-void free_env(char **env)
+void	free_env(char **env)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!env)
 		return ;
 	while (env[i])
