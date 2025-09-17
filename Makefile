@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
+#    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/09/02 22:52:07 by cade-oli         ###   ########.fr        #
+#    Updated: 2025/09/16 17:35:12 by cgross-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,17 @@ INC_PATH		= inc
 BUILD_PATH		= .build
 LIBFT_PATH		= libft
 
-FILES			= main.c signals.c utils.c tokens.c expand.c free.c
+FILES			= 	main.c main_ext.c signals.c utils.c expand.c free.c \
+					parsing/tokens.c parsing/pipeline.c \
+					parsing/tokens_ext1.c parsing/tokens_ext2.c \
+					execution/execute_pipeline.c execution/execute_pipeline_ext.c \
+					execution/external.c execution/utils.c execution/path.c
 
-BUILTINS		= exec_builtin.c ft_exit.c ft_echo.c ft_cd.c ft_pwd.c ft_env.c ft_export.c ft_unset.c
+BUILTINS		= 	exec_builtin.c ft_exit.c ft_echo.c ft_cd.c ft_pwd.c ft_env.c \
+					ft_export.c ft_unset.c
 
-SRCS			= $(addprefix $(SRC_PATH)/, $(FILES)) \
-				$(addprefix $(SRC_PATH)/builtins/, $(BUILTINS))
+SRCS			= 	$(addprefix $(SRC_PATH)/, $(FILES)) \
+					$(addprefix $(SRC_PATH)/builtins/, $(BUILTINS))
 
 OBJS			= $(SRCS:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
 
@@ -59,6 +64,7 @@ $(NAME): $(BUILD_PATH) $(OBJS) $(LIBFT_PATH)/libft.a
 	-o $(NAME) $(LDFLAGS)
 
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.c
+	@$(MKDIR_P) $(dir $@)  # ⬅️ CRIA O SUBDIRETÓRIO NECESSÁRIO
 	@echo -n "$(MAG)█$(D)"
 	$(CC) $(CFLAGS) -c $< -o $@
 

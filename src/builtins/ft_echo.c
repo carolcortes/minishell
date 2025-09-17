@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:18 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/03 22:14:44 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/14 18:24:19 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,20 @@ int	ft_echo(t_token **args)
 {
 	int		i;
 	int		newline;
-	t_token	*av;
 
 	if (!args || !*args)
 		return (1);
-	av = *args;
 	i = 1;
 	newline = 1;
-	if (av[i].value && strcmp(av[i].value, "-n") == 0)
+	if (args[1] && ft_strcmp(args[1]->value, "-n") == 0)
 	{
 		newline = 0;
 		i++;
 	}
-	while (av[i].value)
+	while (args[i])
 	{
-		printf("%s", av[i].value);
-		if (av[i + 1].value)
+		printf("%s", args[i]->value);
+		if (args[i + 1])
 			printf(" ");
 		i++;
 	}

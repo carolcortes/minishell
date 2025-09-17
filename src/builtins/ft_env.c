@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/02 22:56:26 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/16 18:15:45 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	**dup_env(char **envp)
 	i = 0;
 	while (i < count)
 	{
-		new_env[i] = strdup(envp[i]);
+		new_env[i] = ft_strdup(envp[i]);
 		i++;
 	}
 	new_env[count] = NULL;
@@ -82,9 +82,11 @@ char	**dup_env(char **envp)
  *            previously allocated by dup_env().
  */
 
-void free_env(char **env)
+void	free_env(char **env)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!env)
 		return ;
 	while (env[i])
