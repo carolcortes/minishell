@@ -6,16 +6,33 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:50:13 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/16 15:56:41 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/22 11:29:11 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool	is_special_char(char c)
+/*bool	is_special_char(char c)
 {
 	return (c == '|');
+}*/
+
+bool	is_special_char(char c)
+{
+	return (c == '|' || c == '>' || c == '<');
 }
+
+/*t_token	create_pipe_token(void)
+{
+	t_token	pipe_token;
+
+	pipe_token.value = ft_strdup("|");
+	pipe_token.allow_expand = false;
+	pipe_token.is_pipe = true;
+	pipe_token.is_redirection = false;
+	return (pipe_token);
+}*/
+
 
 t_token	create_pipe_token(void)
 {
@@ -25,6 +42,7 @@ t_token	create_pipe_token(void)
 	pipe_token.allow_expand = false;
 	pipe_token.is_pipe = true;
 	pipe_token.is_redirection = false;
+	pipe_token.redir_type = 0;
 	return (pipe_token);
 }
 
@@ -42,12 +60,51 @@ bool	expand_token_array(t_token_data *data)
 	return (true);
 }
 
-bool	process_special_char(char *line, int *i, t_token_data *data)
+/*bool	process_special_char(char *line, int *i, t_token_data *data)
 {
 	t_token	special_token;
 
 	if (line[*i] == '|')
 		special_token = create_pipe_token();
+	else
+	{
+		(*i)++;
+		return (true);
+	}
+	if (data->count >= data->capacity - 1 && !expand_token_array(data))
+		return (false);
+	data->tokens[data->count] = special_token;
+	data->count++;
+	(*i)++;
+	return (true);
+}*/
+
+bool	process_special_char(char *line, int *i, t_token_data *data)
+{
+	t_token	special_token;
+	char	next_char;
+
+	if (line[*i] == '|')
+	{
+		special_token = create_pipe_token();
+	}
+	else if (line[*i] == '>' || line[*i] == '<')
+	{
+		next_char = line[*i + 1];
+		if (line[*i] == '>' && next_char == '>')
+		{
+			special_token = create_redirection_token(">>", 2);
+			(*i)++;
+		}
+		else if (line[*i] == '>')
+		{
+			special_token = create_redirection_token(">", 1);
+		}
+		else if (line[*i] == '<')
+		{
+			special_token = create_redirection_token("<", 3);
+		}
+	}
 	else
 	{
 		(*i)++;

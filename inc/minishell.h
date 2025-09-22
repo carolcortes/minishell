@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/16 17:37:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:19:46 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sysexits.h>
+# include <fcntl.h>    // For O_WRONLY, O_RDONLY, O_CREAT, O_APPEND, O_TRUNC, open()
+
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
@@ -43,8 +45,9 @@ typedef struct s_token
 {
 	char	*value;
 	bool	allow_expand;
-	bool	is_pipe;		// NOVO
-	bool	is_redirection; // NOVO (para futuro)
+	bool	is_pipe;
+	bool	is_redirection;  // true se for >, >>, <
+	int     redir_type;      // 1: >, 2: >>, 3: <, 0: nenhum
 }	t_token;
 
 typedef struct s_builtin
@@ -53,10 +56,18 @@ typedef struct s_builtin
 	int			(*builtin)(t_token **av);
 }	t_builtin;
 
+typedef struct s_redirection
+{
+    int     type;       // 1: >, 2: >>, 3: <
+    char    *filename;  // arquivo alvo
+}   t_redirection;
+
 typedef struct s_command
 {
 	t_token				**args;		// Array de tokens deste comando
 	int					argc;		// Número de argumentos
+	t_redirection		*redirs;    // array de redirecionamentos
+	int					redir_count;
 	struct s_command	*next;		// Próximo comando na pipeline
 	struct s_command	*prev;		// Comando anterior (opcional)
 }	t_command;
@@ -79,9 +90,9 @@ typedef struct s_fork_data
 
 typedef struct s_token_data
 {
-	t_token	*tokens;	// ✅ Ponteiro para array
-	int		count;		// ✅ Inteiro (não ponteiro)
-	int		capacity;	// ✅ Inteiro (não ponteiro)
+	t_token	*tokens;
+	int		count;
+	int		capacity;
 }	t_token_data;
 
 typedef struct s_quote_data
@@ -116,6 +127,8 @@ void		execute_pipeline(t_command *pipeline, char **envp);
 int			execute_external(t_token **args, char **envp);
 //		path.c
 char		*find_command_path(char *command, char **envp);
+//		redirections.c
+int			apply_redirections(t_command *cmd);
 //		utils.c
 bool		is_builtin(t_token **args);
 char		**tokens_to_argv(t_token **tokens);
@@ -140,6 +153,10 @@ bool		process_word_chars(char *line, int *i,
 bool		add_token_to_array(t_token_data *data, char *token,
 				bool allow_expand);
 bool		process_word_token(char *line, int *i, t_token_data *data);
+//		tokens_ext3.c
+t_token	create_redirection_token(char *value, int type);
+//		redirections.c
+void	extract_redirections(t_command *cmd);
 
 // expand.c
 void		expand_tokens(t_token *tokens, int last_status);
