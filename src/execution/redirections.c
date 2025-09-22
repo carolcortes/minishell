@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:18:42 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/22 15:37:33 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/22 17:33:42 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ static int	open_output_file(char *filename, int append)
 	return (fd);
 }
 
-static int	open_input_file(char *filename)
+/*static int	open_input_file(char *filename)
 {
 	int	fd;
 
@@ -165,31 +165,32 @@ static int	open_input_file(char *filename)
 		return (-1);
 	}
 	return (fd);
-}
+}*/
 
-int	apply_redirections(t_command *cmd)
+/*int	apply_redirections(t_command *cmd)
 {
 	int	i;
 	int	fd;
 
-	//printf("=== DEBUG APPLY_REDIRECTIONS START ===\n");
-	//printf("Command has %d redirections\n", cmd->redir_count);
+	printf("=== DEBUG APPLY_REDIRECTIONS for %s ===\n", cmd->args[0]->value);
 
 	if (!cmd || !cmd->redirs)
 	{
-		//printf("DEBUG: No redirections to apply\n");
+		printf("DEBUG: No redirections to apply\n");
 		return (1);
 	}
 	
 	i = 0;
 	while (i < cmd->redir_count)
 	{
-		/*printf("DEBUG: Applying redirection %d: type=%d, file='%s'\n",
-			i, cmd->redirs[i].type, cmd->redirs[i].filename);*/
+		printf("DEBUG: Applying redirection %d: type=%d, file='%s'\n",
+			i, cmd->redirs[i].type, cmd->redirs[i].filename);
 		if (cmd->redirs[i].type == 1 || cmd->redirs[i].type == 2)
 		{
+			printf("DEBUG: Opening output file\n");
 			fd = open_output_file(cmd->redirs[i].filename,
 					cmd->redirs[i].type == 2);
+			
 			if (fd == -1 || dup2(fd, STDOUT_FILENO) == -1)
 			{
 				if (fd != -1)
@@ -207,10 +208,57 @@ int	apply_redirections(t_command *cmd)
 					close(fd);
 				return (0);
 			}
+			printf("DEBUG: dup2 successful\n");
 			close(fd);
 		}
 		i++;
 	}
-	//printf("=== DEBUG APPLY_REDIRECTIONS END ===\n");
+	printf("=== DEBUG APPLY_REDIRECTIONS END ===\n");
+	return (1);
+}*/
+
+int	apply_redirections(t_command *cmd)
+{
+	int	i;
+	int	fd;
+
+	printf("=== DEBUG APPLY_REDIRECTIONS for %s ===\n", cmd->args[0]->value);
+	
+	if (!cmd || !cmd->redirs)
+	{
+		printf("DEBUG: No redirections to apply\n");
+		return (1);
+	}
+	
+	i = 0;
+	while (i < cmd->redir_count)
+	{
+		printf("DEBUG: Processing redirection %d: type=%d, file='%s'\n",
+			i, cmd->redirs[i].type, cmd->redirs[i].filename);
+		
+		if (cmd->redirs[i].type == 1 || cmd->redirs[i].type == 2)
+		{
+			printf("DEBUG: Opening output file\n");
+			fd = open_output_file(cmd->redirs[i].filename,
+					cmd->redirs[i].type == 2);
+			printf("DEBUG: File descriptor: %d\n", fd);
+			
+			if (fd == -1)
+				return (0);
+				
+			printf("DEBUG: Duplicating fd %d to STDOUT\n", fd);
+			if (dup2(fd, STDOUT_FILENO) == -1)
+			{
+				printf("DEBUG: dup2 failed\n");
+				close(fd);
+				return (0);
+			}
+			printf("DEBUG: dup2 successful\n");
+			close(fd);
+		}
+		i++;
+	}
+	printf("=== DEBUG APPLY_REDIRECTIONS END ===\n");
 	return (1);
 }
+
