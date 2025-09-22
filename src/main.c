@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/22 15:01:25 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/22 15:38:33 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ static void	process_input_line(char *line, char **env)
 	if (!tokens)
 		return ;
 	expand_tokens(tokens, g_last_status);
-	print_tokens(tokens);
+	//print_tokens(tokens);
 	pipeline = parse_pipeline(tokens);
 	if (pipeline)
 	{
-		print_pipeline(pipeline);
+		//print_pipeline(pipeline);
 		if (pipeline->next)
 			execute_pipeline(pipeline, env);
 		else

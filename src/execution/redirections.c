@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:18:42 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/22 14:29:02 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/22 15:37:33 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,20 +172,20 @@ int	apply_redirections(t_command *cmd)
 	int	i;
 	int	fd;
 
-	printf("=== DEBUG APPLY_REDIRECTIONS START ===\n");
-	printf("Command has %d redirections\n", cmd->redir_count);
+	//printf("=== DEBUG APPLY_REDIRECTIONS START ===\n");
+	//printf("Command has %d redirections\n", cmd->redir_count);
 
 	if (!cmd || !cmd->redirs)
 	{
-		printf("DEBUG: No redirections to apply\n");
+		//printf("DEBUG: No redirections to apply\n");
 		return (1);
 	}
 	
 	i = 0;
 	while (i < cmd->redir_count)
 	{
-		printf("DEBUG: Applying redirection %d: type=%d, file='%s'\n",
-			i, cmd->redirs[i].type, cmd->redirs[i].filename);
+		/*printf("DEBUG: Applying redirection %d: type=%d, file='%s'\n",
+			i, cmd->redirs[i].type, cmd->redirs[i].filename);*/
 		if (cmd->redirs[i].type == 1 || cmd->redirs[i].type == 2)
 		{
 			fd = open_output_file(cmd->redirs[i].filename,
@@ -211,6 +211,6 @@ int	apply_redirections(t_command *cmd)
 		}
 		i++;
 	}
-	printf("=== DEBUG APPLY_REDIRECTIONS END ===\n");
+	//printf("=== DEBUG APPLY_REDIRECTIONS END ===\n");
 	return (1);
 }

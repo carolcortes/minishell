@@ -1,2 +1,1 @@
-=== DEBUG APPLY_REDIRECTIONS END ===
 hello world

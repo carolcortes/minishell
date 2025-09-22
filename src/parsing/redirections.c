@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 11:31:44 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/22 14:25:57 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/22 15:31:33 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,38 +138,39 @@ void	extract_redirections(t_command *cmd)
 {
 	int	i;
 
-	printf("=== DEBUG EXTRACT_REDIRECTIONS START ===\n");
-	printf("Command has %d args\n", cmd->argc);
+	//printf("=== DEBUG EXTRACT_REDIRECTIONS START ===\n");
+	//printf("Command has %d args\n", cmd->argc);
 	
 	if (!cmd || !cmd->args)
 	{
-		printf("DEBUG: No command or args\n");
+		//printf("DEBUG: No command or args\n");
 		return;
 	}
 	
 	i = 0;
 	while (i < cmd->argc && cmd->args[i])
 	{
-		printf("Arg %d: '%s' (redir: %d, type: %d)\n", 
+		/*printf("Arg %d: '%s' (redir: %d, type: %d)\n", 
 			i, cmd->args[i]->value, 
-			cmd->args[i]->is_redirection, cmd->args[i]->redir_type);
+			cmd->args[i]->is_redirection, cmd->args[i]->redir_type);*/
 		
 		if (cmd->args[i]->is_redirection)
 		{
-			printf("DEBUG: Found redirection '%s' at position %d\n", 
-				cmd->args[i]->value, i);
+			/*printf("DEBUG: Found redirection '%s' at position %d\n", 
+				cmd->args[i]->value, i);*/
 			
 			if (i + 1 < cmd->argc && cmd->args[i + 1])
 			{
-				printf("DEBUG: Adding redirection type %d with filename '%s'\n",
-					cmd->args[i]->redir_type, cmd->args[i + 1]->value);
+				/*printf("DEBUG: Adding redirection type %d with filename '%s'\n",
+					cmd->args[i]->redir_type, cmd->args[i + 1]->value);*/
 				add_redirection(cmd, cmd->args[i]->redir_type,
 					cmd->args[i + 1]->value);
 				remove_args(cmd, i, 2);
 			}
 			else
 			{
-				printf("DEBUG: Syntax error - no filename after redirection\n");
+				printf("minishell: syntax error near redirection\n");
+				//printf("DEBUG: Syntax error - no filename after redirection\n");
 				break;
 			}
 		}
@@ -178,7 +179,7 @@ void	extract_redirections(t_command *cmd)
 			i++;
 		}
 	}
-	printf("DEBUG: After extraction - %d args, %d redirections\n", 
+	/*printf("DEBUG: After extraction - %d args, %d redirections\n", 
 		cmd->argc, cmd->redir_count);
-	printf("=== DEBUG EXTRACT_REDIRECTIONS END ===\n");
+	printf("=== DEBUG EXTRACT_REDIRECTIONS END ===\n");*/
 }

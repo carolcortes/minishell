@@ -1,0 +1,10 @@
+file_list.txt
+inc
+input.txt
+libft
+Makefile
+minishell
+README.md
+src
+test2.txt
+test.txt

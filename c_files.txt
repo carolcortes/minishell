@@ -1,0 +1,7 @@
+DEBUG: Redirections applied successfully
+DEBUG: Executing command: grep
+DEBUG: Applying file redirections (0 redirections)
+DEBUG: Redirections applied successfully
+DEBUG: Executing command: ls
+inc
+src
