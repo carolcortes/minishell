@@ -6,33 +6,16 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:50:13 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/22 11:29:11 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/23 11:32:42 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-/*bool	is_special_char(char c)
-{
-	return (c == '|');
-}*/
-
 bool	is_special_char(char c)
 {
 	return (c == '|' || c == '>' || c == '<');
 }
-
-/*t_token	create_pipe_token(void)
-{
-	t_token	pipe_token;
-
-	pipe_token.value = ft_strdup("|");
-	pipe_token.allow_expand = false;
-	pipe_token.is_pipe = true;
-	pipe_token.is_redirection = false;
-	return (pipe_token);
-}*/
-
 
 t_token	create_pipe_token(void)
 {
@@ -59,25 +42,6 @@ bool	expand_token_array(t_token_data *data)
 	data->capacity = new_capacity;
 	return (true);
 }
-
-/*bool	process_special_char(char *line, int *i, t_token_data *data)
-{
-	t_token	special_token;
-
-	if (line[*i] == '|')
-		special_token = create_pipe_token();
-	else
-	{
-		(*i)++;
-		return (true);
-	}
-	if (data->count >= data->capacity - 1 && !expand_token_array(data))
-		return (false);
-	data->tokens[data->count] = special_token;
-	data->count++;
-	(*i)++;
-	return (true);
-}*/
 
 bool	process_special_char(char *line, int *i, t_token_data *data)
 {

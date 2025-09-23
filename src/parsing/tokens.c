@@ -6,16 +6,11 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/22 11:22:42 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/23 11:33:11 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/*static bool is_redirection_char(char c)
-{
-    return (c == '>' || c == '<');
-}*/
 
 static void	initialize_tokens_array(t_token *tokens, int capacity)
 {

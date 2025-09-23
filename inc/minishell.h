@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/22 12:19:46 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/23 15:47:10 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sysexits.h>
-# include <fcntl.h>    // For O_WRONLY, O_RDONLY, O_CREAT, O_APPEND, O_TRUNC, open()
-
+# include <fcntl.h>    // For O_WRONLY, O_RDONLY ... open()
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
@@ -46,8 +45,8 @@ typedef struct s_token
 	char	*value;
 	bool	allow_expand;
 	bool	is_pipe;
-	bool	is_redirection;  // true se for >, >>, <
-	int     redir_type;      // 1: >, 2: >>, 3: <, 0: nenhum
+	bool	is_redirection;	// true se for >, >>, <
+	int		redir_type;		// 1: >, 2: >>, 3: <, 0: nenhum
 }	t_token;
 
 typedef struct s_builtin
@@ -58,15 +57,15 @@ typedef struct s_builtin
 
 typedef struct s_redirection
 {
-    int     type;       // 1: >, 2: >>, 3: <
-    char    *filename;  // arquivo alvo
-}   t_redirection;
+	int		type;		// 1: >, 2: >>, 3: <
+	char	*filename;	// arquivo alvo
+}	t_redirection;
 
 typedef struct s_command
 {
 	t_token				**args;		// Array de tokens deste comando
 	int					argc;		// Número de argumentos
-	t_redirection		*redirs;    // array de redirecionamentos
+	t_redirection		*redirs;	// array de redirecionamentos
 	int					redir_count;
 	struct s_command	*next;		// Próximo comando na pipeline
 	struct s_command	*prev;		// Comando anterior (opcional)
@@ -154,9 +153,9 @@ bool		add_token_to_array(t_token_data *data, char *token,
 				bool allow_expand);
 bool		process_word_token(char *line, int *i, t_token_data *data);
 //		tokens_ext3.c
-t_token	create_redirection_token(char *value, int type);
+t_token		create_redirection_token(char *value, int type);
 //		redirections.c
-void	extract_redirections(t_command *cmd);
+void		extract_redirections(t_command *cmd);
 
 // expand.c
 void		expand_tokens(t_token *tokens, int last_status);

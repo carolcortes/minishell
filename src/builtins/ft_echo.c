@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:18 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/22 18:14:42 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:15:39 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,33 +25,7 @@
  * @return Always returns 0 (success).
  */
 
-/*int	ft_echo(t_token **args)
-{
-	int		i;
-	int		newline;
-
-	if (!args || !*args)
-		return (1);
-	i = 1;
-	newline = 1;
-	if (args[1] && ft_strcmp(args[1]->value, "-n") == 0)
-	{
-		newline = 0;
-		i++;
-	}
-	while (args[i])
-	{
-		printf("%s", args[i]->value);
-		if (args[i + 1])
-			printf(" ");
-		i++;
-	}
-	if (newline)
-		printf("\n");
-	return (0);
-}*/
-
-static void	print_with_slash_interpretation(char *str)
+/* static void	print_with_slash_interpretation(char *str)
 {
 	int	i;
 
@@ -86,12 +60,9 @@ int	ft_echo(t_token **args)
 
 	if (!args || !args[0])
 		return (1);
-	
 	i = 1;
 	newline = 1;
 	interpret_slash = 0;
-	
-	// Processar opções
 	while (args[i] && args[i]->value[0] == '-')
 	{
 		if (ft_strcmp(args[i]->value, "-n") == 0)
@@ -110,25 +81,107 @@ int	ft_echo(t_token **args)
 			i++;
 		}
 		else
-		{
-			break;
-		}
+			break ;
 	}
-	
-	// Imprimir argumentos
 	while (args[i])
 	{
 		if (interpret_slash)
 			print_with_slash_interpretation(args[i]->value);
 		else
 			printf("%s", args[i]->value);
-		
 		if (args[i + 1])
 			printf(" ");
 		i++;
 	}
-	
+	if (newline)
+		printf("\n");
+	return (0);
+}*/
+
+static void	print_escaped_char(char c)
+{
+	if (c == 'n')
+		printf("\n");
+	else if (c == 't')
+		printf("\t");
+	else if (c == '\\')
+		printf("\\");
+	else
+		printf("\\%c", c);
+}
+
+static void	print_with_slash_interpretation(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\\' && str[i + 1])
+		{
+			i++;
+			print_escaped_char(str[i]);
+		}
+		else
+			printf("%c", str[i]);
+		i++;
+	}
+}
+
+static void	process_echo_options(t_token **args, int *i, 
+	int *newline, int *interpret_slash)
+{
+	while (args[*i] && args[*i]->value[0] == '-')
+	{
+		if (ft_strcmp(args[*i]->value, "-n") == 0)
+		{
+			*newline = 0;
+			(*i)++;
+		}
+		else if (ft_strcmp(args[*i]->value, "-e") == 0)
+		{
+			*interpret_slash = 1;
+			(*i)++;
+		}
+		else if (ft_strcmp(args[*i]->value, "-E") == 0)
+		{
+			*interpret_slash = 0;
+			(*i)++;
+		}
+		else
+			break ;
+	}
+}
+
+static void	print_echo_args(t_token **args, int i, int interpret_slash)
+{
+	while (args[i])
+	{
+		if (interpret_slash)
+			print_with_slash_interpretation(args[i]->value);
+		else
+			printf("%s", args[i]->value);
+		if (args[i + 1])
+			printf(" ");
+		i++;
+	}
+}
+
+int	ft_echo(t_token **args)
+{
+	int	i;
+	int	newline;
+	int	interpret_slash;
+
+	if (!args || !args[0])
+		return (1);
+	i = 1;
+	newline = 1;
+	interpret_slash = 0;
+	process_echo_options(args, &i, &newline, &interpret_slash);
+	print_echo_args(args, i, interpret_slash);
 	if (newline)
 		printf("\n");
 	return (0);
 }
+
