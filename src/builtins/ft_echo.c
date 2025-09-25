@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:18 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/25 08:55:54 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/25 17:07:12 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,8 +167,10 @@ static void	print_echo_args(t_token **args, int i, int interpret_slash)
 	}
 }
 
-int	ft_echo(t_token **args)
+//int	ft_echo(t_token **args)
+int	ft_echo(t_token **args, char **envp)
 {
+	(void)envp; // ✅ Marcar como não usado
 	int	i;
 	int	newline;
 	int	interpret_slash;

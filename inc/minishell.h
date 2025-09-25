@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/25 11:03:51 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/25 22:00:44 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,23 @@ typedef struct s_token
 	int		redir_type;		// 1: >, 2: >>, 3: <, 0: nenhum
 }	t_token;
 
-typedef struct s_builtin
+/*typedef struct s_builtin
 {
 	const char	*builtin_name;
 	int			(*builtin)(t_token **av);
+}	t_builtin;*/
+
+typedef struct s_builtin
+{
+	const char	*builtin_name;
+	int			(*builtin)(t_token **av, char **envp); // ✅ Adicionar envp
 }	t_builtin;
+
+/*typedef struct s_builtin
+{
+    const char  *builtin_name;
+    int         (*builtin)(t_token **av, char ***envp);
+}   t_builtin;*/
 
 typedef struct s_redirection
 {
@@ -108,17 +120,38 @@ typedef struct s_process_data
 	char		**envp;
 }	t_process_data;
 
+/*
 // builtins
 int			exec_builtin(t_token **args, char **envp);
-int			ft_cd(t_token **args);
-int			ft_echo(t_token **args);
+//int			ft_cd(t_token **args);
+int			ft_cd(t_token **args, char **envp);
+//int			ft_echo(t_token **args);
+int			ft_echo(t_token **args, char **envp);
 int			ft_env(t_token **args, char **envp);
 char		**dup_env(char **envp);
 void		free_env(char **env);
-int			ft_exit(t_token **args);
-int			ft_export(t_token **args);
-int			ft_pwd(t_token **args);
-int			ft_unset(t_token **args);
+//int			ft_exit(t_token **args);
+int			ft_exit(t_token **args, char **envp);
+//int			ft_export(t_token **args);
+int			ft_export(t_token **args, char **envp);
+//int			ft_pwd(t_token **args);
+int			ft_pwd(t_token **args, char **envp);
+//int			ft_unset(t_token **args);
+int			ft_unset(t_token **args, char **envp);
+*/
+
+// builtins
+int			exec_builtin(t_token **args, char **envp);  // ✅ char **envp
+int			ft_cd(t_token **args, char **envp);
+int			ft_echo(t_token **args, char **envp);
+int			ft_env(t_token **args, char **envp);
+char		**dup_env(char **envp);
+void		free_env(char **env);
+int			ft_exit(t_token **args, char **envp);
+//int			ft_export(t_token **args, char **envp);
+int			ft_export(t_token **args, char **envp);
+int			ft_pwd(t_token **args, char **envp);
+int			ft_unset(t_token **args, char **envp);
 
 //	execution
 //		execute_pipeline_ext.c

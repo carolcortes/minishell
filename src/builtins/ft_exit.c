@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/08/28 22:27:48 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/25 17:07:50 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@
  * @return This function does not return.
  */
 
-int	ft_exit(t_token **args)
+//int	ft_exit(t_token **args)
+int	ft_exit(t_token **args, char **envp)
 {
+	(void)envp; // ✅ Marcar como não usado
 	(void)args;
 	printf(C "Good bye! 👋\n" RST);
 	rl_clear_history();
