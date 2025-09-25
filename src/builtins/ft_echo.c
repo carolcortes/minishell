@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:18 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/23 17:15:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/25 08:55:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ static void	print_with_slash_interpretation(char *str)
 	}
 }
 
-static void	process_echo_options(t_token **args, int *i, 
+static void	process_echo_options(t_token **args, int *i,
 	int *newline, int *interpret_slash)
 {
 	while (args[*i] && args[*i]->value[0] == '-')
@@ -184,4 +184,3 @@ int	ft_echo(t_token **args)
 		printf("\n");
 	return (0);
 }
-

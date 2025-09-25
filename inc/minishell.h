@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/23 15:47:10 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/25 11:03:51 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,14 @@ typedef struct s_quote_data
 	char	**token;
 	bool	*allow_expand;
 }	t_quote_data;
+
+typedef struct s_process_data
+{
+	int			*input_fd;
+	int			pipe_fd[2];
+	pid_t		*last_pid;
+	char		**envp;
+}	t_process_data;
 
 // builtins
 int			exec_builtin(t_token **args, char **envp);
