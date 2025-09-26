@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/25 22:57:27 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 14:29:39 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,23 +49,11 @@ typedef struct s_token
 	int		redir_type;		// 1: >, 2: >>, 3: <, 0: nenhum
 }	t_token;
 
-/*typedef struct s_builtin
-{
-	const char	*builtin_name;
-	int			(*builtin)(t_token **av);
-}	t_builtin;*/
-
 typedef struct s_builtin
 {
 	const char	*builtin_name;
 	int			(*builtin)(t_token **av, char **envp); // ✅ Adicionar envp
 }	t_builtin;
-
-/*typedef struct s_builtin
-{
-    const char  *builtin_name;
-    int         (*builtin)(t_token **av, char ***envp);
-}   t_builtin;*/
 
 typedef struct s_redirection
 {
@@ -134,19 +122,23 @@ int			ft_pwd(t_token **args, char **envp);
 int			ft_unset(t_token **args, char **envp);
 
 //	execution
-//		execute_pipeline_ext.c
-void		redirect_input(int input_fd);
-void		redirect_output(int pipe_fd[2]);
+//		execute_pip_ext1.c
 void		execute_command(t_command *cmd, char **envp);
 void		handle_child_process(t_command *cmd, int input_fd,
 				int pipe_fd[2], char **envp);
 void		update_fds_after_command(t_command *cmd, t_exec_data *data);
+//		execute_pip_ext2.c
+void		redirect_input(int input_fd);
+void		redirect_output(int pipe_fd[2]);
 //		execute_pipeline.c
 void		execute_pipeline(t_command *pipeline, char **envp);
 //		external.c
 int			execute_external(t_token **args, char **envp);
 //		path.c
 char		*find_command_path(char *command, char **envp);
+//		redirections_ext.c
+int			open_output_file(char *filename, int append);
+int			open_input_file(char *filename);
 //		redirections.c
 int			apply_redirections(t_command *cmd);
 //		utils.c
