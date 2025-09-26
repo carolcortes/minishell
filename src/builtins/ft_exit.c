@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/25 17:07:50 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:12:24 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 //int	ft_exit(t_token **args)
 int	ft_exit(t_token **args, char **envp)
 {
-	(void)envp; // ✅ Marcar como não usado
+	(void)envp;
 	(void)args;
 	printf(C "Good bye! 👋\n" RST);
 	rl_clear_history();

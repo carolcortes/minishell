@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:12 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 15:34:37 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:23:45 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,78 +25,6 @@
  * @return 0 on success, 1 on failure.
  */
 
-/*static bool	is_valid_identifier(char *str)
-{
-	int	i;
-
-	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
-		return (false);
-	i = 1;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-static int	add_or_update_env(char *var, char **envp)
-{
-	int		i;
-	char	*equal_sign;
-	char	*key;
-
-	equal_sign = ft_strchr(var, '=');
-	if (!equal_sign)
-		return (0);
-	key = ft_substr(var, 0, equal_sign - var);
-	if (!key)
-		return (1);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], key, ft_strlen(key)) == 0
-			&& envp[i][ft_strlen(key)] == '=')
-		{
-			free(envp[i]);
-			envp[i] = ft_strdup(var);
-			free(key);
-			return (0);
-		}
-		i++;
-	}
-	envp[i] = ft_strdup(var);
-	envp[i + 1] = NULL;
-	free(key);
-	return (0);
-}
-
-int ft_export(t_token **args, char **envp)
-{
-	int i = 1;
-	int status = 0;
-
-	if (!args[1])
-	{
-		for (int j = 0; envp[j]; j++)
-			printf("declare -x %s\n", envp[j]);
-		return 0;
-	}
-	while (args[i])
-	{
-		if (!is_valid_identifier(args[i]->value))
-		{
-			printf("export: '%s': not a valid identifier\n", args[i]->value);
-			status = 1;
-		}
-		else if (add_or_update_env(args[i]->value, envp))
-			status = 1;
-		i++;
-	}
-	return status;
-}*/
-
 static int	is_valid_identifier(char *str)
 {
 	int	i;
@@ -113,7 +41,7 @@ static int	is_valid_identifier(char *str)
 	return (1);
 }
 
-static int	update_env_var(char **envp, char *key, char *var)
+/*static int	update_env_var(char **envp, char *key, char *var)
 {
 	int	i;
 	int	len;
@@ -163,7 +91,7 @@ static int	add_or_update_env(char *var, char **envp)
 		status = add_env_var(var, envp);
 	free(key);
 	return (status);
-}
+}*/
 
 static void	print_env_export(char **envp)
 {

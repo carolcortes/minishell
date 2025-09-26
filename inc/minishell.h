@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 14:29:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:25:50 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ typedef struct s_process_data
 	char		**envp;
 }	t_process_data;
 
-// builtins
+//	builtins
 int			exec_builtin(t_token **args, char **envp); // ✅ char **envp
 int			ft_cd(t_token **args, char **envp);
 int			ft_echo(t_token **args, char **envp);
@@ -116,8 +116,13 @@ int			ft_env(t_token **args, char **envp);
 char		**dup_env(char **envp);
 void		free_env(char **env);
 int			ft_exit(t_token **args, char **envp);
-//int			ft_export(t_token **args, char **envp);
+//		ft_export_ext.c
+int			update_env_var(char **envp, char *key, char *var);
+int			add_env_var(char *var, char **envp);
+int			add_or_update_env(char *var, char **envp);
+//		ft_export.c
 int			ft_export(t_token **args, char **envp);
+
 int			ft_pwd(t_token **args, char **envp);
 int			ft_unset(t_token **args, char **envp);
 

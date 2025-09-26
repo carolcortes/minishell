@@ -6,7 +6,7 @@
 #    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/09/26 10:42:45 by cgross-s         ###   ########.fr        #
+#    Updated: 2025/09/26 16:14:19 by cgross-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ FILES			= 	main.c main_ext.c signals.c utils.c expand.c free.c \
 					execution/redirections.c execution/redirections_ext.c
 
 BUILTINS		= 	exec_builtin.c ft_exit.c ft_echo.c ft_cd.c ft_pwd.c ft_env.c \
-					ft_export.c ft_unset.c environment.c
+					ft_export.c ft_export_ext.c ft_unset.c environment.c
 
 SRCS			= 	$(addprefix $(SRC_PATH)/, $(FILES)) \
 					$(addprefix $(SRC_PATH)/builtins/, $(BUILTINS))
