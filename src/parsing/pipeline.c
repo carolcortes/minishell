@@ -6,13 +6,13 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/26 10:29:52 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:54:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static int	count_args_until_pipe(t_token *tokens, int start_index)
+/*static int	count_args_until_pipe(t_token *tokens, int start_index)
 {
 	int	count;
 	int	i;
@@ -25,7 +25,7 @@ static int	count_args_until_pipe(t_token *tokens, int start_index)
 		i++;
 	}
 	return (count);
-}
+}*/
 
 static t_token	**copy_command_args(t_token *tokens, int start, int count)
 {

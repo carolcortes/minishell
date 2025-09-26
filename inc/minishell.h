@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 16:36:33 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:55:30 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,9 @@ char		**tokens_to_argv(t_token **tokens);
 void		free_argv(char **argv);
 
 //	parsing
-//		parse_pipeline.c
+//		pipeline_ext.c
+int			count_args_until_pipe(t_token *tokens, int start_index);
+//		pipeline.c
 t_command	*parse_pipeline(t_token *tokens);
 //		tokens.c
 t_token		*shell_split_line_quotes(char *line);
