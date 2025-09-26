@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 23:22:35 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/23 10:43:35 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:14:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	printbanner(void)
 {
 	printf(G "\nWelcome to\n\t"RED"MINISHELL\n" RST);
 	printf(G "\t\ta simple shell implementation.\n\n" RST);
-	//printf(C "Type your commands below:\n" RST);
 }
 
 bool	is_spaces(char c)
