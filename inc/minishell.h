@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 16:25:50 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:36:33 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,8 +157,8 @@ t_command	*parse_pipeline(t_token *tokens);
 //		tokens.c
 t_token		*shell_split_line_quotes(char *line);
 //		tokens_ext1.c
-bool		is_special_char(char c);
-t_token		create_pipe_token(void);
+//bool		is_special_char(char c);
+//t_token		create_pipe_token(void);
 bool		expand_token_array(t_token_data *data);
 bool		process_special_char(char *line, int *i, t_token_data *data);
 char		*extract_quoted(const char *line, int *i, bool *allow_expand);
@@ -171,6 +171,8 @@ bool		add_token_to_array(t_token_data *data, char *token,
 				bool allow_expand);
 bool		process_word_token(char *line, int *i, t_token_data *data);
 //		tokens_ext3.c
+bool		is_special_char(char c);
+t_token		create_pipe_token(void);
 t_token		create_redirection_token(char *value, int type);
 //		redirections.c
 void		extract_redirections(t_command *cmd);

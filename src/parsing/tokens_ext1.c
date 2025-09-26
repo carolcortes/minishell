@@ -6,13 +6,13 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:50:13 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/26 10:30:13 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:32:55 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool	is_special_char(char c)
+/*bool	is_special_char(char c)
 {
 	return (c == '|' || c == '>' || c == '<');
 }
@@ -27,7 +27,7 @@ t_token	create_pipe_token(void)
 	pipe_token.is_redirection = false;
 	pipe_token.redir_type = 0;
 	return (pipe_token);
-}
+}*/
 
 bool	expand_token_array(t_token_data *data)
 {
