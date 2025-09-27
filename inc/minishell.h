@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/27 18:19:15 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/27 19:21:34 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ void		print_pipeline(t_command *pipeline);
 
 // signals
 void		setup_signals(void);
-void		setup_signals_prompt(void);
+void		setup_child_signals(void);
 
 // utils.c
 void		ft_getcwd(char *buf, size_t size);

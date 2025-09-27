@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/15 17:08:05 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/27 19:24:16 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	handle_external_child(char *path, char **argv, char **envp)
 {
+	setup_child_signals();
 	execve(path, argv, envp);
 	printf("minishell: %s: execution failed\n", argv[0]);
 	free(path);
