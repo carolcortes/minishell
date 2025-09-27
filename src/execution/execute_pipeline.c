@@ -6,27 +6,31 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/26 10:05:35 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/27 17:38:44 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-extern int	g_last_status;
+//extern int	g_last_status;
 
-static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid)
+//static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid)
+static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid,
+	t_shell *shell)
 {
 	if (cmd->next && pipe(pipe_fd) == -1)
 	{
 		perror("minishell: pipe");
-		g_last_status = 1;
+		//g_last_status = 1;
+		shell->last_status = 1;
 		return (0);
 	}
 	*pid = fork();
 	if (*pid == -1)
 	{
 		perror("minishell: fork");
-		g_last_status = 1;
+		//g_last_status = 1;
+		shell->last_status = 1;
 		return (0);
 	}
 	return (1);
@@ -46,11 +50,14 @@ static void	update_file_descriptors(int *input_fd, int pipe_fd[2],
 		*input_fd = STDIN_FILENO;
 }
 
-static int	process_command(t_command *cmd, t_process_data *data)
+//static int	process_command(t_command *cmd, t_process_data *data)
+static int	process_command(t_command *cmd, t_process_data *data,
+	t_shell *shell)
 {
 	pid_t	pid;
 
-	if (!create_pipe_and_fork(cmd, data->pipe_fd, &pid))
+	//if (!create_pipe_and_fork(cmd, data->pipe_fd, &pid))
+	if (!create_pipe_and_fork(cmd, data->pipe_fd, &pid, shell))
 		return (0);
 	if (pid == 0)
 		handle_child_process(cmd, *data->input_fd, data->pipe_fd, data->envp);
@@ -60,7 +67,8 @@ static int	process_command(t_command *cmd, t_process_data *data)
 	return (1);
 }
 
-static void	wait_for_children(pid_t last_pid)
+//static void	wait_for_children(pid_t last_pid)
+static void	wait_for_children(pid_t last_pid, t_shell *shell)
 {
 	int		status;
 	pid_t	waited_pid;
@@ -72,14 +80,17 @@ static void	wait_for_children(pid_t last_pid)
 		if (waited_pid == last_pid)
 		{
 			if (WIFEXITED(status))
-				g_last_status = WEXITSTATUS(status);
+				//g_last_status = WEXITSTATUS(status);
+				shell->last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				g_last_status = 128 + WTERMSIG(status);
+				//g_last_status = 128 + WTERMSIG(status);
+				shell->last_status = 128 + WTERMSIG(status);
 		}
 	}
 }
 
-void	execute_pipeline(t_command *pipeline, char **envp)
+//void	execute_pipeline(t_command *pipeline, char **envp)
+void	execute_pipeline(t_command *pipeline, char **envp, t_shell *shell)
 {
 	t_process_data	data;
 	int				input_fd;
@@ -94,9 +105,11 @@ void	execute_pipeline(t_command *pipeline, char **envp)
 	data.envp = envp;
 	while (cmd)
 	{
-		if (!process_command(cmd, &data))
+		//if (!process_command(cmd, &data))
+		if (!process_command(cmd, &data, shell))
 			return ;
 		cmd = cmd->next;
 	}
-	wait_for_children(last_pid);
+	//wait_for_children(last_pid);
+	wait_for_children(last_pid, shell);
 }
