@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:50:13 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/27 14:51:54 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/27 18:20:38 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,14 @@ bool	expand_token_array(t_token_data *data)
 
 static t_token	handle_redirection_token(char *line, int *i)
 {
-	t_token	special_token;
+	t_token	special_token; // erro
 	char	next_char;
 
+	special_token.value = NULL;
+	special_token.allow_expand = false;
+	special_token.is_pipe = false;
+	special_token.is_redirection = false;
+	special_token.redir_type = 0;
 	next_char = line[*i + 1];
 	if (line[*i] == '>' && next_char == '>')
 	{
@@ -41,11 +46,11 @@ static t_token	handle_redirection_token(char *line, int *i)
 	{
 		special_token = create_redirection_token(">", 1);
 	}
-	else if (line[*i] == '<')
+	else if (line[*i] == '<') // erro
 	{
 		special_token = create_redirection_token("<", 3);
 	}
-	return (special_token);
+	return (special_token); // erro
 }
 
 static bool	add_special_token(t_token_data *data, t_token special_token)
