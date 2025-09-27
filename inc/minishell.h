@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 17:44:46 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/27 16:16:26 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sysexits.h>
-# include <fcntl.h>    // For O_WRONLY, O_RDONLY ... open()
+# include <fcntl.h>
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
 
 extern int	g_last_status;	// ✅ EXTERN - apenas declaração
+extern int	g_signal; // ✅ EXTERN - apenas declaração
 
 // ANSI Color codes
 # define Y		"\033[1;33m"
@@ -52,7 +53,7 @@ typedef struct s_token
 typedef struct s_builtin
 {
 	const char	*builtin_name;
-	int			(*builtin)(t_token **av, char **envp); // ✅ Adicionar envp
+	int			(*builtin)(t_token **av, char **envp);
 }	t_builtin;
 
 typedef struct s_redirection
@@ -197,6 +198,7 @@ void		print_pipeline(t_command *pipeline);
 
 // signals
 void		setup_signals(void);
+void		setup_signals_prompt(void);
 
 // utils.c
 void		ft_getcwd(char *buf, size_t size);
