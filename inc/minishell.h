@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 17:44:46 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/27 17:22:23 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ extern int	g_last_status;	// ✅ EXTERN - apenas declaração
 
 # define WHITESPACES "\t\n\v\f\r "
 
-// Struct para tokens
+// Finalidade → É a base do parser, contém a informação de cada palavra ou operador.
 typedef struct s_token
 {
 	char	*value;
@@ -49,18 +49,35 @@ typedef struct s_token
 	int		redir_type;		// 1: >, 2: >>, 3: <, 0: nenhum
 }	t_token;
 
+// Finalidade → Permite chamar rapidamente a função correta sem if/else gigante.
 typedef struct s_builtin
 {
 	const char	*builtin_name;
 	int			(*builtin)(t_token **av, char **envp); // ✅ Adicionar envp
 }	t_builtin;
 
+// Finalidade → Facilita abrir e aplicar os dup2 corretos antes de executar o comando.
 typedef struct s_redirection
 {
 	int		type;		// 1: >, 2: >>, 3: <
 	char	*filename;	// arquivo alvo
 }	t_redirection;
 
+/*
+- Estrutura de nível mais alto: 
+	representa um comando completo (com args e redirecionamentos).
+- Pode estar ligado a outros via next/prev → pipelines.
+- Exemplo:
+	- Input: cat file.txt | grep hello
+	- t_command 1:
+		- args: ["cat", "file.txt"]
+		- redir_count=0
+	- t_command 2:
+		- args: ["grep", "hello"]
+		- redir_count=0
+		- prev aponta para cat.
+*/
+// Finalidade → É a estrutura central da execução.
 typedef struct s_command
 {
 	t_token				**args;		// Array de tokens deste comando
@@ -71,14 +88,16 @@ typedef struct s_command
 	struct s_command	*prev;		// Comando anterior (opcional)
 }	t_command;
 
+// Usado para controlar a execução de pipelines.
 typedef struct s_exec_data
 {
-	int			*input_fd;
-	int			pipe_fd[2];
-	pid_t		*last_pid;
-	char		**envp;
+	int			*input_fd;	// entrada do comando atual (normalmente stdin ou saída do comando anterior).
+	int			pipe_fd[2];	// pipe criado para comunicação entre comandos.
+	pid_t		*last_pid;	// último processo criado (para o waitpid).
+	char		**envp;		// ambiente do shell.
 }	t_exec_data;
 
+// usado quando crias um novo processo com fork.
 typedef struct s_fork_data
 {
 	int			input_fd;
@@ -87,6 +106,7 @@ typedef struct s_fork_data
 	char		**envp;
 }	t_fork_data;
 
+// Finalidade → Evita realocação manual a cada token novo.
 typedef struct s_token_data
 {
 	t_token	*tokens;
@@ -94,12 +114,16 @@ typedef struct s_token_data
 	int		capacity;
 }	t_token_data;
 
+// Usado para parsing com aspas (' ' e " ").
 typedef struct s_quote_data
 {
-	char	**token;
-	bool	*allow_expand;
+	char	**token;		// O token final (token).
+	bool	*allow_expand;	// Se dentro desse token é permitido expandir
 }	t_quote_data;
 
+/*Mais uma variação para organizar dados da execução.
+É essencialmente igual a t_exec_data, mas pode ser usado em outro 
+contexto (ex: função separada para gerir child processes).*/
 typedef struct s_process_data
 {
 	int			*input_fd;
@@ -107,6 +131,14 @@ typedef struct s_process_data
 	pid_t		*last_pid;
 	char		**envp;
 }	t_process_data;
+
+// substitui a variável global g_last_status
+typedef struct s_shell
+{
+	//char	**envp;          // ambiente duplicado
+	int		last_status;    // substitui g_last_status
+}	t_shell;
+
 
 //	builtins
 int			exec_builtin(t_token **args, char **envp); // ✅ char **envp
@@ -136,7 +168,8 @@ void		update_fds_after_command(t_command *cmd, t_exec_data *data);
 void		redirect_input(int input_fd);
 void		redirect_output(int pipe_fd[2]);
 //		execute_pipeline.c
-void		execute_pipeline(t_command *pipeline, char **envp);
+//void		execute_pipeline(t_command *pipeline, char **envp);
+void		execute_pipeline(t_command *pipeline, char **envp, t_shell *shell);
 //		external.c
 int			execute_external(t_token **args, char **envp);
 //		path.c
@@ -190,7 +223,8 @@ void		free_pipeline(t_command *pipeline);
 
 // main_ext.c
 int			handle_child_process_single(t_command *cmd, char **env);
-void		handle_parent_process(pid_t pid);
+//void		handle_parent_process(pid_t pid);
+void		handle_parent_process(pid_t pid, t_shell *shell);
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);
 void		print_pipeline(t_command *pipeline);
