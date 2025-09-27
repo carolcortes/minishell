@@ -3,37 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 17:16:58 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/27 14:33:35 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 int	g_last_status = 0;
-
-/*static int	handle_child_process_single(t_command *cmd, char **env)
-{
-	if (!apply_redirections(cmd))
-		return (1);
-	if (is_builtin(cmd->args))
-		return (exec_builtin(cmd->args, env));
-	else
-		return (execute_external(cmd->args, env));
-}
-
-static void	handle_parent_process(pid_t pid)
-{
-	int	status;
-
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		g_last_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		g_last_status = 128 + WTERMSIG(status);
-}*/
 
 static void	execute_with_redirections(t_command *cmd, char **env)
 {
