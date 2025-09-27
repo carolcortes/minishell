@@ -6,11 +6,32 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/16 17:33:59 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:44:45 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+int	handle_child_process_single(t_command *cmd, char **env)
+{
+	if (!apply_redirections(cmd))
+		return (1);
+	if (is_builtin(cmd->args))
+		return (exec_builtin(cmd->args, env));
+	else
+		return (execute_external(cmd->args, env));
+}
+
+void	handle_parent_process(pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		g_last_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_last_status = 128 + WTERMSIG(status);
+}
 
 char	*shell_read_line(void)
 {

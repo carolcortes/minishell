@@ -1,46 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_pipeline_ext.c                             :+:      :+:    :+:   */
+/*   execute_pip_ext1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/15 16:31:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/15 16:50:28 by cgross-s         ###   ########.fr       */
+/*   Created: 2025/09/26 10:03:36 by cgross-s          #+#    #+#             */
+/*   Updated: 2025/09/26 10:40:26 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-// extern int	g_last_status;
-
-//static void	redirect_input(int input_fd)
-void	redirect_input(int input_fd)
-{
-	if (input_fd != STDIN_FILENO)
-	{
-		if (dup2(input_fd, STDIN_FILENO) == -1)
-		{
-			perror("minishell: dup2 stdin");
-			exit(1);
-		}
-		close(input_fd);
-	}
-}
-
-//static void	redirect_output(int pipe_fd[2])
-void	redirect_output(int pipe_fd[2])
-{
-	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-	{
-		perror("minishell: dup2 stdout");
-		exit(1);
-	}
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-}
-
-//static void	execute_command(t_command *cmd, char **envp)
 void	execute_command(t_command *cmd, char **envp)
 {
 	int	exit_status;
@@ -57,18 +28,42 @@ void	execute_command(t_command *cmd, char **envp)
 	}
 }
 
-//static void	handle_child_process(t_command *cmd, int input_fd,
-//	int pipe_fd[2], char **envp)
+static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
+	t_command *cmd)
+{
+	if (input_fd != STDIN_FILENO)
+	{
+		if (dup2(input_fd, STDIN_FILENO) == -1)
+		{
+			perror("minishell: dup2 stdin");
+			exit(1);
+		}
+		close(input_fd);
+	}
+	if (cmd->next)
+	{
+		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+		{
+			perror("minishell: dup2 stdout");
+			exit(1);
+		}
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+	}
+}
+
 void	handle_child_process(t_command *cmd, int input_fd,
 	int pipe_fd[2], char **envp)
 {
-	redirect_input(input_fd);
-	if (cmd->next)
-		redirect_output(pipe_fd);
-	execute_command(cmd, envp);
+	if (!apply_redirections(cmd))
+		exit(1);
+	apply_pipe_redirections(input_fd, pipe_fd, cmd);
+	if (is_builtin(cmd->args))
+		exit(exec_builtin(cmd->args, envp));
+	else
+		exit(execute_external(cmd->args, envp));
 }
 
-//static void	update_fds_after_command(t_command *cmd, t_exec_data *data)
 void	update_fds_after_command(t_command *cmd, t_exec_data *data)
 {
 	if (*data->input_fd != STDIN_FILENO)

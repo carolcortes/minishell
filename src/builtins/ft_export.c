@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:12 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/13 16:55:30 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:23:45 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,108 @@
  * @return 0 on success, 1 on failure.
  */
 
-int	ft_export(t_token **args)
+static int	is_valid_identifier(char *str)
 {
-	if (!args[1])
+	int	i;
+
+	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=')
 	{
-		printf("export: precisa de argumento\n");
-		return (1);
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+		i++;
 	}
-	if (putenv(args[1]->value) != 0)
+	return (1);
+}
+
+/*static int	update_env_var(char **envp, char *key, char *var)
+{
+	int	i;
+	int	len;
+
+	len = ft_strlen(key);
+	i = 0;
+	while (envp[i])
 	{
-		perror("export");
-		return (1);
+		if (ft_strncmp(envp[i], key, len) == 0 && envp[i][len] == '=')
+		{
+			free(envp[i]);
+			envp[i] = ft_strdup(var);
+			return (1);
+		}
+		i++;
 	}
 	return (0);
+}
+
+static int	add_env_var(char *var, char **envp)
+{
+	int		i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	envp[i] = ft_strdup(var);
+	envp[i + 1] = NULL;
+	return (0);
+}
+
+static int	add_or_update_env(char *var, char **envp)
+{
+	char	*equal;
+	char	*key;
+	int		status;
+
+	equal = ft_strchr(var, '=');
+	if (!equal)
+		return (0);
+	key = ft_substr(var, 0, equal - var);
+	if (!key)
+		return (1);
+	if (update_env_var(envp, key, var))
+		status = 0;
+	else
+		status = add_env_var(var, envp);
+	free(key);
+	return (status);
+}*/
+
+static void	print_env_export(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		printf("declare -x %s\n", envp[i]);
+		i++;
+	}
+}
+
+int	ft_export(t_token **args, char **envp)
+{
+	int	i;
+	int	status;
+
+	if (!args[1])
+	{
+		print_env_export(envp);
+		return (0);
+	}
+	i = 1;
+	status = 0;
+	while (args[i])
+	{
+		if (!is_valid_identifier(args[i]->value))
+		{
+			printf("export: `%s': not a valid identifier\n", args[i]->value);
+			status = 1;
+		}
+		else if (add_or_update_env(args[i]->value, envp))
+			status = 1;
+		i++;
+	}
+	return (status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:52 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/02 22:50:35 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:12:07 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@
  *         cannot be retrieved.
  */
 
-int	ft_pwd(t_token **args)
+//int	ft_pwd(t_token **args)
+int	ft_pwd(t_token **args, char **envp)
 {
 	char	cwd[4096];
 
 	(void)args;
+	(void)envp;
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
 		printf("%s\n", cwd);

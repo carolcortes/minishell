@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 23:22:35 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/13 16:54:58 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:14:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ void	ft_getcwd(char *buf, size_t size)
 
 void	printbanner(void)
 {
-	printf(Y "Welcome to Minishell!\n" RST);
-	printf(G "This is a simple shell implementation.\n" RST);
-	printf(C "Type your commands below:\n" RST);
+	printf(G "\nWelcome to\n\t"RED"MINISHELL\n" RST);
+	printf(G "\t\ta simple shell implementation.\n\n" RST);
 }
 
 bool	is_spaces(char c)

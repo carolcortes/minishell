@@ -6,13 +6,13 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/15 20:38:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 16:54:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static int	count_args_until_pipe(t_token *tokens, int start_index)
+/*static int	count_args_until_pipe(t_token *tokens, int start_index)
 {
 	int	count;
 	int	i;
@@ -25,7 +25,7 @@ static int	count_args_until_pipe(t_token *tokens, int start_index)
 		i++;
 	}
 	return (count);
-}
+}*/
 
 static t_token	**copy_command_args(t_token *tokens, int start, int count)
 {
@@ -45,8 +45,29 @@ static t_token	**copy_command_args(t_token *tokens, int start, int count)
 	return (args);
 }
 
-static int	process_token(t_token *tokens, int *i, t_command **first,
-	t_command **current)
+static t_command	*create_new_command(t_token *tokens, int i, int arg_count)
+{
+	t_command	*new_cmd;
+
+	new_cmd = malloc(sizeof(t_command));
+	if (!new_cmd)
+		return (NULL);
+	new_cmd->args = copy_command_args(tokens, i, arg_count);
+	if (!new_cmd->args)
+	{
+		free(new_cmd);
+		return (NULL);
+	}
+	new_cmd->argc = arg_count;
+	new_cmd->redirs = NULL;
+	new_cmd->redir_count = 0;
+	new_cmd->next = NULL;
+	new_cmd->prev = NULL;
+	return (new_cmd);
+}
+
+static int	add_command_to_pipeline(t_token *tokens, int *i,
+	t_command **first, t_command **current)
 {
 	int			arg_count;
 	t_command	*new_cmd;
@@ -54,23 +75,31 @@ static int	process_token(t_token *tokens, int *i, t_command **first,
 	arg_count = count_args_until_pipe(tokens, *i);
 	if (arg_count == 0)
 		return (0);
-	new_cmd = malloc(sizeof(t_command));
+	new_cmd = create_new_command(tokens, *i, arg_count);
 	if (!new_cmd)
-	{
-		free_pipeline(*first);
 		return (0);
-	}
-	new_cmd->args = copy_command_args(tokens, *i, arg_count);
-	new_cmd->argc = arg_count;
-	new_cmd->next = NULL;
-	new_cmd->prev = *current;
 	if (!*first)
 		*first = new_cmd;
 	if (*current)
+	{
 		(*current)->next = new_cmd;
+		new_cmd->prev = *current;
+	}
 	*current = new_cmd;
 	*i += arg_count;
 	return (1);
+}
+
+static void	extract_redirections_from_pipeline(t_command *pipeline)
+{
+	t_command	*current;
+
+	current = pipeline;
+	while (current)
+	{
+		extract_redirections(current);
+		current = current->next;
+	}
 }
 
 t_command	*parse_pipeline(t_token *tokens)
@@ -91,8 +120,9 @@ t_command	*parse_pipeline(t_token *tokens)
 			i++;
 			continue ;
 		}
-		if (!process_token(tokens, &i, &first, &current))
+		if (!add_command_to_pipeline(tokens, &i, &first, &current))
 			break ;
 	}
+	extract_redirections_from_pipeline(first);
 	return (first);
 }

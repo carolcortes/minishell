@@ -1,0 +1,10 @@
+c_files.txt
+file_list.txt
+inc
+libft
+Makefile
+minishell
+README.md
+src
+test1.c
+test2.c

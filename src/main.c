@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/16 17:33:54 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:16:58 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,67 +14,54 @@
 
 int	g_last_status = 0;
 
-/*char	*shell_read_line(void)
+/*static int	handle_child_process_single(t_command *cmd, char **env)
 {
-	char	*line;
-
-	line = readline(MAG"🏴‍☠️  minishell 🏴‍☠️ $> "RST);
-	if (!line)
-	{
-		printf("exit\n");
-		return (NULL);
-	}
-	if (*line)
-		add_history(line);
-	return (line);
+	if (!apply_redirections(cmd))
+		return (1);
+	if (is_builtin(cmd->args))
+		return (exec_builtin(cmd->args, env));
+	else
+		return (execute_external(cmd->args, env));
 }
 
-void	print_tokens(t_token *tokens)
+static void	handle_parent_process(pid_t pid)
 {
-	int	i;
+	int	status;
 
-	i = 0;
-	printf("=== TOKENS PARSED ===\n");
-	while (tokens[i].value)
-	{
-		printf("Token %d: '%s' (expand: %d, pipe: %d, redir: %d)\n",
-			i, tokens[i].value, tokens[i].allow_expand,
-			tokens[i].is_pipe, tokens[i].is_redirection);
-		i++;
-	}
-	printf("=====================\n");
-}
-
-void	print_pipeline(t_command *pipeline)
-{
-	t_command	*cmd;
-	int			cmd_index;
-	int			i;
-
-	cmd = pipeline;
-	cmd_index = 0;
-	printf("=== PIPELINE STRUCTURE ===\n");
-	while (cmd)
-	{
-		printf("Command %d: ", cmd_index++);
-		i = 0;
-		while (i < cmd->argc)
-		{
-			printf("'%s' ", cmd->args[i]->value);
-			i++;
-		}
-		printf("\n");
-		cmd = cmd->next;
-	}
-	printf("==========================\n");
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		g_last_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_last_status = 128 + WTERMSIG(status);
 }*/
 
-static void	process_single_command(t_command *pipeline, char **env)
+static void	execute_with_redirections(t_command *cmd, char **env)
 {
-	if (is_builtin(pipeline->args))
-		g_last_status = exec_builtin(pipeline->args, env);
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+		exit(handle_child_process_single(cmd, env));
+	else if (pid > 0)
+		handle_parent_process(pid);
 	else
-		g_last_status = execute_external(pipeline->args, env);
+	{
+		perror("minishell: fork");
+		g_last_status = 1;
+	}
+}
+
+static void	process_single_command(t_command *cmd, char **env)
+{
+	if (cmd->redir_count > 0)
+		execute_with_redirections(cmd, env);
+	else
+	{
+		if (is_builtin(cmd->args))
+			g_last_status = exec_builtin(cmd->args, env);
+		else
+			g_last_status = execute_external(cmd->args, env);
+	}
 }
 
 static void	process_input_line(char *line, char **env)
@@ -87,11 +74,9 @@ static void	process_input_line(char *line, char **env)
 	if (!tokens)
 		return ;
 	expand_tokens(tokens, g_last_status);
-	print_tokens(tokens);
 	pipeline = parse_pipeline(tokens);
 	if (pipeline)
 	{
-		print_pipeline(pipeline);
 		if (pipeline->next)
 			execute_pipeline(pipeline, env);
 		else
