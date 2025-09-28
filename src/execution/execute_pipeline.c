@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/27 17:38:44 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/28 10:49:16 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,13 @@ static void	wait_for_children(pid_t last_pid, t_shell *shell)
 		if (waited_pid == last_pid)
 		{
 			if (WIFEXITED(status))
-				//g_last_status = WEXITSTATUS(status);
 				shell->last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				//g_last_status = 128 + WTERMSIG(status);
 				shell->last_status = 128 + WTERMSIG(status);
 		}
 	}
 }
 
-//void	execute_pipeline(t_command *pipeline, char **envp)
 void	execute_pipeline(t_command *pipeline, char **envp, t_shell *shell)
 {
 	t_process_data	data;
