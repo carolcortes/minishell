@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/28 11:46:29 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/28 16:54:27 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ static void	execute_with_redirections(t_command *cmd, char **env, t_shell *shell
 
 	pid = fork();
 	if (pid == 0)
+	{
+		setup_child_signals();
 		exit(handle_child_process_single(cmd, env));
+	}
 	else if (pid > 0)
 		handle_parent_process(pid, shell);
 	else
@@ -69,6 +72,9 @@ static void	main_loop(char **env, t_shell *shell)
 
 	while (42)
 	{
+		setup_signals();
+		if (g_signal == SIGINT)
+			g_signal = 0;
 		line = shell_read_line();
 		if (!line)
 			break ;
@@ -86,7 +92,6 @@ int	main(int argc, char **argv, char **envp)
 	env = dup_env(envp);
 	shell.last_status = 0;
 	printbanner();
-	setup_signals();
 	main_loop(env, &shell);
 	free_env(env);
 	rl_clear_history();

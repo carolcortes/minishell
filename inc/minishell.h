@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/27 19:21:34 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/28 13:33:25 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
 
-extern int	g_last_status;	// ✅ EXTERN - apenas declaração
-extern int	g_signal; // ✅ EXTERN - apenas declaração
+extern volatile sig_atomic_t g_signal;
 
 // ANSI Color codes
 # define Y		"\033[1;33m"
@@ -224,7 +223,6 @@ void		free_pipeline(t_command *pipeline);
 
 // main_ext.c
 int			handle_child_process_single(t_command *cmd, char **env);
-//void		handle_parent_process(pid_t pid);
 void		handle_parent_process(pid_t pid, t_shell *shell);
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);

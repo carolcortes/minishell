@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/27 19:24:16 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/28 13:35:14 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ static int	execute_external_command(char *path, char **argv, char **envp)
 
 	pid = fork();
 	if (pid == 0)
+	{
+		setup_child_signals();
 		return (handle_external_child(path, argv, envp));
+	}
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
@@ -46,7 +49,11 @@ static int	execute_external_command(char *path, char **argv, char **envp)
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGQUIT)
+				printf("Quit (core dumped)\n");
 			return (128 + WTERMSIG(status));
+		}
 		else
 			return (1);
 	}

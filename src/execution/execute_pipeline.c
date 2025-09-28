@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/28 10:49:16 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/28 13:37:37 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ static int	process_command(t_command *cmd, t_process_data *data,
 	if (!create_pipe_and_fork(cmd, data->pipe_fd, &pid, shell))
 		return (0);
 	if (pid == 0)
+	{
+		setup_child_signals();
 		handle_child_process(cmd, *data->input_fd, data->pipe_fd, data->envp);
+	}
 	if (pid > 0)
 		*data->last_pid = pid;
 	update_file_descriptors(data->input_fd, data->pipe_fd, cmd);
@@ -102,11 +105,9 @@ void	execute_pipeline(t_command *pipeline, char **envp, t_shell *shell)
 	data.envp = envp;
 	while (cmd)
 	{
-		//if (!process_command(cmd, &data))
 		if (!process_command(cmd, &data, shell))
 			return ;
 		cmd = cmd->next;
 	}
-	//wait_for_children(last_pid);
 	wait_for_children(last_pid, shell);
 }
