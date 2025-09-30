@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/30 20:47:55 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 21:19:19 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ typedef struct s_builtin
 // Finalidade → Facilita abrir e aplicar os dup2 corretos antes de executar o comando.
 typedef struct s_redirection
 {
-	int		type;		// 1: >, 2: >>, 3: <
-	char	*filename;	// arquivo alvo
+	int		type;		// 1: >, 2: >>, 3: <, 4: <<
+	char	*filename;	// para << será o delimitador
 }	t_redirection;
 
 // Finalidade → É a estrutura central da execução.

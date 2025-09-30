@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:50:13 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/30 20:56:38 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 21:26:00 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,13 @@ static t_token	handle_redirection_token(char *line, int *i)
 	{
 		special_token = create_redirection_token(">", 1);
 	}
+	////// added ---------------------
+	else if (line[*i] == '<' && next_char == '<')
+	{
+		special_token = create_redirection_token("<<", 4);
+		(*i)++;
+	}
+	///// -----------------------------
 	else if (line[*i] == '<') // erro
 	{
 		special_token = create_redirection_token("<", 3);
