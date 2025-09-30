@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/27 17:22:23 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 20:47:55 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
 
-extern int	g_last_status;	// ✅ EXTERN - apenas declaração
+//extern int	g_last_status;	// ✅ EXTERN - apenas declaração
 
 // ANSI Color codes
 # define Y		"\033[1;33m"
@@ -53,7 +53,7 @@ typedef struct s_token
 typedef struct s_builtin
 {
 	const char	*builtin_name;
-	int			(*builtin)(t_token **av, char **envp); // ✅ Adicionar envp
+	int			(*builtin)(t_token **av, char **envp);
 }	t_builtin;
 
 // Finalidade → Facilita abrir e aplicar os dup2 corretos antes de executar o comando.
@@ -63,20 +63,6 @@ typedef struct s_redirection
 	char	*filename;	// arquivo alvo
 }	t_redirection;
 
-/*
-- Estrutura de nível mais alto: 
-	representa um comando completo (com args e redirecionamentos).
-- Pode estar ligado a outros via next/prev → pipelines.
-- Exemplo:
-	- Input: cat file.txt | grep hello
-	- t_command 1:
-		- args: ["cat", "file.txt"]
-		- redir_count=0
-	- t_command 2:
-		- args: ["grep", "hello"]
-		- redir_count=0
-		- prev aponta para cat.
-*/
 // Finalidade → É a estrutura central da execução.
 typedef struct s_command
 {
@@ -141,7 +127,7 @@ typedef struct s_shell
 
 
 //	builtins
-int			exec_builtin(t_token **args, char **envp); // ✅ char **envp
+int			exec_builtin(t_token **args, char **envp);
 int			ft_cd(t_token **args, char **envp);
 int			ft_echo(t_token **args, char **envp);
 int			ft_env(t_token **args, char **envp);
@@ -168,7 +154,6 @@ void		update_fds_after_command(t_command *cmd, t_exec_data *data);
 void		redirect_input(int input_fd);
 void		redirect_output(int pipe_fd[2]);
 //		execute_pipeline.c
-//void		execute_pipeline(t_command *pipeline, char **envp);
 void		execute_pipeline(t_command *pipeline, char **envp, t_shell *shell);
 //		external.c
 int			execute_external(t_token **args, char **envp);
@@ -192,8 +177,6 @@ t_command	*parse_pipeline(t_token *tokens);
 //		tokens.c
 t_token		*shell_split_line_quotes(char *line);
 //		tokens_ext1.c
-//bool		is_special_char(char c);
-//t_token		create_pipe_token(void);
 bool		expand_token_array(t_token_data *data);
 bool		process_special_char(char *line, int *i, t_token_data *data);
 char		*extract_quoted(const char *line, int *i, bool *allow_expand);
@@ -223,7 +206,6 @@ void		free_pipeline(t_command *pipeline);
 
 // main_ext.c
 int			handle_child_process_single(t_command *cmd, char **env);
-//void		handle_parent_process(pid_t pid);
 void		handle_parent_process(pid_t pid, t_shell *shell);
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);

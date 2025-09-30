@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 16:12:24 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 20:49:27 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
  * @return This function does not return.
  */
 
-//int	ft_exit(t_token **args)
 int	ft_exit(t_token **args, char **envp)
 {
 	(void)envp;

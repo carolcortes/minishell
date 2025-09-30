@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:22 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 14:52:21 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 20:50:45 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,54 +24,6 @@
  * @return 0 on success, 1 if no argument is given or
  *         if the variable could not be removed.
  */
-
-/*static bool	is_valid_identifier(char *str)
-{
-	int	i;
-
-	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
-		return (false);
-	i = 1;
-	while (str[i])
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-int	ft_unset(t_token **args, char **envp)
-{
-	int	i;
-	int	exit_status;
-
-	(void)envp;
-	
-	if (!args[1])
-	{
-		printf("unset: precisa de argumento\n");
-		return (1);
-	}
-	
-	exit_status = 0;
-	i = 1;
-	while (args[i])
-	{
-		if (!is_valid_identifier(args[i]->value))
-		{
-			printf("unset: '%s': not a valid identifier\n", args[i]->value);
-			exit_status = 1;
-		}
-		else if (unsetenv(args[i]->value) != 0)
-		{
-			perror("unset");
-			exit_status = 1;
-		}
-		i++;
-	}
-	return (exit_status);
-}*/
 
 static int	is_valid_identifier(char *str)
 {

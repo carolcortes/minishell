@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:52 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 16:12:07 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 20:50:19 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
  *         cannot be retrieved.
  */
 
-//int	ft_pwd(t_token **args)
 int	ft_pwd(t_token **args, char **envp)
 {
 	char	cwd[4096];
