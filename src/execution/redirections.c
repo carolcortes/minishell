@@ -6,40 +6,39 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:18:42 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/30 21:36:41 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/01 12:04:29 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-// added
-static int apply_heredoc(t_redirection *redir)
+static int	apply_heredoc(t_redirection *redir)
 {
-    int     pipefd[2];
-    char    *line;
+	int		pipefd[2];
+	char	*line;
 
-    if (pipe(pipefd) == -1)
-        return (0);
-    while (1)
-    {
-        line = readline("> ");
-        if (!line || ft_strcmp(line, redir->filename) == 0)
-        {
-            free(line);
-            break;
-        }
-        write(pipefd[1], line, ft_strlen(line));
-        write(pipefd[1], "\n", 1);
-        free(line);
-    }
-    close(pipefd[1]);
-    if (dup2(pipefd[0], STDIN_FILENO) == -1)
-    {
-        close(pipefd[0]);
-        return (0);
-    }
-    close(pipefd[0]);
-    return (1);
+	if (pipe(pipefd) == -1)
+		return (0);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strcmp(line, redir->filename) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(pipefd[1], line, ft_strlen(line));
+		write(pipefd[1], "\n", 1);
+		free(line);
+	}
+	close(pipefd[1]);
+	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+	{
+		close(pipefd[0]);
+		return (0);
+	}
+	close(pipefd[0]);
+	return (1);
 }
 
 //////////////////
