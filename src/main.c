@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/30 21:00:04 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 22:34:03 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	execute_with_redirections(t_command *cmd, char **env, t_shell *shell
 	}
 }
 
-static void	process_single_command(t_command *cmd, char **env, t_shell *shell)
+/*static void	process_single_command(t_command *cmd, char **env, t_shell *shell)
 {
 	if (cmd->redir_count > 0)
 		execute_with_redirections(cmd, env, shell);
@@ -39,7 +39,32 @@ static void	process_single_command(t_command *cmd, char **env, t_shell *shell)
 		else
 			shell->last_status = execute_external(cmd->args, env);
 	}
+}*/
+
+static void	process_single_command(t_command *cmd, char **env, t_shell *shell)
+{
+	if (cmd->argc == 0) // ✅ Nenhum comando, apenas redireções
+	{
+		if (cmd->redir_count > 0)
+		{
+			if (!apply_redirections(cmd))
+				shell->last_status = 1;
+			else
+				shell->last_status = 0; // descarta heredoc, igual ao bash
+		}
+		return ;
+	}
+	if (cmd->redir_count > 0)
+		execute_with_redirections(cmd, env, shell);
+	else
+	{
+		if (is_builtin(cmd->args))
+			shell->last_status = exec_builtin(cmd->args, env);
+		else
+			shell->last_status = execute_external(cmd->args, env);
+	}
 }
+
 
 static void	process_input_line(char *line, char **env, t_shell *shell)
 {

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/30 21:19:19 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 23:04:30 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,8 @@ void		redirect_output(int pipe_fd[2]);
 void		execute_pipeline(t_command *pipeline, char **envp, t_shell *shell);
 //		external.c
 int			execute_external(t_token **args, char **envp);
+//		heredoc.c
+char		*handle_heredoc(char *delimiter);
 //		path.c
 char		*find_command_path(char *command, char **envp);
 //		redirections_ext.c

@@ -6,7 +6,7 @@
 #    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/09/26 16:52:50 by cgross-s         ###   ########.fr        #
+#    Updated: 2025/09/30 23:15:08 by cgross-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ FILES			= 	main.c main_ext.c signals.c utils.c expand.c free.c \
 					parsing/tokens_ext1.c parsing/tokens_ext2.c parsing/tokens_ext3.c \
 					execution/execute_pipeline.c execution/execute_pip_ext1.c execution/execute_pip_ext2.c \
 					execution/external.c execution/utils.c execution/path.c \
-					execution/redirections.c execution/redirections_ext.c
+					execution/redirections.c execution/redirections_ext.c execution/heredoc.c
 
 BUILTINS		= 	exec_builtin.c ft_exit.c ft_echo.c ft_cd.c ft_pwd.c ft_env.c \
 					ft_export.c ft_export_ext.c ft_unset.c environment.c
