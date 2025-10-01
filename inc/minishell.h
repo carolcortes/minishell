@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/01 11:50:03 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/01 12:35:30 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 
 # define WHITESPACES "\t\n\v\f\r "
 
-// Finalidade → É a base do parser, contém a informação de cada palavra ou operador.
+// É a base do parser, contém a informação de cada palavra ou operador.
 typedef struct s_token
 {
 	char	*value;
@@ -49,14 +49,14 @@ typedef struct s_token
 	int		redir_type;		// 1: >, 2: >>, 3: <, 0: nenhum
 }	t_token;
 
-// Finalidade → Permite chamar rapidamente a função correta sem if/else gigante.
+// Permite chamar rapidamente a função correta sem if/else gigante.
 typedef struct s_builtin
 {
 	const char	*builtin_name;
 	int			(*builtin)(t_token **av, char **envp);
 }	t_builtin;
 
-// Finalidade → Facilita abrir e aplicar os dup2 corretos antes de executar o comando.
+// Facilita abrir e aplicar os dup2 corretos antes de executar o comando.
 typedef struct s_redirection
 {
 	int		type;		// 1: >, 2: >>, 3: <, 4: <<
@@ -77,7 +77,7 @@ typedef struct s_command
 // Usado para controlar a execução de pipelines.
 typedef struct s_exec_data
 {
-	int			*input_fd;	// entrada do comando atual (normalmente stdin ou saída do comando anterior).
+	int			*input_fd;	// entrada do comando atual
 	int			pipe_fd[2];	// pipe criado para comunicação entre comandos.
 	pid_t		*last_pid;	// último processo criado (para o waitpid).
 	char		**envp;		// ambiente do shell.
@@ -122,9 +122,8 @@ typedef struct s_process_data
 typedef struct s_shell
 {
 	//char	**envp;          // ambiente duplicado
-	int		last_status;    // substitui g_last_status
+	int		last_status;	// substitui g_last_status
 }	t_shell;
-
 
 //	builtins
 int			exec_builtin(t_token **args, char **envp);

@@ -6,13 +6,14 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/30 22:34:03 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/01 12:30:52 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	execute_with_redirections(t_command *cmd, char **env, t_shell *shell)
+static void	execute_with_redirections(t_command *cmd, char **env,
+	t_shell *shell)
 {
 	pid_t	pid;
 
@@ -28,29 +29,16 @@ static void	execute_with_redirections(t_command *cmd, char **env, t_shell *shell
 	}
 }
 
-/*static void	process_single_command(t_command *cmd, char **env, t_shell *shell)
-{
-	if (cmd->redir_count > 0)
-		execute_with_redirections(cmd, env, shell);
-	else
-	{
-		if (is_builtin(cmd->args))
-			shell->last_status = exec_builtin(cmd->args, env);
-		else
-			shell->last_status = execute_external(cmd->args, env);
-	}
-}*/
-
 static void	process_single_command(t_command *cmd, char **env, t_shell *shell)
 {
-	if (cmd->argc == 0) // ✅ Nenhum comando, apenas redireções
+	if (cmd->argc == 0)
 	{
 		if (cmd->redir_count > 0)
 		{
 			if (!apply_redirections(cmd))
 				shell->last_status = 1;
 			else
-				shell->last_status = 0; // descarta heredoc, igual ao bash
+				shell->last_status = 0;
 		}
 		return ;
 	}
@@ -64,7 +52,6 @@ static void	process_single_command(t_command *cmd, char **env, t_shell *shell)
 			shell->last_status = execute_external(cmd->args, env);
 	}
 }
-
 
 static void	process_input_line(char *line, char **env, t_shell *shell)
 {
