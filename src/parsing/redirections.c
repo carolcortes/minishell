@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 11:31:44 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/01 09:10:46 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/01 09:49:04 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,50 +61,50 @@ static void	remove_args(t_command *cmd, int start, int count)
 
 /*static int	process_redirection_token(t_command *cmd, int i)
 {
-    if (i + 1 < cmd->argc && cmd->args[i + 1])
-    {
-        int type = cmd->args[i]->redir_type;
-        char *target = cmd->args[i + 1]->value;
+	if (i + 1 < cmd->argc && cmd->args[i + 1])
+	{
+		int type = cmd->args[i]->redir_type;
+		char *target = cmd->args[i + 1]->value;
 
-        if (type == 4) // heredoc
-        {
-            char *tmpfile = handle_heredoc(target);
-            if (!tmpfile)
-                return (0);
-            add_redirection(cmd, 3, tmpfile); // converte para "< tmpfile"
-            free(tmpfile);
-        }
-        else
-            add_redirection(cmd, type, target);
-        remove_args(cmd, i, 2);
-        return (1);
-    }
-    printf("minishell: syntax error near redirection\n");
-    return (0);
+		if (type == 4) // heredoc
+		{
+			char *tmpfile = handle_heredoc(target);
+			if (!tmpfile)
+				return (0);
+			add_redirection(cmd, 3, tmpfile); // converte para "< tmpfile"
+			free(tmpfile);
+		}
+		else
+			add_redirection(cmd, type, target);
+		remove_args(cmd, i, 2);
+		return (1);
+	}
+	printf("minishell: syntax error near redirection\n");
+	return (0);
 }*/
 
 /*static int	process_redirection_token(t_command *cmd, int i)
 {
-    if (i + 1 < cmd->argc && cmd->args[i + 1])
-    {
-        int type = cmd->args[i]->redir_type;
-        char *target = cmd->args[i + 1]->value;
+	if (i + 1 < cmd->argc && cmd->args[i + 1])
+	{
+		int type = cmd->args[i]->redir_type;
+		char *target = cmd->args[i + 1]->value;
 
-        if (type == 4) // heredoc
-        {
-            char *tmpfile = handle_heredoc(target);
-            if (!tmpfile)
-                return (0);
-            add_redirection(cmd, 3, tmpfile); // converte para "< tmpfile"
-            free(tmpfile);
-        }
-        else
-            add_redirection(cmd, type, target);
-        remove_args(cmd, i, 2);
-        return (1);
-    }
-    printf("minishell: syntax error near redirection\n");
-    return (0);
+		if (type == 4) // heredoc
+		{
+			char *tmpfile = handle_heredoc(target);
+			if (!tmpfile)
+				return (0);
+			add_redirection(cmd, 3, tmpfile); // converte para "< tmpfile"
+			free(tmpfile);
+		}
+		else
+			add_redirection(cmd, type, target);
+		remove_args(cmd, i, 2);
+		return (1);
+	}
+	printf("minishell: syntax error near redirection\n");
+	return (0);
 }*/
 
 /*static int	process_redirection_token(t_command *cmd, int i)
@@ -140,34 +140,37 @@ static void	remove_args(t_command *cmd, int start, int count)
 
 static int	process_redirection_token(t_command *cmd, int i)
 {
-    if (i + 1 < cmd->argc && cmd->args[i + 1])
-    {
-        int type = cmd->args[i]->redir_type;
-        char *target = cmd->args[i + 1]->value;
-
-        // 🚩 se o comando não tem args, heredoc não faz sentido
-        if (cmd->argc == 0 || !cmd->args[0])
-        {
-            printf("minishell: syntax error near unexpected token `<<'\n");
-            return (0);
-        }
-
-        if (type == 4) // heredoc
-        {
-            char *tmpfile = handle_heredoc(target);
-            if (!tmpfile)
-                return (0);
-            add_redirection(cmd, 3, tmpfile); // converte em "< tmpfile"
-            free(tmpfile);
-        }
-        else
-            add_redirection(cmd, type, target);
-
-        remove_args(cmd, i, 2);
-        return (1);
-    }
-    printf("minishell: syntax error near redirection\n");
-    return (0);
+	int		type;
+	char	*target;
+	char	*tmpfile;
+	
+	if (i + 1 < cmd->argc && cmd->args[i + 1])
+	{
+		//int type = cmd->args[i]->redir_type;
+		type = cmd->args[i]->redir_type;
+		//char *target = cmd->args[i + 1]->value;
+		target = cmd->args[i + 1]->value;
+		if (cmd->argc == 0 || !cmd->args[0])
+		{
+			printf("minishell: syntax error near unexpected token `<<'\n");
+			return (0);
+		}
+		if (type == 4)
+		{
+			//char *tmpfile = handle_heredoc(target);			
+			tmpfile = handle_heredoc(target);
+			if (!tmpfile)
+				return (0);
+			add_redirection(cmd, 3, tmpfile);
+			free(tmpfile);
+		}
+		else
+			add_redirection(cmd, type, target);
+		remove_args(cmd, i, 2);
+		return (1);
+	}
+	printf("minishell: syntax error near redirection\n");
+	return (0);
 }
 
 void	extract_redirections(t_command *cmd)

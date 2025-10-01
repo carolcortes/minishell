@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/01 09:21:14 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/01 10:05:24 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,11 @@ static int	add_command_to_pipeline(t_token *tokens, int *i,
 	t_command	*new_cmd;
 
 	arg_count = count_args_until_pipe(tokens, *i);
-
-	// 🚩 caso especial: comando sem argumentos (só redir/heredoc)
 	if (arg_count == 0 || (tokens[*i].is_redirection && !tokens[*i + 1].value))
 	{
 		printf("minishell: syntax error near unexpected token `newline'\n");
 		return (0);
 	}
-
 	new_cmd = create_new_command(tokens, *i, arg_count);
 	if (!new_cmd)
 		return (0);
@@ -119,7 +116,6 @@ static int	add_command_to_pipeline(t_token *tokens, int *i,
 	*i += arg_count;
 	return (1);
 }
-
 
 static void	extract_redirections_from_pipeline(t_command *pipeline)
 {
@@ -162,13 +158,14 @@ static t_command	*remove_empty_commands(t_command *pipeline)
 {
 	t_command	*cur;
 	t_command	*next;
-	t_command	*head = pipeline;
+	t_command	*head;
+	//t_command	*head = pipeline;
 
+	head = pipeline;
 	cur = pipeline;
 	while (cur)
 	{
 		next = cur->next;
-		// 🚩 se não tem argumentos, descarta o comando
 		if (cur->argc == 0)
 		{
 			if (cur->prev)
@@ -207,5 +204,5 @@ t_command	*parse_pipeline(t_token *tokens)
 			break ;
 	}
 	extract_redirections_from_pipeline(first);
-	return (remove_empty_commands(first)); // 🚩 descarta comandos "fantasma"
+	return (remove_empty_commands(first));
 }
