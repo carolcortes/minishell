@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/03 10:01:49 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 14:35:44 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ static char	*handle_literal_char(const char *str, int *i, char *result)
 }
 
 //static char	*expand_variables(const char *str, int last_status)
-static char	*expand_variables(const char *str, t_shell *shell)
+//static char	*expand_variables(const char *str, t_shell *shell)
+char	*expand_variables(const char *str, t_shell *shell)
 {
 	int		i;
 	char	*result;

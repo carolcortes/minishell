@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/03 13:54:23 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 14:36:16 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,7 @@ t_token		create_redirection_token(char *value, int type);
 void		extract_redirections(t_command *cmd, t_shell *shell);
 
 // expand.c
+char		*expand_variables(const char *str, t_shell *shell);
 //void		expand_tokens(t_token *tokens, int last_status);
 void		expand_tokens(t_token *tokens, t_shell *shell);
 
