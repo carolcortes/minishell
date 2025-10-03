@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 23:01:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/03 14:30:22 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 15:00:08 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,6 @@ static char	*create_tmpfile(int *fd)
 	}
 	return (filename);
 }
-
-/*static void	write_until_delimiter(int fd, char *delimiter)
-{
-	char	*line;
-
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-	}
-}*/
 
 static void	write_until_delimiter(int fd, char *delimiter,
 		bool allow_expand, t_shell *shell)
@@ -81,19 +63,14 @@ static void	write_until_delimiter(int fd, char *delimiter,
 	}
 }
 
-//char	*handle_heredoc(char *delimiter)
-//char	*handle_heredoc(char *delimiter, t_shell *shell)
 char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
 {
 	char	*filename;
 	int		fd;
-	//(void)shell; // por hora
-	//(void)allow_expand;
 
 	filename = create_tmpfile(&fd);
 	if (!filename)
 		return (NULL);
-	//write_until_delimiter(fd, delimiter);
 	write_until_delimiter(fd, delimiter, allow_expand, shell);
 	close(fd);
 	return (filename);

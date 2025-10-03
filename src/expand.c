@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/03 14:35:44 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 14:52:43 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ static char	*handle_literal_char(const char *str, int *i, char *result)
 	return (result);
 }
 
-//static char	*expand_variables(const char *str, int last_status)
-//static char	*expand_variables(const char *str, t_shell *shell)
 char	*expand_variables(const char *str, t_shell *shell)
 {
 	int		i;
@@ -66,7 +64,6 @@ char	*expand_variables(const char *str, t_shell *shell)
 	{
 		if (str[i] == '$' && str[i + 1] == '?')
 		{
-			//tmp = ft_itoa(last_status);
 			tmp = ft_itoa(shell->last_status);
 			result = ft_strjoin_free(result, tmp, 3);
 			i += 2;
@@ -81,7 +78,6 @@ char	*expand_variables(const char *str, t_shell *shell)
 	return (result);
 }
 
-//void	expand_tokens(t_token *tokens, int last_status)
 void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	int		i;
@@ -92,8 +88,6 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 	{
 		if (tokens[i].allow_expand)
 		{
-			//expanded = expand_variables(tokens[i].value, last_status);
-			//expanded = expand_variables(tokens[i].value, shell->last_status);
 			expanded = expand_variables(tokens[i].value, shell);
 			if (!expanded)
 			{
