@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:48 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/03 11:17:42 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 13:51:36 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@ static void	remove_args(t_command *cmd, int start, int count)
 }
 
 //static int	handle_heredoc_redirection(t_command *cmd, char *target)
-static int	handle_heredoc_redirection(t_command *cmd, char *target, t_shell *shell)
+static int	handle_heredoc_redirection(t_command *cmd, char *target, bool allow_expand, t_shell *shell)
 {
 	char	*tmpfile;
+	//bool	allow_expand; // permição para expandir $
 
 	//tmpfile = handle_heredoc(target);
-	tmpfile = handle_heredoc(target, shell);
+	//allow_expand = cmd->args[i + 1]->allow_expand;
+	//tmpfile = handle_heredoc(target, shell);
+	tmpfile = handle_heredoc(target, allow_expand, shell);
 	if (!tmpfile)
 		return (0);
 	add_redirection(cmd, 3, tmpfile);
@@ -62,6 +65,7 @@ static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 {
 	int		type;
 	char	*target;
+	bool	allow_expand;// essa aqui é nova
 
 	if (i + 1 < cmd->argc && cmd->args[i + 1])
 	{
@@ -74,8 +78,10 @@ static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 		}
 		if (type == 4)
 		{
+			allow_expand = cmd->args[i + 1]->allow_expand; // new
 			//if (!handle_heredoc_redirection(cmd, target))
-			if (!handle_heredoc_redirection(cmd, target, shell))
+			//if (!handle_heredoc_redirection(cmd, target, shell))
+			if (!handle_heredoc_redirection(cmd, target, allow_expand, shell))
 				return (0);
 		}
 		else

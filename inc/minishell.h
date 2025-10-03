@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/03 11:18:28 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 13:54:23 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 typedef struct s_token
 {
 	char	*value;
-	bool	allow_expand;
+	bool	allow_expand; //$home: /home/cassiano
 	bool	is_pipe;
 	bool	is_redirection;	// true se for >, >>, <
 	int		redir_type;		// 1: >, 2: >>, 3: <, 0: nenhum
@@ -155,7 +155,8 @@ void		execute_pipeline(t_command *pipeline, char **envp, t_shell *shell);
 //		external.c
 int			execute_external(t_token **args, char **envp);
 //		heredoc.c
-char		*handle_heredoc(char *delimiter, t_shell *shell);
+//char		*handle_heredoc(char *delimiter, t_shell *shell);
+char		*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell);
 //		path.c
 char		*find_command_path(char *command, char **envp);
 //		redirections_ext.c

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 23:01:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/03 11:21:53 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 13:55:19 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,13 @@ static void	write_until_delimiter(int fd, char *delimiter)
 }
 
 //char	*handle_heredoc(char *delimiter)
-char	*handle_heredoc(char *delimiter, t_shell *shell)
+//char	*handle_heredoc(char *delimiter, t_shell *shell)
+char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
 {
 	char	*filename;
 	int		fd;
 	(void)shell; // por hora
+	(void)allow_expand;
 
 	filename = create_tmpfile(&fd);
 	if (!filename)
