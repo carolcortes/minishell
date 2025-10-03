@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/02 11:28:00 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 10:03:34 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ typedef struct s_fork_data
 	char		**envp;
 }	t_fork_data;
 
-// Finalidade → Evita realocação manual a cada token novo.
+// Evita realocação manual a cada token novo.
 typedef struct s_token_data
 {
 	t_token	*tokens;
@@ -192,11 +192,12 @@ bool		process_word_token(char *line, int *i, t_token_data *data);
 bool		is_special_char(char c);
 t_token		create_pipe_token(void);
 t_token		create_redirection_token(char *value, int type);
-//		redirections.c
+//		redir_parse.c
 void		extract_redirections(t_command *cmd);
 
 // expand.c
-void		expand_tokens(t_token *tokens, int last_status);
+//void		expand_tokens(t_token *tokens, int last_status);
+void		expand_tokens(t_token *tokens, t_shell *shell);
 
 // free.c
 void		free_array(char **arr);
