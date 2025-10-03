@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/03 10:03:34 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 11:18:28 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void		execute_pipeline(t_command *pipeline, char **envp, t_shell *shell);
 //		external.c
 int			execute_external(t_token **args, char **envp);
 //		heredoc.c
-char		*handle_heredoc(char *delimiter);
+char		*handle_heredoc(char *delimiter, t_shell *shell);
 //		path.c
 char		*find_command_path(char *command, char **envp);
 //		redirections_ext.c
@@ -173,7 +173,8 @@ void		free_argv(char **argv);
 t_token		**copy_command_args(t_token *tokens, int start, int count);
 int			count_args_until_pipe(t_token *tokens, int start_index);
 //		pipeline.c
-t_command	*parse_pipeline(t_token *tokens);
+//t_command	*parse_pipeline(t_token *tokens);
+t_command	*parse_pipeline(t_token *tokens, t_shell *shell);
 //		tokens.c
 t_token		*shell_split_line_quotes(char *line);
 //		tokens_ext1.c
@@ -193,7 +194,8 @@ bool		is_special_char(char c);
 t_token		create_pipe_token(void);
 t_token		create_redirection_token(char *value, int type);
 //		redir_parse.c
-void		extract_redirections(t_command *cmd);
+//void		extract_redirections(t_command *cmd);
+void		extract_redirections(t_command *cmd, t_shell *shell);
 
 // expand.c
 //void		expand_tokens(t_token *tokens, int last_status);

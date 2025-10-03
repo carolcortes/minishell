@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:48 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/03 09:48:51 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 11:17:42 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,13 @@ static void	remove_args(t_command *cmd, int start, int count)
 	cmd->args[cmd->argc] = NULL;
 }
 
-static int	handle_heredoc_redirection(t_command *cmd, char *target)
+//static int	handle_heredoc_redirection(t_command *cmd, char *target)
+static int	handle_heredoc_redirection(t_command *cmd, char *target, t_shell *shell)
 {
 	char	*tmpfile;
 
-	tmpfile = handle_heredoc(target);
+	//tmpfile = handle_heredoc(target);
+	tmpfile = handle_heredoc(target, shell);
 	if (!tmpfile)
 		return (0);
 	add_redirection(cmd, 3, tmpfile);
@@ -55,7 +57,8 @@ static int	handle_heredoc_redirection(t_command *cmd, char *target)
 	return (1);
 }
 
-static int	process_redirection_token(t_command *cmd, int i)
+//static int	process_redirection_token(t_command *cmd, int i)
+static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 {
 	int		type;
 	char	*target;
@@ -71,7 +74,8 @@ static int	process_redirection_token(t_command *cmd, int i)
 		}
 		if (type == 4)
 		{
-			if (!handle_heredoc_redirection(cmd, target))
+			//if (!handle_heredoc_redirection(cmd, target))
+			if (!handle_heredoc_redirection(cmd, target, shell))
 				return (0);
 		}
 		else
@@ -83,7 +87,8 @@ static int	process_redirection_token(t_command *cmd, int i)
 	return (0);
 }
 
-void	extract_redirections(t_command *cmd)
+void	extract_redirections(t_command *cmd, t_shell *shell)
+//void	extract_redirections(t_command *cmd)
 {
 	int	i;
 
@@ -94,7 +99,8 @@ void	extract_redirections(t_command *cmd)
 	{
 		if (cmd->args[i]->is_redirection)
 		{
-			if (!process_redirection_token(cmd, i))
+			//if (!process_redirection_token(cmd, i))
+			if (!process_redirection_token(cmd, i, shell))
 				break ;
 		}
 		else
