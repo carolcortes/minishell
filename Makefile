@@ -6,7 +6,7 @@
 #    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/09/30 23:15:08 by cgross-s         ###   ########.fr        #
+#    Updated: 2025/10/03 09:49:33 by cgross-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ BUILD_PATH		= .build
 LIBFT_PATH		= libft
 
 FILES			= 	main.c main_ext.c signals.c utils.c expand.c free.c \
-					parsing/tokens.c parsing/pipeline.c parsing/pipeline_ext.c parsing/redirections.c \
+					parsing/tokens.c parsing/pipeline.c parsing/pipeline_ext.c parsing/redir_parse.c \
 					parsing/tokens_ext1.c parsing/tokens_ext2.c parsing/tokens_ext3.c \
 					execution/execute_pipeline.c execution/execute_pip_ext1.c execution/execute_pip_ext2.c \
 					execution/external.c execution/utils.c execution/path.c \

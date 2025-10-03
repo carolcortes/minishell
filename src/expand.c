@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/16 16:57:21 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/02 10:51:48 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static char	*handle_literal_char(const char *str, int *i, char *result)
 	return (result);
 }
 
-// Na função expand_variables(), você precisa USAR o last_status
 static char	*expand_variables(const char *str, int last_status)
 {
 	int		i;
@@ -79,7 +78,6 @@ static char	*expand_variables(const char *str, int last_status)
 	return (result);
 }
 
-// Na função expand_tokens(), passe o last_status corretamente:
 void	expand_tokens(t_token *tokens, int last_status)
 {
 	int		i;

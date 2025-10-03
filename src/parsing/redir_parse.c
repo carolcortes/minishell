@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   redir_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/22 11:31:44 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/01 11:38:07 by cgross-s         ###   ########.fr       */
+/*   Created: 2025/10/03 09:48:48 by cgross-s          #+#    #+#             */
+/*   Updated: 2025/10/03 09:48:51 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,38 +42,6 @@ static void	remove_args(t_command *cmd, int start, int count)
 	cmd->argc -= count;
 	cmd->args[cmd->argc] = NULL;
 }
-
-/*static int	process_redirection_token(t_command *cmd, int i)
-{
-	int		type;
-	char	*target;
-	char	*tmpfile;
-
-	if (i + 1 < cmd->argc && cmd->args[i + 1])
-	{
-		type = cmd->args[i]->redir_type;
-		target = cmd->args[i + 1]->value;
-		if (cmd->argc == 0 || !cmd->args[0])
-		{
-			printf("minishell: syntax error near unexpected token `<<'\n");
-			return (0);
-		}
-		if (type == 4)
-		{
-			tmpfile = handle_heredoc(target);
-			if (!tmpfile)
-				return (0);
-			add_redirection(cmd, 3, tmpfile);
-			free(tmpfile);
-		}
-		else
-			add_redirection(cmd, type, target);
-		remove_args(cmd, i, 2);
-		return (1);
-	}
-	printf("minishell: syntax error near redirection\n");
-	return (0);
-}*/
 
 static int	handle_heredoc_redirection(t_command *cmd, char *target)
 {

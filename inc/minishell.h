@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/01 12:35:30 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/02 11:28:00 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
-
-//extern int	g_last_status;	// ✅ EXTERN - apenas declaração
 
 // ANSI Color codes
 # define Y		"\033[1;33m"
