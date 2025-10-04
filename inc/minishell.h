@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/03 14:36:16 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/04 12:18:37 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,8 @@ bool		process_word_token(char *line, int *i, t_token_data *data);
 bool		is_special_char(char c);
 t_token		create_pipe_token(void);
 t_token		create_redirection_token(char *value, int type);
+//		redir_parse_ext.c
+void		add_redirection(t_command *cmd, int type, char *filename);
 //		redir_parse.c
 //void		extract_redirections(t_command *cmd);
 void		extract_redirections(t_command *cmd, t_shell *shell);
