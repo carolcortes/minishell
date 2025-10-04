@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/27 16:50:15 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 20:36:02 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,14 @@ int	handle_child_process_single(t_command *cmd, char **env)
 		return (execute_external(cmd->args, env));
 }
 
-//void	handle_parent_process(pid_t pid)
 void	handle_parent_process(pid_t pid, t_shell *shell)
 {
 	int	status;
 
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		//g_last_status = WEXITSTATUS(status);
 		shell->last_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		//g_last_status = 128 + WTERMSIG(status);
 		shell->last_status = 128 + WTERMSIG(status);
 }
 

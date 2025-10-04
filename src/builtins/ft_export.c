@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:12 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/26 16:23:45 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/30 20:50:09 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,58 +40,6 @@ static int	is_valid_identifier(char *str)
 	}
 	return (1);
 }
-
-/*static int	update_env_var(char **envp, char *key, char *var)
-{
-	int	i;
-	int	len;
-
-	len = ft_strlen(key);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], key, len) == 0 && envp[i][len] == '=')
-		{
-			free(envp[i]);
-			envp[i] = ft_strdup(var);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-static int	add_env_var(char *var, char **envp)
-{
-	int		i;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	envp[i] = ft_strdup(var);
-	envp[i + 1] = NULL;
-	return (0);
-}
-
-static int	add_or_update_env(char *var, char **envp)
-{
-	char	*equal;
-	char	*key;
-	int		status;
-
-	equal = ft_strchr(var, '=');
-	if (!equal)
-		return (0);
-	key = ft_substr(var, 0, equal - var);
-	if (!key)
-		return (1);
-	if (update_env_var(envp, key, var))
-		status = 0;
-	else
-		status = add_env_var(var, envp);
-	free(key);
-	return (status);
-}*/
 
 static void	print_env_export(char **envp)
 {

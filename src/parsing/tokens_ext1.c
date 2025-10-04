@@ -6,28 +6,11 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:50:13 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/27 17:45:20 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/01 11:42:18 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/*bool	is_special_char(char c)
-{
-	return (c == '|' || c == '>' || c == '<');
-}
-
-t_token	create_pipe_token(void)
-{
-	t_token	pipe_token;
-
-	pipe_token.value = ft_strdup("|");
-	pipe_token.allow_expand = false;
-	pipe_token.is_pipe = true;
-	pipe_token.is_redirection = false;
-	pipe_token.redir_type = 0;
-	return (pipe_token);
-}*/
 
 bool	expand_token_array(t_token_data *data)
 {
@@ -45,7 +28,7 @@ bool	expand_token_array(t_token_data *data)
 
 static t_token	handle_redirection_token(char *line, int *i)
 {
-	t_token	special_token; // erro
+	t_token	special_token;
 	char	next_char;
 
 	special_token.value = NULL;
@@ -60,14 +43,15 @@ static t_token	handle_redirection_token(char *line, int *i)
 		(*i)++;
 	}
 	else if (line[*i] == '>')
-	{
 		special_token = create_redirection_token(">", 1);
-	}
-	else if (line[*i] == '<') // erro
+	else if (line[*i] == '<' && next_char == '<')
 	{
-		special_token = create_redirection_token("<", 3);
+		special_token = create_redirection_token("<<", 4);
+		(*i)++;
 	}
-	return (special_token); // erro
+	else if (line[*i] == '<')
+		special_token = create_redirection_token("<", 3);
+	return (special_token);
 }
 
 static bool	add_special_token(t_token_data *data, t_token special_token)
