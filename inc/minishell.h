@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/07 22:09:34 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:13:15 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_token
 typedef struct s_builtin
 {
 	const char	*builtin_name;
-	int			(*builtin)(t_token **av, char **envp);
 	int			(*builtin)(t_token **av, char **envp);
 }	t_builtin;
 
