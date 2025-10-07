@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/30 20:52:57 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:12:12 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ static int	process_command(t_command *cmd, t_process_data *data,
 	if (!create_pipe_and_fork(cmd, data->pipe_fd, &pid, shell))
 		return (0);
 	if (pid == 0)
+	{
+		setup_child_signals();
 		handle_child_process(cmd, *data->input_fd, data->pipe_fd, data->envp);
+	}
 	if (pid > 0)
 		*data->last_pid = pid;
 	update_file_descriptors(data->input_fd, data->pipe_fd, cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/04 12:18:37 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:35:38 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,14 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sysexits.h>
-# include <fcntl.h>    // For O_WRONLY, O_RDONLY ... open()
+# include <fcntl.h>
+# include <errno.h>
+# include <limits.h>
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
+
+extern volatile sig_atomic_t g_signal;
 
 // ANSI Color codes
 # define Y		"\033[1;33m"
@@ -61,6 +65,20 @@ typedef struct s_redirection
 	char	*filename;	// para << será o delimitador
 }	t_redirection;
 
+/*
+- Estrutura de nível mais alto:
+	representa um comando completo (com args e redirecionamentos).
+- Pode estar ligado a outros via next/prev → pipelines.
+- Exemplo:
+	- Input: cat file.txt | grep hello
+	- t_command 1:
+		- args: ["cat", "file.txt"]
+		- redir_count=0
+	- t_command 2:
+		- args: ["grep", "hello"]
+		- redir_count=0
+		- prev aponta para cat.
+*/
 // Finalidade → É a estrutura central da execução.
 typedef struct s_command
 {
@@ -106,7 +124,7 @@ typedef struct s_quote_data
 }	t_quote_data;
 
 /*Mais uma variação para organizar dados da execução.
-É essencialmente igual a t_exec_data, mas pode ser usado em outro 
+É essencialmente igual a t_exec_data, mas pode ser usado em outro
 contexto (ex: função separada para gerir child processes).*/
 typedef struct s_process_data
 {
@@ -143,7 +161,6 @@ int			ft_unset(t_token **args, char **envp);
 
 //	execution
 //		execute_pip_ext1.c
-void		execute_command(t_command *cmd, char **envp);
 void		handle_child_process(t_command *cmd, int input_fd,
 				int pipe_fd[2], char **envp);
 void		update_fds_after_command(t_command *cmd, t_exec_data *data);
@@ -220,6 +237,7 @@ void		print_pipeline(t_command *pipeline);
 
 // signals
 void		setup_signals(void);
+void		setup_child_signals(void);
 
 // utils.c
 void		ft_getcwd(char *buf, size_t size);
