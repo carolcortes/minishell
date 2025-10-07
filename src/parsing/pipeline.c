@@ -6,44 +6,11 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/26 16:54:54 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/03 14:56:28 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/*static int	count_args_until_pipe(t_token *tokens, int start_index)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	i = start_index;
-	while (tokens[i].value && !tokens[i].is_pipe)
-	{
-		count++;
-		i++;
-	}
-	return (count);
-}*/
-
-static t_token	**copy_command_args(t_token *tokens, int start, int count)
-{
-	t_token	**args;
-	int		i;
-
-	args = malloc(sizeof(t_token *) * (count + 1));
-	if (!args)
-		return (NULL);
-	i = 0;
-	while (i < count)
-	{
-		args[i] = &tokens[start + i];
-		i++;
-	}
-	args[count] = NULL;
-	return (args);
-}
 
 static t_command	*create_new_command(t_token *tokens, int i, int arg_count)
 {
@@ -73,8 +40,11 @@ static int	add_command_to_pipeline(t_token *tokens, int *i,
 	t_command	*new_cmd;
 
 	arg_count = count_args_until_pipe(tokens, *i);
-	if (arg_count == 0)
+	if (arg_count == 0 || (tokens[*i].is_redirection && !tokens[*i + 1].value))
+	{
+		printf("minishell: syntax error near unexpected token `newline'\n");
 		return (0);
+	}
 	new_cmd = create_new_command(tokens, *i, arg_count);
 	if (!new_cmd)
 		return (0);
@@ -90,19 +60,47 @@ static int	add_command_to_pipeline(t_token *tokens, int *i,
 	return (1);
 }
 
-static void	extract_redirections_from_pipeline(t_command *pipeline)
+static void	extract_redirections_from_pipeline(t_command *pipeline,
+	t_shell *shell)
 {
 	t_command	*current;
 
 	current = pipeline;
 	while (current)
 	{
-		extract_redirections(current);
+		extract_redirections(current, shell);
 		current = current->next;
 	}
 }
 
-t_command	*parse_pipeline(t_token *tokens)
+static t_command	*remove_empty_commands(t_command *pipeline)
+{
+	t_command	*cur;
+	t_command	*next;
+	t_command	*head;
+
+	head = pipeline;
+	cur = pipeline;
+	while (cur)
+	{
+		next = cur->next;
+		if (cur->argc == 0)
+		{
+			if (cur->prev)
+				cur->prev->next = cur->next;
+			if (cur->next)
+				cur->next->prev = cur->prev;
+			if (cur == head)
+				head = cur->next;
+			free(cur->args);
+			free(cur);
+		}
+		cur = next;
+	}
+	return (head);
+}
+
+t_command	*parse_pipeline(t_token *tokens, t_shell *shell)
 {
 	t_command	*first;
 	t_command	*current;
@@ -123,6 +121,6 @@ t_command	*parse_pipeline(t_token *tokens)
 		if (!add_command_to_pipeline(tokens, &i, &first, &current))
 			break ;
 	}
-	extract_redirections_from_pipeline(first);
-	return (first);
+	extract_redirections_from_pipeline(first, shell);
+	return (remove_empty_commands(first));
 }

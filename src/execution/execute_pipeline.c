@@ -6,22 +6,18 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/28 13:37:37 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:12:12 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-//extern int	g_last_status;
-
-//static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid)
 static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid,
 	t_shell *shell)
 {
 	if (cmd->next && pipe(pipe_fd) == -1)
 	{
 		perror("minishell: pipe");
-		//g_last_status = 1;
 		shell->last_status = 1;
 		return (0);
 	}
@@ -29,7 +25,6 @@ static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid,
 	if (*pid == -1)
 	{
 		perror("minishell: fork");
-		//g_last_status = 1;
 		shell->last_status = 1;
 		return (0);
 	}
@@ -50,13 +45,11 @@ static void	update_file_descriptors(int *input_fd, int pipe_fd[2],
 		*input_fd = STDIN_FILENO;
 }
 
-//static int	process_command(t_command *cmd, t_process_data *data)
 static int	process_command(t_command *cmd, t_process_data *data,
 	t_shell *shell)
 {
 	pid_t	pid;
 
-	//if (!create_pipe_and_fork(cmd, data->pipe_fd, &pid))
 	if (!create_pipe_and_fork(cmd, data->pipe_fd, &pid, shell))
 		return (0);
 	if (pid == 0)
@@ -70,7 +63,6 @@ static int	process_command(t_command *cmd, t_process_data *data,
 	return (1);
 }
 
-//static void	wait_for_children(pid_t last_pid)
 static void	wait_for_children(pid_t last_pid, t_shell *shell)
 {
 	int		status;

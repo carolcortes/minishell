@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/29 22:16:29 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:11:42 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
  * @return This function does not return.
  */
 
-// int	ft_exit(t_token **args, char **envp, int exit_code)
 int	ft_exit(t_token **args, char **envp)
 {
 	// unsigned char	value; // TO DO, store exit code in a byte so it loops around

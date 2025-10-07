@@ -6,11 +6,42 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:18:42 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/26 10:44:52 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/01 12:04:29 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static int	apply_heredoc(t_redirection *redir)
+{
+	int		pipefd[2];
+	char	*line;
+
+	if (pipe(pipefd) == -1)
+		return (0);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strcmp(line, redir->filename) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(pipefd[1], line, ft_strlen(line));
+		write(pipefd[1], "\n", 1);
+		free(line);
+	}
+	close(pipefd[1]);
+	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+	{
+		close(pipefd[0]);
+		return (0);
+	}
+	close(pipefd[0]);
+	return (1);
+}
+
+//////////////////
 
 static int	apply_output_redirection(t_redirection *redir)
 {
@@ -50,6 +81,8 @@ static int	process_single_redirection(t_redirection *redir)
 		return (apply_output_redirection(redir));
 	else if (redir->type == 3)
 		return (apply_input_redirection(redir));
+	else if (redir->type == 4)
+		return (apply_heredoc(redir));
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/28 17:20:30 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:09:34 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,29 @@ extern volatile sig_atomic_t g_signal;
 
 # define WHITESPACES "\t\n\v\f\r "
 
-// Finalidade → É a base do parser, contém a informação de cada palavra ou operador.
+// É a base do parser, contém a informação de cada palavra ou operador.
 typedef struct s_token
 {
 	char	*value;
-	bool	allow_expand;
+	bool	allow_expand; //$home: /home/cassiano
 	bool	is_pipe;
 	bool	is_redirection;	// true se for >, >>, <
 	int		redir_type;		// 1: >, 2: >>, 3: <, 0: nenhum
 }	t_token;
 
-// Finalidade → Permite chamar rapidamente a função correta sem if/else gigante.
+// Permite chamar rapidamente a função correta sem if/else gigante.
 typedef struct s_builtin
 {
 	const char	*builtin_name;
 	int			(*builtin)(t_token **av, char **envp);
+	int			(*builtin)(t_token **av, char **envp);
 }	t_builtin;
 
-// Finalidade → Facilita abrir e aplicar os dup2 corretos antes de executar o comando.
+// Facilita abrir e aplicar os dup2 corretos antes de executar o comando.
 typedef struct s_redirection
 {
-	int		type;		// 1: >, 2: >>, 3: <
-	char	*filename;	// arquivo alvo
+	int		type;		// 1: >, 2: >>, 3: <, 4: <<
+	char	*filename;	// para << será o delimitador
 }	t_redirection;
 
 /*
@@ -92,7 +93,7 @@ typedef struct s_command
 // Usado para controlar a execução de pipelines.
 typedef struct s_exec_data
 {
-	int			*input_fd;	// entrada do comando atual (normalmente stdin ou saída do comando anterior).
+	int			*input_fd;	// entrada do comando atual
 	int			pipe_fd[2];	// pipe criado para comunicação entre comandos.
 	pid_t		*last_pid;	// último processo criado (para o waitpid).
 	char		**envp;		// ambiente do shell.
@@ -107,7 +108,7 @@ typedef struct s_fork_data
 	char		**envp;
 }	t_fork_data;
 
-// Finalidade → Evita realocação manual a cada token novo.
+// Evita realocação manual a cada token novo.
 typedef struct s_token_data
 {
 	t_token	*tokens;
@@ -137,12 +138,11 @@ typedef struct s_process_data
 typedef struct s_shell
 {
 	//char	**envp;          // ambiente duplicado
-	int		last_status;    // substitui g_last_status
+	int		last_status;	// substitui g_last_status
 }	t_shell;
 
-
 //	builtins
-int			exec_builtin(t_token **args, char **envp); // ✅ char **envp
+int			exec_builtin(t_token **args, char **envp);
 int			ft_cd(t_token **args, char **envp);
 int			ft_echo(t_token **args, char **envp);
 int			ft_env(t_token **args, char **envp);
@@ -168,10 +168,12 @@ void		update_fds_after_command(t_command *cmd, t_exec_data *data);
 void		redirect_input(int input_fd);
 void		redirect_output(int pipe_fd[2]);
 //		execute_pipeline.c
-//void		execute_pipeline(t_command *pipeline, char **envp);
 void		execute_pipeline(t_command *pipeline, char **envp, t_shell *shell);
 //		external.c
 int			execute_external(t_token **args, char **envp);
+//		heredoc.c
+//char		*handle_heredoc(char *delimiter, t_shell *shell);
+char		*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell);
 //		path.c
 char		*find_command_path(char *command, char **envp);
 //		redirections_ext.c
@@ -186,14 +188,14 @@ void		free_argv(char **argv);
 
 //	parsing
 //		pipeline_ext.c
+t_token		**copy_command_args(t_token *tokens, int start, int count);
 int			count_args_until_pipe(t_token *tokens, int start_index);
 //		pipeline.c
-t_command	*parse_pipeline(t_token *tokens);
+//t_command	*parse_pipeline(t_token *tokens);
+t_command	*parse_pipeline(t_token *tokens, t_shell *shell);
 //		tokens.c
 t_token		*shell_split_line_quotes(char *line);
 //		tokens_ext1.c
-//bool		is_special_char(char c);
-//t_token		create_pipe_token(void);
 bool		expand_token_array(t_token_data *data);
 bool		process_special_char(char *line, int *i, t_token_data *data);
 char		*extract_quoted(const char *line, int *i, bool *allow_expand);
@@ -209,11 +211,16 @@ bool		process_word_token(char *line, int *i, t_token_data *data);
 bool		is_special_char(char c);
 t_token		create_pipe_token(void);
 t_token		create_redirection_token(char *value, int type);
-//		redirections.c
-void		extract_redirections(t_command *cmd);
+//		redir_parse_ext.c
+void		add_redirection(t_command *cmd, int type, char *filename);
+//		redir_parse.c
+//void		extract_redirections(t_command *cmd);
+void		extract_redirections(t_command *cmd, t_shell *shell);
 
 // expand.c
-void		expand_tokens(t_token *tokens, int last_status);
+char		*expand_variables(const char *str, t_shell *shell);
+//void		expand_tokens(t_token *tokens, int last_status);
+void		expand_tokens(t_token *tokens, t_shell *shell);
 
 // free.c
 void		free_array(char **arr);
