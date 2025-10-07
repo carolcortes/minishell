@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/28 13:33:25 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/28 17:20:30 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <readline/history.h>
 # include <sysexits.h>
 # include <fcntl.h>
+# include <errno.h>
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
@@ -160,7 +161,6 @@ int			ft_unset(t_token **args, char **envp);
 
 //	execution
 //		execute_pip_ext1.c
-void		execute_command(t_command *cmd, char **envp);
 void		handle_child_process(t_command *cmd, int input_fd,
 				int pipe_fd[2], char **envp);
 void		update_fds_after_command(t_command *cmd, t_exec_data *data);

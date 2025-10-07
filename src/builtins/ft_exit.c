@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/27 14:50:14 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/09/29 22:16:29 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ int	ft_exit(t_token **args, char **envp)
 	// value = exit_code;
 	printf(C "Good bye! 👋\n" RST);
 	rl_clear_history();
+	printf("%s", (*args)->value);
 	exit(0);
 }
