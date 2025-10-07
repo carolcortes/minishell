@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/07 22:13:15 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:35:38 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sysexits.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <limits.h>
 
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
