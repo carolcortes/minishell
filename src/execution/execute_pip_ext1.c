@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pip_ext1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:03:36 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/26 10:40:26 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/09/28 17:11:59 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-void	execute_command(t_command *cmd, char **envp)
-{
-	int	exit_status;
-
-	if (is_builtin(cmd->args))
-	{
-		exit_status = exec_builtin(cmd->args, envp);
-		exit(exit_status);
-	}
-	else
-	{
-		exit_status = execute_external(cmd->args, envp);
-		exit(exit_status);
-	}
-}
 
 static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
 	t_command *cmd)

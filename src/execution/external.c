@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/04 15:19:33 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/07 22:12:17 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	handle_external_child(char *path, char **argv, char **envp)
 {
+	setup_child_signals();
 	execve(path, argv, envp);
 	printf("minishell: %s: execution failed\n", argv[0]);
 	free(path);
@@ -36,7 +37,10 @@ static int	execute_external_command(char *path, char **argv, char **envp)
 
 	pid = fork();
 	if (pid == 0)
+	{
+		setup_child_signals();
 		return (handle_external_child(path, argv, envp));
+	}
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
@@ -45,7 +49,11 @@ static int	execute_external_command(char *path, char **argv, char **envp)
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGQUIT)
+				printf("Quit (core dumped)\n");
 			return (128 + WTERMSIG(status));
+		}
 		else
 			return (1);
 	}
