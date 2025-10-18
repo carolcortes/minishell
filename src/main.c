@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 19:39:25 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 00:05:40 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,17 @@ static void	main_loop(t_shell *shell)
 	while (42)
 	{
 		setup_signals();
-		if (g_signal == SIGINT)
-			g_signal = 0;
 		line = shell_read_line();
+		if (g_signal == SIGINT)
+		{
+			shell->last_status = 130;
+			g_signal = 0;
+			if (line && !*line)
+			{
+				free(line);
+				continue;
+			}
+		}
 		if (!line)
 			break ;
 		process_input_line(line, shell);
