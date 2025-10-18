@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 22:35:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/09/16 17:08:22 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 19:38:42 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	free_array(char **arr)
+void	free_strings(char **arr)
 {
 	int	i;
 

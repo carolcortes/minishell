@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 21:50:39 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 18:31:33 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/18 20:45:06 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ void	setup_child_signals(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-// In the parent while waiting for a foreground job, ignore SIGINT/SIGQUIT
-// to avoid readline redraws or duplicated prompts. Children get defaults.
 void	setup_wait_signals(void)
 {
 	signal(SIGINT, SIG_IGN);

@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 23:01:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/03 15:00:08 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 20:23:50 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static char	*create_tmpfile(int *fd);
+static void	write_until_delimiter(int fd, char *delimiter,
+				bool allow_expand, t_shell *shell);
+
+/**
+ * @brief Handle a here-document.
+ *
+ * Reads lines until the delimiter, optionally expands variables, writes
+ * them to a temporary file, and returns its path.
+ *
+ * @param delimiter End marker string.
+ * @param allow_expand Whether to expand variables in lines.
+ * @param shell Shell state used for variable expansion.
+ * @return Allocated path to the temp file, or NULL on error.
+ */
+
+char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
+{
+	char	*filename;
+	int		fd;
+
+	filename = create_tmpfile(&fd);
+	if (!filename)
+		return (NULL);
+	write_until_delimiter(fd, delimiter, allow_expand, shell);
+	close(fd);
+	return (filename);
+}
 
 static char	*create_tmpfile(int *fd)
 {
@@ -61,17 +90,4 @@ static void	write_until_delimiter(int fd, char *delimiter,
 		write(fd, "\n", 1);
 		free(line);
 	}
-}
-
-char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
-{
-	char	*filename;
-	int		fd;
-
-	filename = create_tmpfile(&fd);
-	if (!filename)
-		return (NULL);
-	write_until_delimiter(fd, delimiter, allow_expand, shell);
-	close(fd);
-	return (filename);
 }

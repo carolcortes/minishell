@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 18:21:21 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/18 19:39:25 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	main(int argc, char **argv, char **envp)
 	printbanner();
 	setup_signals();
 	main_loop(&shell);
-	free_env(shell.envp);
+	free_strings(shell.envp);
 	rl_clear_history();
 	return (EXIT_SUCCESS);
 }
