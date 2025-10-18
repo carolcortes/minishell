@@ -6,14 +6,14 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 16:39:52 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:51:16 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-#include <errno.h>
+//#include <errno.h>
 
-static void	exec_child(char *path, char **argv, char **envp)
+/*static void	exec_child(char *path, char **argv, char **envp)
 {
 	execve(path, argv, envp);
 	perror("minishell");
@@ -22,7 +22,7 @@ static void	exec_child(char *path, char **argv, char **envp)
 	if (errno == ENOENT)
 		exit(127);
 	exit(126);
-}
+}*/
 
 static int	exec_parent(pid_t pid, char *path, char **argv)
 {

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 16:38:20 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:52:40 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 	}
 	return (0);
 }*/
-
 
 //Para ficar igual ao bash (resolve erro):
 int	ft_cd(t_token **args, char **envp)
