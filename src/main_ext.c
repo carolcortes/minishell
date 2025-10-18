@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main_ext.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 16:14:35 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 18:31:07 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//int	handle_child_process_single(t_command *cmd, char **env)
-//return (exec_builtin(cmd->args, env));
-//return (execute_external(cmd->args, env));
-//return (execute_external(cmd->args, shell->envp));
 int	handle_child_process_single(t_command *cmd, t_shell *shell)
 {
 	if (!apply_redirections(cmd))
@@ -30,11 +26,19 @@ void	handle_parent_process(pid_t pid, t_shell *shell)
 {
 	int	status;
 
+	setup_wait_signals();
 	waitpid(pid, &status, 0);
+	setup_signals();
 	if (WIFEXITED(status))
 		shell->last_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			write(1, "\n", 1);
+		if (WTERMSIG(status) == SIGQUIT)
+			write(2, "Quit (core dumped)\n", 19);
 		shell->last_status = 128 + WTERMSIG(status);
+	}
 }
 
 char	*shell_read_line(void)

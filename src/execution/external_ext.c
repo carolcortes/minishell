@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_ext.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:41:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 16:49:38 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 18:19:37 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	exec_child(char *path, char **argv, char **envp)
 {
+	setup_child_signals();
 	execve(path, argv, envp);
 	perror("minishell");
 	free(path);

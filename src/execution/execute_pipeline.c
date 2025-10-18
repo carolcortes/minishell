@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 16:18:16 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 18:31:09 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static void	wait_for_children(pid_t last_pid, t_shell *shell)
 	int		status;
 	pid_t	waited_pid;
 
+	setup_wait_signals();
 	waited_pid = 1;
 	while (waited_pid > 0)
 	{
@@ -79,8 +80,15 @@ static void	wait_for_children(pid_t last_pid, t_shell *shell)
 			if (WIFEXITED(status))
 				shell->last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
+			{
+				if (WTERMSIG(status) == SIGINT)
+					write(1, "\n", 1);
+				if (WTERMSIG(status) == SIGQUIT)
+					write(2, "Quit (core dumped)\n", 19);
 				shell->last_status = 128 + WTERMSIG(status);
+			}
 		}
+		setup_signals();
 	}
 }
 

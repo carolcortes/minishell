@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 16:50:50 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 18:31:26 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@
 # include "../libft/libft/libft.h"
 # include "../libft/get_next_line/get_next_line.h"
 
+// Global variable used as a flag to handle asynchronous signals safely.
+// Declared as 'volatile sig_atomic_t' to ensure atomic access and prevent
+// compiler optimizations that could cause unexpected behaviour in signal handlers.
 extern volatile sig_atomic_t g_signal;
 
 // ANSI Color codes
@@ -249,6 +252,7 @@ void		print_pipeline(t_command *pipeline);
 // signals
 void		setup_signals(void);
 void		setup_child_signals(void);
+void		setup_wait_signals(void);
 
 // utils.c
 void		ft_getcwd(char *buf, size_t size);
