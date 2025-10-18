@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/12 17:12:46 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:14:01 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 //static void	execute_with_redirections(t_command *cmd, char **env,
 //	t_shell *shell)
+// exit(handle_child_process_single(cmd, shell->envp));
 static void	execute_with_redirections(t_command *cmd, t_shell *shell)
 {
 	pid_t	pid;
@@ -22,7 +23,6 @@ static void	execute_with_redirections(t_command *cmd, t_shell *shell)
 	if (pid == 0)
 	{
 		setup_child_signals();
-		//exit(handle_child_process_single(cmd, shell->envp));
 		exit(handle_child_process_single(cmd, shell));
 	}
 	else if (pid > 0)
@@ -34,7 +34,12 @@ static void	execute_with_redirections(t_command *cmd, t_shell *shell)
 	}
 }
 
-//static void	process_single_command(t_command *cmd, char **env, t_shell *shell)
+//static void	process_single_command(t_command *cmd, char **env, 
+//t_shell *shell)
+//execute_with_redirections(cmd, env, shell);
+//execute_with_redirections(cmd, shell->envp, shell);
+//shell->last_status = exec_builtin(cmd->args, env);
+//shell->last_status = execute_external(cmd->args, shell->envp);
 static void	process_single_command(t_command *cmd, t_shell *shell)
 {
 	if (cmd->argc == 0)
@@ -49,21 +54,21 @@ static void	process_single_command(t_command *cmd, t_shell *shell)
 		return ;
 	}
 	if (cmd->redir_count > 0)
-		//execute_with_redirections(cmd, env, shell);
-		//execute_with_redirections(cmd, shell->envp, shell);
 		execute_with_redirections(cmd, shell);
 	else
 	{
 		if (is_builtin(cmd->args))
-			//shell->last_status = exec_builtin(cmd->args, env);
 			shell->last_status = exec_builtin(cmd->args, shell->envp);
 		else
-			//shell->last_status = execute_external(cmd->args, shell->envp);
 			shell->last_status = execute_external(cmd->args, shell);
 	}
 }
 
 //static void	process_input_line(char *line, char **env, t_shell *shell)
+//execute_pipeline(pipeline, env, shell);
+//execute_pipeline(pipeline, shell->envp, shell);
+//process_single_command(pipeline, env, shell);
+//process_single_command(pipeline, shell->envp, shell);
 static void	process_input_line(char *line, t_shell *shell)
 {
 	t_token		*tokens;
@@ -78,12 +83,8 @@ static void	process_input_line(char *line, t_shell *shell)
 	if (pipeline)
 	{
 		if (pipeline->next)
-			//execute_pipeline(pipeline, env, shell);
-			//execute_pipeline(pipeline, shell->envp, shell);
 			execute_pipeline(pipeline, shell);
 		else
-			//process_single_command(pipeline, env, shell);
-			//process_single_command(pipeline, shell->envp, shell);
 			process_single_command(pipeline, shell);
 		free_pipeline(pipeline);
 	}
@@ -91,6 +92,8 @@ static void	process_input_line(char *line, t_shell *shell)
 }
 
 //static void	main_loop(char **env, t_shell *shell)
+//process_input_line(line, shell->envp, shell);
+//process_input_line(line, env, shell);
 static void	main_loop(t_shell *shell)
 {
 	char	*line;
@@ -104,26 +107,24 @@ static void	main_loop(t_shell *shell)
 		if (!line)
 			break ;
 		process_input_line(line, shell);
-		//process_input_line(line, shell->envp, shell);
-		//process_input_line(line, env, shell);
 	}
 }
 
+//char	**env;
+//env = dup_env(envp);
+//main_loop(env, &shell);
+//free_env(env);
 int	main(int argc, char **argv, char **envp)
 {
-	//char	**env;
 	t_shell	shell;
 
 	(void)argc;
 	(void)argv;
-	//env = dup_env(envp);
 	shell.envp = dup_env(envp);
 	shell.last_status = 0;
 	printbanner();
 	setup_signals();
-	//main_loop(env, &shell);
 	main_loop(&shell);
-	//free_env(env);
 	free_env(shell.envp);
 	rl_clear_history();
 	return (EXIT_SUCCESS);

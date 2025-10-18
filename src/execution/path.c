@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:43:07 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/04 15:17:48 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:20:57 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,25 +121,26 @@ char	*find_command_path(char *command, char **envp)
 	return (result);
 }*/
 
+// arquivo não existe
+// marcador especial
 static char	*check_explicit_path(char *command)
 {
 	if (access(command, F_OK) != 0)
-		return (NULL); // arquivo não existe
+		return (NULL);
 	if (access(command, X_OK) != 0)
-		return (ft_strdup("PERMISSION_DENIED")); // marcador especial
+		return (ft_strdup("PERMISSION_DENIED"));
 	return (ft_strdup(command));
 }
 
+// 🚩 Se o comando contém '/', trata como caminho explícito
 char	*find_command_path(char *command, char **envp)
 {
 	char	*path_env;
 	char	**paths;
 	char	*result;
 
-	// 🚩 Se o comando contém '/', trata como caminho explícito
 	if (ft_strchr(command, '/'))
 		return (check_explicit_path(command));
-
 	path_env = get_path_env(envp);
 	if (!path_env)
 		return (NULL);
