@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/07 22:45:12 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/18 23:16:46 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	numeric_error(const char *s)
 	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 	ft_putstr_fd((char *)s, STDERR_FILENO);
 	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-	exit(255);
+	exit(2);
 }
 
 int	ft_exit(t_token **args, char **envp)
