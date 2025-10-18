@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/12 17:08:38 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:04:28 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	execute_external_command(char *path, char **argv, char **envp)
 }
 
 //int	execute_external(t_token **args, char **envp)
-int	execute_external(t_token **args, t_shell *shell)
+/*int	execute_external(t_token **args, t_shell *shell)
 {
 	char	*path;
 	char	**argv;
@@ -76,6 +76,50 @@ int	execute_external(t_token **args, t_shell *shell)
 		free(path);
 		free_argv(argv);
 		return (126);
+	}
+	return (execute_external_command(path, argv, shell->envp));
+}*/
+
+int	execute_external(t_token **args, t_shell *shell)
+{
+	char	*path;
+	char	**argv;
+
+	argv = tokens_to_argv(args);
+	if (!argv)
+		return (1);
+
+	// caso 1: comando contém '/'
+	if (ft_strchr(argv[0], '/'))
+	{
+		if (access(argv[0], F_OK) != 0)
+		{
+			fprintf(stderr, "minishell: %s: No such file or directory\n", argv[0]);
+			free_argv(argv);
+			return (127);
+		}
+		if (access(argv[0], X_OK) != 0)
+		{
+			fprintf(stderr, "minishell: %s: Permission denied\n", argv[0]);
+			free_argv(argv);
+			return (126);
+		}
+		path = ft_strdup(argv[0]);
+		if (!path)
+		{
+			free_argv(argv);
+			return (1);
+		}
+		return (execute_external_command(path, argv, shell->envp));
+	}
+
+	// caso 2: comando simples → procurar no PATH
+	path = find_command_path(argv[0], shell->envp);
+	if (!path)
+	{
+		fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
+		free_argv(argv);
+		return (127);
 	}
 	return (execute_external_command(path, argv, shell->envp));
 }
