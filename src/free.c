@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 22:35:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 23:47:13 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 00:20:14 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	free_pipeline(t_command *pipeline)
 {
 	t_command	*current;
 	t_command	*next;
+	int			i;
 
 	current = pipeline;
 	while (current)
@@ -64,7 +65,7 @@ void	free_pipeline(t_command *pipeline)
 		next = current->next;
 		if (current->redirs && current->redir_count > 0)
 		{
-			int i = 0;
+			i = 0;
 			while (i < current->redir_count)
 			{
 				free(current->redirs[i].filename);

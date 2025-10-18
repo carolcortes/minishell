@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 00:05:40 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 00:20:53 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static void	main_loop(t_shell *shell)
 			if (line && !*line)
 			{
 				free(line);
-				continue;
+				continue ;
 			}
 		}
 		if (!line)
