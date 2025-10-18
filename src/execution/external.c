@@ -3,84 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   external.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/07 22:12:17 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/12 17:08:38 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/*#include "../../inc/minishell.h"
-
-static int	handle_external_child(char *path, char **argv, char **envp)
-{
-	setup_child_signals();
-	execve(path, argv, envp);
-	printf("minishell: %s: execution failed\n", argv[0]);
-	free(path);
-	free_argv(argv);
-	exit(126);
-}
-
-static int	handle_fork_error(char *path, char **argv)
-{
-	perror("minishell: fork");
-	free(path);
-	free_argv(argv);
-	return (1);
-}
-
-static int	execute_external_command(char *path, char **argv, char **envp)
-{
-	pid_t	pid;
-	int		status;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		setup_child_signals();
-		return (handle_external_child(path, argv, envp));
-	}
-	else if (pid > 0)
-	{
-		waitpid(pid, &status, 0);
-		free(path);
-		free_argv(argv);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else if (WIFSIGNALED(status))
-		{
-			if (WTERMSIG(status) == SIGQUIT)
-				printf("Quit (core dumped)\n");
-			return (128 + WTERMSIG(status));
-		}
-		else
-			return (1);
-	}
-	else
-		return (handle_fork_error(path, argv));
-}
-
-static int	handle_command_not_found(char **argv)
-{
-	printf("minishell: %s: command not found\n", argv[0]);
-	free_argv(argv);
-	return (127);
-}
-
-int	execute_external(t_token **args, char **envp)
-{
-	char	*path;
-	char	**argv;
-
-	argv = tokens_to_argv(args);
-	if (!argv)
-		return (1);
-	path = find_command_path(argv[0], envp);
-	if (!path)
-		return (handle_command_not_found(argv));
-	return (execute_external_command(path, argv, envp));
-}*/
 
 #include "../../inc/minishell.h"
 #include <errno.h>
@@ -125,28 +53,8 @@ static int	execute_external_command(char *path, char **argv, char **envp)
 	return (1);
 }
 
-/*static int	handle_command_not_found(char **argv)
-{
-	fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
-	free_argv(argv);
-	return (127);
-}*/
-
-/*int	execute_external(t_token **args, char **envp)
-{
-	char	*path;
-	char	**argv;
-
-	argv = tokens_to_argv(args);
-	if (!argv)
-		return (1);
-	path = find_command_path(argv[0], envp);
-	if (!path)
-		return (handle_command_not_found(argv));
-	return (execute_external_command(path, argv, envp));
-}*/
-
-int	execute_external(t_token **args, char **envp)
+//int	execute_external(t_token **args, char **envp)
+int	execute_external(t_token **args, t_shell *shell)
 {
 	char	*path;
 	char	**argv;
@@ -155,7 +63,7 @@ int	execute_external(t_token **args, char **envp)
 	if (!argv)
 		return (1);
 
-	path = find_command_path(argv[0], envp);
+	path = find_command_path(argv[0], shell->envp);
 	if (!path)
 	{
 		fprintf(stderr, "minishell: %s: No such file or directory\n", argv[0]);
@@ -169,5 +77,5 @@ int	execute_external(t_token **args, char **envp)
 		free_argv(argv);
 		return (126);
 	}
-	return (execute_external_command(path, argv, envp));
+	return (execute_external_command(path, argv, shell->envp));
 }

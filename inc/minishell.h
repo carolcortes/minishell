@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/07 22:35:38 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/12 17:09:33 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,15 @@ typedef struct s_token
 	bool	is_pipe;
 	bool	is_redirection;	// true se for >, >>, <
 	int		redir_type;		// 1: >, 2: >>, 3: <, 0: nenhum
+	//int		last_status;	// substitui g_last_status
 }	t_token;
+
+// substitui a variável global g_last_status
+typedef struct s_shell
+{
+	char	**envp;          // ambiente duplicado
+	int		last_status;	// substitui g_last_status
+}	t_shell;
 
 // Permite chamar rapidamente a função correta sem if/else gigante.
 typedef struct s_builtin
@@ -131,15 +139,8 @@ typedef struct s_process_data
 	int			*input_fd;
 	int			pipe_fd[2];
 	pid_t		*last_pid;
-	char		**envp;
+	//char		**env;
 }	t_process_data;
-
-// substitui a variável global g_last_status
-typedef struct s_shell
-{
-	//char	**envp;          // ambiente duplicado
-	int		last_status;	// substitui g_last_status
-}	t_shell;
 
 //	builtins
 int			exec_builtin(t_token **args, char **envp);
@@ -161,16 +162,20 @@ int			ft_unset(t_token **args, char **envp);
 
 //	execution
 //		execute_pip_ext1.c
-void		handle_child_process(t_command *cmd, int input_fd,
-				int pipe_fd[2], char **envp);
+//void		handle_child_process(t_command *cmd, int input_fd,
+//				int pipe_fd[2], char **env);
+void	handle_child_process(t_command *cmd, int input_fd,
+	int pipe_fd[2], t_shell *shell);
 void		update_fds_after_command(t_command *cmd, t_exec_data *data);
 //		execute_pip_ext2.c
 void		redirect_input(int input_fd);
 void		redirect_output(int pipe_fd[2]);
 //		execute_pipeline.c
-void		execute_pipeline(t_command *pipeline, char **envp, t_shell *shell);
+//void		execute_pipeline(t_command *pipeline, char **env, t_shell *shell);
+void	execute_pipeline(t_command *pipeline, t_shell *shell);
 //		external.c
-int			execute_external(t_token **args, char **envp);
+//int			execute_external(t_token **args, char **envp);
+int			execute_external(t_token **args, t_shell *shell);
 //		heredoc.c
 //char		*handle_heredoc(char *delimiter, t_shell *shell);
 char		*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell);
@@ -229,7 +234,8 @@ char		*ft_strjoin_free(char *s1, char *s2, int mode);
 void		free_pipeline(t_command *pipeline);
 
 // main_ext.c
-int			handle_child_process_single(t_command *cmd, char **env);
+//int			handle_child_process_single(t_command *cmd, char **env);
+int			handle_child_process_single(t_command *cmd, t_shell *shell);
 void		handle_parent_process(pid_t pid, t_shell *shell);
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);

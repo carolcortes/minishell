@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pip_ext1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:03:36 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/28 17:11:59 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/12 17:08:05 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,21 @@ static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
 	}
 }
 
+//void	handle_child_process(t_command *cmd, int input_fd,
+//	int pipe_fd[2], char **env)
 void	handle_child_process(t_command *cmd, int input_fd,
-	int pipe_fd[2], char **envp)
+	int pipe_fd[2], t_shell *shell)
 {
 	if (!apply_redirections(cmd))
 		exit(1);
 	apply_pipe_redirections(input_fd, pipe_fd, cmd);
 	if (is_builtin(cmd->args))
-		exit(exec_builtin(cmd->args, envp));
+		//exit(exec_builtin(cmd->args, env));
+		exit(exec_builtin(cmd->args, shell->envp));
 	else
-		exit(execute_external(cmd->args, envp));
+		//exit(execute_external(cmd->args, env));
+		//exit(execute_external(cmd->args, shell->envp));
+		exit(execute_external(cmd->args, shell));
 }
 
 void	update_fds_after_command(t_command *cmd, t_exec_data *data)

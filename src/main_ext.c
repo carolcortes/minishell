@@ -3,23 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   main_ext.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/07 22:09:42 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/12 17:11:37 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	handle_child_process_single(t_command *cmd, char **env)
+//int	handle_child_process_single(t_command *cmd, char **env)
+int	handle_child_process_single(t_command *cmd, t_shell *shell)
 {
 	if (!apply_redirections(cmd))
 		return (1);
 	if (is_builtin(cmd->args))
-		return (exec_builtin(cmd->args, env));
+		//return (exec_builtin(cmd->args, env));
+		return (exec_builtin(cmd->args, shell->envp));
 	else
-		return (execute_external(cmd->args, env));
+		//return (execute_external(cmd->args, env));
+		//return (execute_external(cmd->args, shell->envp));
+		return (execute_external(cmd->args, shell));
 }
 
 void	handle_parent_process(pid_t pid, t_shell *shell)
