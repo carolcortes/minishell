@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/12 17:09:33 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:50:50 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,11 @@ void		redirect_output(int pipe_fd[2]);
 //		execute_pipeline.c
 //void		execute_pipeline(t_command *pipeline, char **env, t_shell *shell);
 void	execute_pipeline(t_command *pipeline, t_shell *shell);
+//		external_ext.c
+
+void	exec_child(char *path, char **argv, char **envp);
+
+
 //		external.c
 //int			execute_external(t_token **args, char **envp);
 int			execute_external(t_token **args, t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/12 16:50:11 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:18:16 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static void	update_file_descriptors(int *input_fd, int pipe_fd[2],
 		*input_fd = STDIN_FILENO;
 }
 
+//handle_child_process(cmd, *data->input_fd, data->pipe_fd, data->env);
+//handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell->envp);
 static int	process_command(t_command *cmd, t_process_data *data,
 	t_shell *shell)
 {
@@ -55,8 +57,6 @@ static int	process_command(t_command *cmd, t_process_data *data,
 	if (pid == 0)
 	{
 		setup_child_signals();
-		//handle_child_process(cmd, *data->input_fd, data->pipe_fd, data->env);
-		//handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell->envp);
 		handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell);
 	}
 	if (pid > 0)
@@ -85,6 +85,8 @@ static void	wait_for_children(pid_t last_pid, t_shell *shell)
 }
 
 //void	execute_pipeline(t_command *pipeline, char **env, t_shell *shell)
+//data.env = env;
+//data.env = shell->envp;
 void	execute_pipeline(t_command *pipeline, t_shell *shell)
 {
 	t_process_data	data;
@@ -97,8 +99,6 @@ void	execute_pipeline(t_command *pipeline, t_shell *shell)
 	last_pid = 0;
 	data.input_fd = &input_fd;
 	data.last_pid = &last_pid;
-	//data.env = env;
-	//data.env = shell->envp;
 	while (cmd)
 	{
 		if (!process_command(cmd, &data, shell))

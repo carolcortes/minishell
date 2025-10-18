@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:18:08 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/07 22:06:54 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:21:54 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_builtin(t_token **args)
 {
-	int		i;
+	int			i;
 	const char	*builtins[] = {
 		"echo",
 		"cd",
