@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 18:52:04 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:07:29 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_token
 	bool	is_pipe;
 	bool	is_redirection;
 	int		redir_type;
+    bool    quoted;   // NOVO: true se o token veio de aspas explícitas
 }	t_token;
 
 /*============================================================================
@@ -189,6 +190,7 @@ typedef struct s_quote_data
 {
 	char	**token;
 	bool	*allow_expand;
+	bool    *quoted;       // <-- novo campo
 }	t_quote_data;
 
 /*============================================================================
@@ -278,7 +280,8 @@ t_token		*shell_split_line_quotes(char *line);
 /* tokens_ext1.c */
 bool		expand_token_array(t_token_data *data);
 bool		process_special_char(char *line, int *i, t_token_data *data);
-char		*extract_quoted(const char *line, int *i, bool *allow_expand);
+//char		*extract_quoted(const char *line, int *i, bool *allow_expand);
+char    *extract_quoted(const char *line, int *i, bool *allow_expand, bool *quoted);
 
 /* tokens_ext2.c */
 bool		process_word_token(char *line, int *i, t_token_data *data);

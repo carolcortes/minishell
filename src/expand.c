@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 19:54:52 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 22:32:21 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,29 @@ char *expand_variables(const char *str, t_shell *shell)
     return (result);
 }
 
+/*void expand_tokens(t_token *tokens, t_shell *shell)
+{
+    int     i;
+    char    *expanded;
+
+    i = 0;
+    while (tokens[i].value)
+    {
+        if (tokens[i].allow_expand)
+        {
+            expanded = expand_variables(tokens[i].value, shell);
+            if (!expanded)
+            {
+                printf("Error: memory allocation failed during expansion\n");
+                return ;
+            }
+            free(tokens[i].value);
+            tokens[i].value = expanded;
+        }
+        i++;
+    }
+}*/
+
 void expand_tokens(t_token *tokens, t_shell *shell)
 {
     int     i;
@@ -238,4 +261,5 @@ void expand_tokens(t_token *tokens, t_shell *shell)
         }
         i++;
     }
+    remove_empty_expanded_tokens(tokens);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_ext1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:50:13 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/07 22:12:44 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:03:46 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ bool	process_special_char(char *line, int *i, t_token_data *data)
 	return (true);
 }
 
-char	*extract_quoted(const char *line, int *i, bool *allow_expand)
+//char	*extract_quoted(const char *line, int *i, bool *allow_expand)
+char    *extract_quoted(const char *line, int *i, bool *allow_expand, bool *quoted)
 {
 	char	quote;
 	int		start;
@@ -93,6 +94,9 @@ char	*extract_quoted(const char *line, int *i, bool *allow_expand)
 		*allow_expand = false;
 	else if (quote == '"')
 		*allow_expand = true;
+	/////////////////
+	*quoted = true;   // <-- marca que veio de aspas
+	/////////////////
 	(*i)++;
 	start = *i;
 	while (line[*i] && line[*i] != quote)
