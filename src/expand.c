@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 20:43:15 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:13:20 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,35 @@ char	*expand_variables(const char *str, t_shell *shell)
 	return (result);
 }
 
+static void	remove_empty_tokens(t_token *tokens)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (tokens[i].value)
+	{
+		if (tokens[i].value[0] != '\0')
+		{
+			if (i != j)
+			{
+				tokens[j] = tokens[i];
+				tokens[i].value = NULL;
+			}
+			j++;
+		}
+		else
+		{
+			free(tokens[i].value);
+			tokens[i].value = NULL;
+		}
+		i++;
+	}
+	if (j < i)
+		tokens[j].value = NULL;
+}
+
 void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	int		i;
@@ -66,6 +95,7 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 		}
 		i++;
 	}
+	remove_empty_tokens(tokens);
 }
 
 static char	*get_env_value(char *key, char **envp)

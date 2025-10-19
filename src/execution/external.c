@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 20:33:27 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:15:34 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,18 @@ static int	execute_external_command(char *path, char **argv, char **envp)
 
 static int	exec_with_path(char **argv, t_shell *shell)
 {
-	char	*path;
+	char		*path;
+	struct stat	path_stat;
 
 	if (access(argv[0], F_OK) != 0)
 	{
 		fprintf(stderr, "minishell: %s: No such file or directory\n", argv[0]);
-		free_strings(argv);
-		return (127);
+		return (free_strings(argv), 127);
+	}
+	if (stat(argv[0], &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+	{
+		fprintf(stderr, "minishell: %s: Is a directory\n", argv[0]);
+		return (free_strings(argv), 126);
 	}
 	if (access(argv[0], X_OK) != 0)
 	{
@@ -103,10 +108,7 @@ static int	exec_with_path(char **argv, t_shell *shell)
 	}
 	path = ft_strdup(argv[0]);
 	if (!path)
-	{
-		free_strings(argv);
-		return (1);
-	}
+		return (free_strings(argv),1);
 	return (execute_external_command(path, argv, shell->envp));
 }
 
