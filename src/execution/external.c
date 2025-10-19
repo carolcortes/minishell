@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 13:15:34 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:24:58 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ int	execute_external(t_token **args, t_shell *shell)
 	argv = tokens_to_argv(args);
 	if (!argv)
 		return (1);
+	if (argv[0][0] == '\0')
+	{
+		fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
+		free_strings(argv);
+		return (127);
+	}
 	if (ft_strchr(argv[0], '/'))
 		return (exec_with_path(argv, shell));
 	return (exec_from_env(argv, shell));
