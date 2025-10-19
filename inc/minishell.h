@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 13:43:19 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:41:23 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,11 +230,14 @@ char		**dup_env(char **envp);
 
 /* execution
 execute_pip_ext1.c */
-void		handle_child_process(t_command *cmd, int input_fd,
-				int pipe_fd[2], t_shell *shell);
+//void		handle_child_process(t_command *cmd, int input_fd,
+//				int pipe_fd[2], t_shell *shell, t_token *tokens);
+void	handle_child_process(t_command *cmd, t_process_data *data,
+	t_shell *shell, t_token *tokens);
 
 /* execute_pipeline.c */
-void		execute_pipeline(t_command *pipeline, t_shell *shell);
+//void		execute_pipeline(t_command *pipeline, t_shell *shell);
+void		execute_pipeline(t_command *pipeline, t_shell *shell, t_token *tokens);
 
 /* external_ext.c */
 void		exec_child(char *path, char **argv, char **envp);
@@ -249,7 +252,8 @@ char		*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell);
 char		*find_command_path(char *command, char **envp);
 
 /*		redirections.c */
-int			apply_redirections(t_command *cmd);
+//int			apply_redirections(t_command *cmd);
+int	apply_redirections(t_command *cmd, t_shell *shell, t_token *tokens);
 
 /* redirections_ext.c */
 int			open_output_file(char *filename, int append);
@@ -304,7 +308,7 @@ char		*ft_strjoin_free(char *s1, char *s2, int mode);
 void		free_pipeline(t_command *pipeline);
 
 /* main_ext.c */
-int			handle_child_process_single(t_command *cmd, t_shell *shell);
+int			handle_child_process_single(t_command *cmd, t_shell *shell, t_token *tokens);
 void		handle_parent_process(pid_t pid, t_shell *shell);
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);

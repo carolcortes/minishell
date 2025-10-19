@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 20:17:15 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:34:39 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid,
 static void	update_file_descriptors(int *input_fd, int pipe_fd[2],
 				t_command *cmd);
 static int	process_command(t_command *cmd, t_process_data *data,
-				t_shell *shell);
+				t_shell *shell, t_token *tokens);
 static void	wait_for_children(pid_t last_pid, t_shell *shell);
 
 /**
@@ -35,7 +35,8 @@ static void	wait_for_children(pid_t last_pid, t_shell *shell);
  * @param shell Shell state (environment, last_status, and signal handling).
 */
 
-void	execute_pipeline(t_command *pipeline, t_shell *shell)
+//void	execute_pipeline(t_command *pipeline, t_shell *shell)
+void	execute_pipeline(t_command *pipeline, t_shell *shell, t_token *tokens)
 {
 	t_process_data	data;
 	int				input_fd;
@@ -49,7 +50,8 @@ void	execute_pipeline(t_command *pipeline, t_shell *shell)
 	data.last_pid = &last_pid;
 	while (cmd)
 	{
-		if (!process_command(cmd, &data, shell))
+		//if (!process_command(cmd, &data, shell))
+		if (!process_command(cmd, &data, shell, tokens))
 			return ;
 		cmd = cmd->next;
 	}
@@ -89,8 +91,10 @@ static void	update_file_descriptors(int *input_fd, int pipe_fd[2],
 		*input_fd = STDIN_FILENO;
 }
 
+//static int	process_command(t_command *cmd, t_process_data *data,
+//	t_shell *shell)
 static int	process_command(t_command *cmd, t_process_data *data,
-	t_shell *shell)
+	t_shell *shell, t_token *tokens)
 {
 	pid_t	pid;
 
@@ -99,7 +103,9 @@ static int	process_command(t_command *cmd, t_process_data *data,
 	if (pid == 0)
 	{
 		setup_child_signals();
-		handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell);
+		//handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell);
+		//handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell, tokens);
+		handle_child_process(cmd, data, shell, tokens);
 	}
 	if (pid > 0)
 		*data->last_pid = pid;

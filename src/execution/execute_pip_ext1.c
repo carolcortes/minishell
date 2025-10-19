@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:03:36 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 11:29:09 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:55:26 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,17 @@ static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
  * @return This function does not return; it exits with the command’s status.
 */
 
-void	handle_child_process(t_command *cmd, int input_fd,
-	int pipe_fd[2], t_shell *shell)
+void	handle_child_process(t_command *cmd, t_process_data *data,
+	t_shell *shell, t_token *tokens)
 {
+	int input_fd;
+	int pipe_fd[2];
+
+	input_fd = *data->input_fd;
+	pipe_fd[0] = data->pipe_fd[0];
+	pipe_fd[1] = data->pipe_fd[1];
 	apply_pipe_redirections(input_fd, pipe_fd, cmd);
-	if (!apply_redirections(cmd))
+	if (!apply_redirections(cmd, shell, tokens))
 		exit(1);
 	if (is_builtin(cmd->args))
 		exit(exec_builtin(cmd->args, shell->envp));
