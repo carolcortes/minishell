@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:22 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 00:22:43 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 10:59:20 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ int	ft_unset(t_token **args, char **envp)
 	{
 		if (!is_valid_identifier(args[i]->value))
 		{
-			printf("unset: `%s': not a valid identifier\n", args[i]->value);
+			fprintf(stderr, "unset: `%s': not a valid identifier\n",
+				args[i]->value);
 			exit_status = 1;
 		}
 		else

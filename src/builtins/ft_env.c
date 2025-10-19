@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 19:38:53 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 11:30:16 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@ char	**dup_env(char **envp)
 {
 	int		i;
 	int		count;
+	int		capacity;
 	char	**new_env;
 
 	count = 0;
 	while (envp[count])
 		count++;
-	new_env = malloc((count + 1) * sizeof(char *));
+	capacity = count + (count / 2) + 10;
+	new_env = malloc((capacity + 1) * sizeof(char *));
 	if (!new_env)
 		return (NULL);
 	i = 0;
@@ -68,6 +70,7 @@ char	**dup_env(char **envp)
 		new_env[i] = ft_strdup(envp[i]);
 		i++;
 	}
-	new_env[count] = NULL;
+	while (i <= capacity)
+		new_env[i++] = NULL;
 	return (new_env);
 }
