@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 23:16:46 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 11:45:39 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,10 @@ static int	is_valid_numeric(const char *s, long *out)
 	return (1);
 }
 
-/* Helper: print numeric error and exit with 255 */
+/* Helper: print numeric error and exit with 2 */
 static void	numeric_error(const char *s)
 {
-	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-	ft_putstr_fd((char *)s, STDERR_FILENO);
-	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+	fprintf(stderr, "minishell: exit: %s: numeric argument required\n", s);
 	exit(2);
 }
 
@@ -75,20 +73,24 @@ int	ft_exit(t_token **args, char **envp)
 {
 	long			val;
 	unsigned char	code;
+	int				arg_index;
 
 	(void)envp;
 	if (!args || !args[0])
 		exit(0);
-	ft_putendl_fd("exit", STDERR_FILENO);
-	if (args[1] && args[2] && is_valid_numeric(args[1]->value, &val))
+	arg_index = 1;
+	if (args[1] && ft_strcmp(args[1]->value, "--") == 0)
+		arg_index = 2;
+	if (args[arg_index] && args[arg_index + 1]
+		&& is_valid_numeric(args[arg_index]->value, &val))
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		return (1);
 	}
-	if (args[1])
+	if (args[arg_index])
 	{
-		if (!is_valid_numeric(args[1]->value, &val))
-			numeric_error(args[1]->value);
+		if (!is_valid_numeric(args[arg_index]->value, &val))
+			numeric_error(args[arg_index]->value);
 		code = (unsigned char)val;
 		exit(code);
 	}

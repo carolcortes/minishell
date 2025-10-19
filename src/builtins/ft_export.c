@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:12 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 20:03:30 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 11:12:37 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	ft_export(t_token **args, char **envp)
 	{
 		if (!is_valid_identifier(args[i]->value))
 		{
-			printf("export: `%s': not a valid identifier\n", args[i]->value);
+			fprintf(stderr, "export: `%s': not a valid identifier\n",
+				args[i]->value);
 			status = 1;
 		}
 		else if (add_or_update_env(args[i]->value, envp))
@@ -75,6 +76,8 @@ static int	is_valid_identifier(char *str)
 	i = 1;
 	while (str[i] && str[i] != '=')
 	{
+		if (str[i] == '+' && str[i + 1] == '=')
+			break ;
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;

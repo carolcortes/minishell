@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 00:22:08 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 11:38:02 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ int	ft_cd(t_token **args, char **envp)
 			return (1);
 		}
 		return (0);
+	}
+	if (args[2])
+	{
+		fprintf(stderr, "minishell: cd: too many arguments\n");
+		return (1);
 	}
 	if (chdir(args[1]->value) != 0)
 	{
