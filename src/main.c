@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 00:20:53 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 10:39:48 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,15 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 
-	(void)argc;
-	(void)argv;
 	shell.envp = dup_env(envp);
 	shell.last_status = 0;
-	printbanner();
+	if (argc >= 3 && ft_strcmp(argv[1], "-c") == 0)
+	{
+		setup_signals();
+		process_input_line(ft_strdup(argv[2]), &shell);
+		free_strings(shell.envp);
+		return (shell.last_status);
+	}
 	setup_signals();
 	main_loop(&shell);
 	free_strings(shell.envp);
