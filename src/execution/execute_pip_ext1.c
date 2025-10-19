@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:03:36 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 11:14:37 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 11:29:09 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	handle_child_process(t_command *cmd, int input_fd,
 	apply_pipe_redirections(input_fd, pipe_fd, cmd);
 	if (!apply_redirections(cmd))
 		exit(1);
-	//apply_pipe_redirections(input_fd, pipe_fd, cmd);
 	if (is_builtin(cmd->args))
 		exit(exec_builtin(cmd->args, shell->envp));
 	else
