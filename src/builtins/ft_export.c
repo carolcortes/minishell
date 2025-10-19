@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:12 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 11:12:37 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 12:00:10 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	ft_export(t_token **args, char **envp)
 	return (status);
 }
 
-static void	print_env_export(char **envp)
+/*static void	print_env_export(char **envp)
 {
 	int	i;
 
@@ -63,6 +63,33 @@ static void	print_env_export(char **envp)
 	while (envp[i])
 	{
 		printf("declare -x %s\n", envp[i]);
+		i++;
+	}
+}*/
+
+static void	print_env_export(char **envp)
+{
+	int		i;
+	char	*eq;
+	char	*key;
+	char	*val;
+
+	i = 0;
+	while (envp[i])
+	{
+		eq = ft_strchr(envp[i], '=');
+		if (eq)
+		{
+			key = ft_substr(envp[i], 0, eq - envp[i]);
+			val = eq + 1;
+			if (key)
+			{
+				printf("declare -x %s=\"%s\"\n", key, val);
+				free(key);
+			}
+		}
+		else
+			printf("declare -x %s\n", envp[i]);
 		i++;
 	}
 }
