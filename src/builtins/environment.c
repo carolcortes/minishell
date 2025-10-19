@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 19:08:10 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/07 22:11:04 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/18 19:38:14 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	add_variable_to_env(char *var, char ***envp)
 		return (1);
 	new_env[count] = ft_strdup(var);
 	new_env[count + 1] = NULL;
-	free_env(*envp);
+	free_strings(*envp);
 	*envp = new_env;
 	return (0);
 }

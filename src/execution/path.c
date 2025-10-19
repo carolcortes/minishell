@@ -3,14 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:43:07 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 16:20:57 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 20:27:22 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static char	*get_path_env(char **envp);
+static char	*check_path_directory(char *dir, char *command);
+static char	*search_in_paths(char **paths, char *command);
+static char	*check_explicit_path(char *command);
+
+/**
+ * @brief Resolve the executable path for a command.
+ *
+ * If the command contains '/', validate it as an explicit path; otherwise
+ * search directories from PATH for an executable (X_OK).
+ *
+ * @param command Program name or explicit path.
+ * @param envp Environment array (used to read PATH).
+ * @return Allocated path string on success; NULL if not found.
+ *         For explicit paths without execute permission, returns
+ *         the literal string "PERMISSION_DENIED".
+ */
+char	*find_command_path(char *command, char **envp)
+{
+	char	*path_env;
+	char	**paths;
+	char	*result;
+
+	if (ft_strchr(command, '/'))
+		return (check_explicit_path(command));
+	path_env = get_path_env(envp);
+	if (!path_env)
+		return (NULL);
+	paths = ft_split(path_env, ':');
+	if (!paths)
+		return (NULL);
+	result = search_in_paths(paths, command);
+	free_strings(paths);
+	return (result);
+}
 
 static char	*get_path_env(char **envp)
 {
@@ -25,13 +61,6 @@ static char	*get_path_env(char **envp)
 	}
 	return (NULL);
 }
-
-/*static char	*check_absolute_path(char *command)
-{
-	if (access(command, X_OK) == 0)
-		return (ft_strdup(command));
-	return (NULL);
-}*/
 
 static char	*check_path_directory(char *dir, char *command)
 {
@@ -66,63 +95,6 @@ static char	*search_in_paths(char **paths, char *command)
 	return (NULL);
 }
 
-/*char	*find_command_path(char *command, char **envp)
-{
-	char	*path_env;
-	char	**paths;
-	char	*result;
-
-	result = check_absolute_path(command);
-	if (result)
-		return (result);
-	path_env = get_path_env(envp);
-	if (!path_env)
-		return (NULL);
-	paths = ft_split(path_env, ':');
-	if (!paths)
-		return (NULL);
-	result = search_in_paths(paths, command);
-	free_array(paths);
-	return (result);
-}*/
-/*static char	*check_explicit_path(char *command)
-{
-	if (access(command, F_OK) != 0)
-	{
-		perror("minishell");
-		return (NULL);
-	}
-	if (access(command, X_OK) != 0)
-	{
-		perror("minishell");
-		return (NULL);
-	}
-	return (ft_strdup(command));
-}
-
-char	*find_command_path(char *command, char **envp)
-{
-	char	*path_env;
-	char	**paths;
-	char	*result;
-
-	// 🚩 Se tiver '/' → é caminho explícito, não procurar em PATH
-	if (ft_strchr(command, '/'))
-		return (check_explicit_path(command));
-
-	path_env = get_path_env(envp);
-	if (!path_env)
-		return (NULL);
-	paths = ft_split(path_env, ':');
-	if (!paths)
-		return (NULL);
-	result = search_in_paths(paths, command);
-	free_array(paths);
-	return (result);
-}*/
-
-// arquivo não existe
-// marcador especial
 static char	*check_explicit_path(char *command)
 {
 	if (access(command, F_OK) != 0)
@@ -130,24 +102,4 @@ static char	*check_explicit_path(char *command)
 	if (access(command, X_OK) != 0)
 		return (ft_strdup("PERMISSION_DENIED"));
 	return (ft_strdup(command));
-}
-
-// 🚩 Se o comando contém '/', trata como caminho explícito
-char	*find_command_path(char *command, char **envp)
-{
-	char	*path_env;
-	char	**paths;
-	char	*result;
-
-	if (ft_strchr(command, '/'))
-		return (check_explicit_path(command));
-	path_env = get_path_env(envp);
-	if (!path_env)
-		return (NULL);
-	paths = ft_split(path_env, ':');
-	if (!paths)
-		return (NULL);
-	result = search_in_paths(paths, command);
-	free_array(paths);
-	return (result);
 }

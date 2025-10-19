@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+         #
+#    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/10/18 16:42:57 by cgross-s         ###   ########.fr        #
+#    Updated: 2025/10/18 20:30:49 by cade-oli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ FILES			= 	main.c main_ext.c signals.c utils.c expand.c free.c \
 					parsing/redir_parse.c parsing/redir_parse_ext.c \
 					parsing/tokens_ext1.c parsing/tokens_ext2.c parsing/tokens_ext3.c \
 					execution/execute_pipeline.c execution/execute_pip_ext1.c \
-					execution/execute_pip_ext2.c execution/external_ext.c\
-					execution/external.c execution/utils.c execution/path.c \
+					execution/external_ext.c\
+					execution/external.c execution/exec_utils.c execution/path.c \
 					execution/redirections.c execution/redirections_ext.c \
 					execution/heredoc.c
 

@@ -3,14 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 16:18:16 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/18 20:17:15 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid,
+				t_shell *shell);
+static void	update_file_descriptors(int *input_fd, int pipe_fd[2],
+				t_command *cmd);
+static int	process_command(t_command *cmd, t_process_data *data,
+				t_shell *shell);
+static void	wait_for_children(pid_t last_pid, t_shell *shell);
+
+/**
+ * @brief Orchestrate execution of a command pipeline.
+ *
+ * Creates pipes between consecutive commands, forks a process per stage, and
+ * wires stdin/stdout appropriately. In children, applies redirections and
+ * executes either a builtin or an external command. The parent closes unused
+ * FDs, tracks the last command's PID, and waits for all children.
+ *
+ * Updates shell->last_status based on the last command's exit status or
+ * terminating signal. On pipe/fork errors, sets shell->last_status to 1.
+ *
+ * @param pipeline Head of the parsed command list (linked via cmd->next).
+ * @param shell Shell state (environment, last_status, and signal handling).
+*/
+
+void	execute_pipeline(t_command *pipeline, t_shell *shell)
+{
+	t_process_data	data;
+	int				input_fd;
+	t_command		*cmd;
+	pid_t			last_pid;
+
+	input_fd = STDIN_FILENO;
+	cmd = pipeline;
+	last_pid = 0;
+	data.input_fd = &input_fd;
+	data.last_pid = &last_pid;
+	while (cmd)
+	{
+		if (!process_command(cmd, &data, shell))
+			return ;
+		cmd = cmd->next;
+	}
+	wait_for_children(last_pid, shell);
+}
 
 static int	create_pipe_and_fork(t_command *cmd, int pipe_fd[2], pid_t *pid,
 	t_shell *shell)
@@ -45,8 +89,6 @@ static void	update_file_descriptors(int *input_fd, int pipe_fd[2],
 		*input_fd = STDIN_FILENO;
 }
 
-//handle_child_process(cmd, *data->input_fd, data->pipe_fd, data->env);
-//handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell->envp);
 static int	process_command(t_command *cmd, t_process_data *data,
 	t_shell *shell)
 {
@@ -70,6 +112,7 @@ static void	wait_for_children(pid_t last_pid, t_shell *shell)
 	int		status;
 	pid_t	waited_pid;
 
+	setup_wait_signals();
 	waited_pid = 1;
 	while (waited_pid > 0)
 	{
@@ -79,31 +122,14 @@ static void	wait_for_children(pid_t last_pid, t_shell *shell)
 			if (WIFEXITED(status))
 				shell->last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
+			{
+				if (WTERMSIG(status) == SIGINT)
+					write(1, "\n", 1);
+				if (WTERMSIG(status) == SIGQUIT)
+					write(2, "Quit (core dumped)\n", 19);
 				shell->last_status = 128 + WTERMSIG(status);
+			}
 		}
+		setup_signals();
 	}
-}
-
-//void	execute_pipeline(t_command *pipeline, char **env, t_shell *shell)
-//data.env = env;
-//data.env = shell->envp;
-void	execute_pipeline(t_command *pipeline, t_shell *shell)
-{
-	t_process_data	data;
-	int				input_fd;
-	t_command		*cmd;
-	pid_t			last_pid;
-
-	input_fd = STDIN_FILENO;
-	cmd = pipeline;
-	last_pid = 0;
-	data.input_fd = &input_fd;
-	data.last_pid = &last_pid;
-	while (cmd)
-	{
-		if (!process_command(cmd, &data, shell))
-			return ;
-		cmd = cmd->next;
-	}
-	wait_for_children(last_pid, shell);
 }

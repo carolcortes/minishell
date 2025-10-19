@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/07 22:11:21 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/18 19:38:53 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_env(t_token **args, char **envp)
  *
  * Allocates a new array of strings and duplicates each entry
  * from the provided environment. The returned array must be
- * freed using free_env().
+ * freed using free_strings().
  *
  * @param envp Null-terminated array of environment strings.
  * @return Pointer to a newly allocated copy of envp,
@@ -70,29 +70,4 @@ char	**dup_env(char **envp)
 	}
 	new_env[count] = NULL;
 	return (new_env);
-}
-
-/**
- * @brief Free a duplicated environment array.
- *
- * Iterates through the given environment array and frees
- * each string, then frees the array itself.
- *
- * @param env Null-terminated array of environment strings
- *            previously allocated by dup_env().
- */
-
-void	free_env(char **env)
-{
-	int	i;
-
-	i = 0;
-	if (!env)
-		return ;
-	while (env[i])
-	{
-		free(env[i]);
-		i++;
-	}
-	free(env);
 }
