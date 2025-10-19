@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 17:41:23 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 18:52:04 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ char	*filename;	para << será o delimitador
 typedef struct s_redirection
 {
 	int		type;
-	char	*filename;
+	char	*filename;		// delimitador no caso de heredoc
+	bool	allow_expand;	// novo: herdado do token
 }	t_redirection;
 
 /*============================================================================
@@ -323,5 +324,6 @@ void		setup_wait_signals(void);
 void		ft_getcwd(char *buf, size_t size);
 void		printbanner(void);
 bool		is_spaces(char c);
+
 
 #endif

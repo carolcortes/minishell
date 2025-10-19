@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 17:43:46 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 19:57:39 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ static void	process_input_line(char *line, t_shell *shell)
 	t_command	*pipeline;
 
 	tokens = shell_split_line_quotes(line);
+	///////////
+	//print_tokens(tokens);   // <<-- adiciona isto para debug
+	/////////////////
 	free(line);
 	if (!tokens)
 		return ;
