@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 17:34:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:25:35 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	execute_pipeline(t_command *pipeline, t_shell *shell, t_token *tokens)
 	data.last_pid = &last_pid;
 	while (cmd)
 	{
-		//if (!process_command(cmd, &data, shell))
 		if (!process_command(cmd, &data, shell, tokens))
 			return ;
 		cmd = cmd->next;
@@ -103,8 +102,6 @@ static int	process_command(t_command *cmd, t_process_data *data,
 	if (pid == 0)
 	{
 		setup_child_signals();
-		//handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell);
-		//handle_child_process(cmd, *data->input_fd, data->pipe_fd, shell, tokens);
 		handle_child_process(cmd, data, shell, tokens);
 	}
 	if (pid > 0)

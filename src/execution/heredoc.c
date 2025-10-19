@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 23:01:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 19:22:17 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:27:52 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,12 @@ static void	write_until_delimiter(int fd, char *delimiter,
 			expanded = expand_variables(line, shell);
 			if (expanded)
 			{
-				//printf("[DEBUG] allow_expand = true\n");
 				write(fd, expanded, ft_strlen(expanded));
 				free(expanded);
 			}
 		}
 		else
-		{
-			//printf("[DEBUG] allow_expand = false\n");
 			write(fd, line, ft_strlen(line));
-		}
 		write(fd, "\n", 1);
 		free(line);
 	}

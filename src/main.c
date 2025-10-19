@@ -6,13 +6,12 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 19:57:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:16:39 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//static void	execute_with_redirections(t_command *cmd, t_shell *shell)
 static void	execute_with_redirections(t_command *cmd, t_shell *shell,
 	t_token *tokens)
 {
@@ -22,7 +21,6 @@ static void	execute_with_redirections(t_command *cmd, t_shell *shell,
 	if (pid == 0)
 	{
 		setup_child_signals();
-		//exit(handle_child_process_single(cmd, shell));
 		exit(handle_child_process_single(cmd, shell, tokens));
 	}
 	else if (pid > 0)
@@ -34,7 +32,6 @@ static void	execute_with_redirections(t_command *cmd, t_shell *shell,
 	}
 }
 
-//static void	process_single_command(t_command *cmd, t_shell *shell)
 static void	process_single_command(t_command *cmd, t_shell *shell,
 	t_token *tokens)
 {
@@ -50,7 +47,6 @@ static void	process_single_command(t_command *cmd, t_shell *shell,
 		return ;
 	}
 	if (cmd->redir_count > 0)
-		//execute_with_redirections(cmd, shell);
 		execute_with_redirections(cmd, shell, tokens);
 	else
 	{
@@ -67,9 +63,6 @@ static void	process_input_line(char *line, t_shell *shell)
 	t_command	*pipeline;
 
 	tokens = shell_split_line_quotes(line);
-	///////////
-	//print_tokens(tokens);   // <<-- adiciona isto para debug
-	/////////////////
 	free(line);
 	if (!tokens)
 		return ;
@@ -78,15 +71,9 @@ static void	process_input_line(char *line, t_shell *shell)
 	if (pipeline)
 	{
 		if (pipeline->next)
-		///////////////////////////////////////////////
-			//execute_pipeline(pipeline, shell);
 			execute_pipeline(pipeline, shell, tokens);
-		////////////////////////////////////////////////
 		else
-		////////////////////////////////////////////////
-			//process_single_command(pipeline, shell);
 			process_single_command(pipeline, shell, tokens);
-		////////////////////////////////////////////////
 		free_pipeline(pipeline);
 	}
 	free_tokens(tokens);
