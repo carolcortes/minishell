@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 13:24:58 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:33:54 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ static int	exec_with_path(char **argv, t_shell *shell)
 	}
 	path = ft_strdup(argv[0]);
 	if (!path)
-		return (free_strings(argv),1);
+		return (free_strings(argv), 1);
 	return (execute_external_command(path, argv, shell->envp));
 }
 

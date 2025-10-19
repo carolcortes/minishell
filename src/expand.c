@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 13:24:53 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:35:48 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,59 +45,6 @@ char	*expand_variables(const char *str, t_shell *shell)
 	return (result);
 }
 
-static bool	token_has_variable(const char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' && (str[i + 1] == '?' || ft_isalpha(str[i + 1])
-				|| str[i + 1] == '_'))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-static void	remove_empty_expanded_tokens(t_token *tokens)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (tokens[i].value)
-	{
-		if (tokens[i].value[0] != '\0')
-		{
-			if (i != j)
-			{
-				tokens[j] = tokens[i];
-				tokens[i].value = NULL;
-			}
-			j++;
-		}
-		else if (tokens[i].allow_expand == false)
-		{
-			if (i != j)
-			{
-				tokens[j] = tokens[i];
-				tokens[i].value = NULL;
-			}
-			j++;
-		}
-		else
-		{
-			free(tokens[i].value);
-			tokens[i].value = NULL;
-		}
-		i++;
-	}
-	if (j < i)
-		tokens[j].value = NULL;
-}
-
 void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	int		i;
@@ -105,8 +52,8 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 	char	*original;
 	bool	had_var;
 
-	i = 0;
-	while (tokens[i].value)
+	i = -1;
+	while (tokens[++i].value)
 	{
 		if (tokens[i].allow_expand)
 		{
@@ -123,7 +70,6 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 			if (expanded[0] != '\0' || !had_var)
 				tokens[i].allow_expand = false;
 		}
-		i++;
 	}
 	remove_empty_expanded_tokens(tokens);
 }

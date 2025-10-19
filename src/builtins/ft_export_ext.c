@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 16:13:49 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 11:33:20 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:43:15 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static int	update_env_var(char **envp, char *key, char *var);
 static int	add_env_var(char *var, char **envp);
-static int	append_env_var(char **envp, char *key, char *value);
 static char	*extract_key(char *var, char *equal, int *is_append);
 
 /**
@@ -98,31 +97,18 @@ static int	add_env_var(char *var, char **envp)
 	return (0);
 }
 
-static int	append_env_var(char **envp, char *key, char *value)
+int	append_env_var(char **envp, char *key, char *value)
 {
 	int		i;
 	int		len;
-	char	*old_value;
-	char	*new_value;
 	char	*key_eq;
-	char	*result;
 
 	len = ft_strlen(key);
 	i = 0;
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], key, len) == 0 && envp[i][len] == '=')
-		{
-			old_value = ft_strchr(envp[i], '=') + 1;
-			new_value = ft_strjoin(old_value, value);
-			key_eq = ft_strjoin(key, "=");
-			result = ft_strjoin(key_eq, new_value);
-			free(envp[i]);
-			envp[i] = result;
-			free(new_value);
-			free(key_eq);
-			return (0);
-		}
+			return (append_to_existing(envp, i, key, value));
 		i++;
 	}
 	key_eq = ft_strjoin(key, "=");
