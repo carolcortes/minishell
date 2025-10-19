@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 18:31:07 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 10:27:24 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*shell_read_line(void)
 {
 	char	*line;
 
-	line = readline(MAG"🏴‍☠️  minishell 🏴‍☠️ $> "RST);
+	line = readline("minishell$> ");
 	if (!line)
 	{
 		printf("exit\n");

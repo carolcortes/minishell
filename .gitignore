@@ -3,3 +3,5 @@ libft.a
 *.out
 .vscode
 minishell
+minishell_test.log
+minishell_tester
