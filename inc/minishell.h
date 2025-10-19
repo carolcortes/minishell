@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/18 20:45:40 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:43:19 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <stdbool.h>
 # include <signal.h>
 # include <readline/readline.h>
@@ -218,6 +219,11 @@ int			ft_exit(t_token **args, char **envp);
 
 /* ft_export_ext.c */
 int			add_or_update_env(char *var, char **envp);
+int			append_env_var(char **envp, char *key, char *value);
+
+/* ft_export_ext2.c */
+char		*create_new_var(char *key, char *old_value, char *value);
+int			append_to_existing(char **envp, int i, char *key, char *value);
 
 /* ft_env.c */
 char		**dup_env(char **envp);
@@ -286,6 +292,10 @@ void		extract_redirections(t_command *cmd, t_shell *shell);
 /* expand.c */
 char		*expand_variables(const char *str, t_shell *shell);
 void		expand_tokens(t_token *tokens, t_shell *shell);
+
+/* expand_ext.c */
+bool		token_has_variable(const char *str);
+void		remove_empty_expanded_tokens(t_token *tokens);
 
 /* free.c */
 void		free_strings(char **arr);

@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 20:43:15 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:35:48 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,17 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	int		i;
 	char	*expanded;
+	char	*original;
+	bool	had_var;
 
-	i = 0;
-	while (tokens[i].value)
+	i = -1;
+	while (tokens[++i].value)
 	{
 		if (tokens[i].allow_expand)
 		{
-			expanded = expand_variables(tokens[i].value, shell);
+			original = tokens[i].value;
+			had_var = token_has_variable(original);
+			expanded = expand_variables(original, shell);
 			if (!expanded)
 			{
 				printf("Error: memory allocation failed during expansion\n");
@@ -63,9 +67,11 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 			}
 			free(tokens[i].value);
 			tokens[i].value = expanded;
+			if (expanded[0] != '\0' || !had_var)
+				tokens[i].allow_expand = false;
 		}
-		i++;
 	}
+	remove_empty_expanded_tokens(tokens);
 }
 
 static char	*get_env_value(char *key, char **envp)
