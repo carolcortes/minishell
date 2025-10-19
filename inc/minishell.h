@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 13:43:19 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:27:52 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,6 +227,8 @@ int			append_to_existing(char **envp, int i, char *key, char *value);
 
 /* ft_env.c */
 char		**dup_env(char **envp);
+char		*handle_env_var(const char *str, int *i, char *result,
+				t_shell *shell);
 
 /* execution
 execute_pip_ext1.c */
@@ -291,11 +293,17 @@ void		extract_redirections(t_command *cmd, t_shell *shell);
 
 /* expand.c */
 char		*expand_variables(const char *str, t_shell *shell);
-void		expand_tokens(t_token *tokens, t_shell *shell);
+t_token		*expand_tokens(t_token *tokens, t_shell *shell);
 
 /* expand_ext.c */
 bool		token_has_variable(const char *str);
 void		remove_empty_expanded_tokens(t_token *tokens);
+
+/* word_split.c */
+char		**split_on_whitespace(const char *str);
+
+/* token_split.c */
+t_token		*split_token_on_whitespace(t_token *tokens, int index);
 
 /* free.c */
 void		free_strings(char **arr);
@@ -317,7 +325,8 @@ void		setup_wait_signals(void);
 
 /* utils.c */
 void		ft_getcwd(char *buf, size_t size);
-void		printbanner(void);
 bool		is_spaces(char c);
+int			count_words(const char *str);
+char		*handle_literal_char(const char *str, int *i, char *result);
 
 #endif

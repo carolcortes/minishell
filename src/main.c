@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 10:39:48 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:11:09 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	process_input_line(char *line, t_shell *shell)
 	free(line);
 	if (!tokens)
 		return ;
-	expand_tokens(tokens, shell);
+	tokens = expand_tokens(tokens, shell);
 	pipeline = parse_pipeline(tokens, shell);
 	if (pipeline)
 	{

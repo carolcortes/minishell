@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 23:22:35 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/09/26 17:14:54 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:28:09 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@ void	ft_getcwd(char *buf, size_t size)
 	}
 }
 
-void	printbanner(void)
-{
-	printf(G "\nWelcome to\n\t"RED"MINISHELL\n" RST);
-	printf(G "\t\ta simple shell implementation.\n\n" RST);
-}
-
 bool	is_spaces(char c)
 {
 	int	i;
@@ -39,4 +33,39 @@ bool	is_spaces(char c)
 		i++;
 	}
 	return (false);
+}
+
+int	count_words(const char *str)
+{
+	int		count;
+	int		i;
+	bool	in_word;
+
+	count = 0;
+	i = 0;
+	in_word = false;
+	while (str[i])
+	{
+		if (!is_spaces(str[i]) && !in_word)
+		{
+			in_word = true;
+			count++;
+		}
+		else if (is_spaces(str[i]))
+			in_word = false;
+		i++;
+	}
+	return (count);
+}
+
+char	*handle_literal_char(const char *str, int *i, char *result)
+{
+	char	*char_str;
+
+	char_str = ft_substr(str, *i, 1);
+	if (!char_str)
+		return (NULL);
+	result = ft_strjoin_free(result, char_str, 3);
+	(*i)++;
+	return (result);
 }

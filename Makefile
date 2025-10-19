@@ -6,7 +6,7 @@
 #    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/10/19 13:43:13 by cade-oli         ###   ########.fr        #
+#    Updated: 2025/10/19 17:21:17 by cade-oli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ BUILD_PATH		= .build
 LIBFT_PATH		= libft
 
 FILES			= 	main.c main_ext.c signals.c utils.c expand.c expand_ext.c free.c \
+					word_split.c token_split.c \
 					parsing/tokens.c parsing/pipeline.c parsing/pipeline_ext.c \
 					parsing/redir_parse.c parsing/redir_parse_ext.c \
 					parsing/tokens_ext1.c parsing/tokens_ext2.c parsing/tokens_ext3.c \
