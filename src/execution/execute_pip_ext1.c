@@ -6,14 +6,15 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:03:36 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 17:55:26 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/19 18:11:52 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
-				t_command *cmd);
+//static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
+//				t_command *cmd);
+static void	apply_pipe_redirections(t_process_data *data, t_command *cmd);
 
 /**
  * @brief Execute a single pipeline stage in a child process.
@@ -34,13 +35,14 @@ static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
 void	handle_child_process(t_command *cmd, t_process_data *data,
 	t_shell *shell, t_token *tokens)
 {
-	int input_fd;
+/*	int input_fd;
 	int pipe_fd[2];
 
 	input_fd = *data->input_fd;
 	pipe_fd[0] = data->pipe_fd[0];
-	pipe_fd[1] = data->pipe_fd[1];
-	apply_pipe_redirections(input_fd, pipe_fd, cmd);
+	pipe_fd[1] = data->pipe_fd[1];*/
+	//apply_pipe_redirections(input_fd, pipe_fd, cmd);
+	apply_pipe_redirections(data, cmd);
 	if (!apply_redirections(cmd, shell, tokens))
 		exit(1);
 	if (is_builtin(cmd->args))
@@ -49,9 +51,17 @@ void	handle_child_process(t_command *cmd, t_process_data *data,
 		exit(execute_external(cmd->args, shell));
 }
 
-static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
-	t_command *cmd)
+//static void	apply_pipe_redirections(int input_fd, int pipe_fd[2],
+//	t_command *cmd)
+static void	apply_pipe_redirections(t_process_data *data, t_command *cmd)
 {
+	int input_fd;
+	int pipe_fd[2];
+
+	input_fd = *data->input_fd;
+	pipe_fd[0] = data->pipe_fd[0];
+	pipe_fd[1] = data->pipe_fd[1];
+	
 	if (input_fd != STDIN_FILENO)
 	{
 		if (dup2(input_fd, STDIN_FILENO) == -1)
