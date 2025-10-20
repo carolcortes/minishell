@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:48 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/20 22:01:42 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/20 23:03:54 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	validate_redirection_syntax(t_command *cmd, int i)
 	return (1);
 }
 
-static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
+/*static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 {
 	int		type;
 	char	*target;
@@ -78,6 +78,7 @@ static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 	remove_args(cmd, i, 2);
 	return (1);
 }
+
 
 void	extract_redirections(t_command *cmd, t_shell *shell)
 {
