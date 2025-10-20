@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ext.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:35:00 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 13:35:49 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:35:03 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,20 @@ void	remove_empty_expanded_tokens(t_token *tokens)
 	int	i;
 	int	j;
 
-	i = -1;
+	i = 0;
 	j = 0;
-	while (tokens[++i].value)
+	while (tokens[i].value)
 	{
-		if (tokens[i].value[0] != '\0' || !tokens[i].allow_expand)
-		{
-			if (i != j)
-			{
-				tokens[j] = tokens[i];
-				tokens[i].value = NULL;
-			}
-			j++;
-		}
-		else
+		if (tokens[i].value[0] == '\0' && !tokens[i].quoted)
 		{
 			free(tokens[i].value);
-			tokens[i].value = NULL;
+			i++;
+			continue ;
 		}
+		if (i != j)
+			tokens[j] = tokens[i];
+		i++;
+		j++;
 	}
-	if (j < i)
-		tokens[j].value = NULL;
+	tokens[j].value = NULL;
 }

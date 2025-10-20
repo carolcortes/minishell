@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main_ext.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 10:27:24 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:35:31 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	handle_child_process_single(t_command *cmd, t_shell *shell)
+int	handle_child_process_single(t_command *cmd, t_shell *shell, t_token *tokens)
 {
-	if (!apply_redirections(cmd))
+	if (!apply_redirections(cmd, shell, tokens))
 		return (1);
 	if (is_builtin(cmd->args))
 		return (exec_builtin(cmd->args, shell->envp));

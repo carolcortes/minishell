@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:48 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/03 15:21:11 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/20 16:46:56 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	validate_redirection_syntax(t_command *cmd, int i)
 	return (1);
 }
 
-static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
+/*static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 {
 	int		type;
 	char	*target;
@@ -74,7 +74,35 @@ static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 		add_redirection(cmd, type, target);
 	remove_args(cmd, i, 2);
 	return (1);
+}*/
+
+static int process_redirection_token(t_command *cmd, int i, t_shell *shell)
+{
+    int     type;
+    char    *target;
+    bool    allow_expand;
+
+    if (!validate_redirection_syntax(cmd, i))
+        return (0);
+    type = cmd->args[i]->redir_type;
+    target = cmd->args[i + 1]->value;
+    if (type == 4) // heredoc
+    {
+        // 🔑 se delimitador veio entre aspas → NÃO expande
+        if (cmd->args[i + 1]->quoted)
+            allow_expand = false;
+        else
+            allow_expand = true;
+
+        if (!handle_heredoc_redirection(cmd, target, allow_expand, shell))
+            return (0);
+    }
+    else
+        add_redirection(cmd, type, target);
+    remove_args(cmd, i, 2);
+    return (1);
 }
+
 
 void	extract_redirections(t_command *cmd, t_shell *shell)
 {

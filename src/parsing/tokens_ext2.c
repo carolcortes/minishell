@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_ext2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:01:43 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 20:43:04 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:24:07 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,26 @@ static bool	process_regular_char(char *line, int *i, char **token);
 static bool	process_word_chars(char *line, int *i,
 				t_quote_data *qdata);
 static bool	add_token_to_array(t_token_data *data, char *token,
-				bool allow_expand);
+				bool allow_expand, bool quoted);
 
 bool	process_word_token(char *line, int *i, t_token_data *data)
 {
 	char			*token;
 	bool			allow_expand;
+	bool			quoted;
 	t_quote_data	qdata;
 
 	token = ft_strdup("");
 	allow_expand = true;
+	quoted = false;
 	if (!token)
 		return (false);
 	qdata.token = &token;
 	qdata.allow_expand = &allow_expand;
+	qdata.quoted = &quoted;
 	if (!process_word_chars(line, i, &qdata))
 		return (free(token), false);
-	if (!add_token_to_array(data, token, allow_expand))
+	if (!add_token_to_array(data, token, allow_expand, quoted))
 		return (free(token), false);
 	return (true);
 }
@@ -43,7 +46,7 @@ static bool	process_quoted_part(char *line, int *i, t_quote_data *qdata)
 	bool	local_expand;
 	char	*part;
 
-	part = extract_quoted(line, i, &local_expand);
+	part = extract_quoted(line, i, &local_expand, qdata->quoted);
 	if (!part)
 	{
 		printf("Syntax error: unclosed quote\n");
@@ -87,7 +90,7 @@ static bool	process_word_chars(char *line, int *i,
 }
 
 static bool	add_token_to_array(t_token_data *data, char *token,
-			bool allow_expand)
+			bool allow_expand, bool quoted)
 {
 	if (data->count >= data->capacity - 1)
 	{
@@ -98,6 +101,7 @@ static bool	add_token_to_array(t_token_data *data, char *token,
 	data->tokens[data->count].allow_expand = allow_expand;
 	data->tokens[data->count].is_pipe = false;
 	data->tokens[data->count].is_redirection = false;
+	data->tokens[data->count].quoted = quoted;
 	data->count++;
 	return (true);
 }

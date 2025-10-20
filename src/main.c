@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 10:39:48 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:16:39 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	execute_with_redirections(t_command *cmd, t_shell *shell)
+static void	execute_with_redirections(t_command *cmd, t_shell *shell,
+	t_token *tokens)
 {
 	pid_t	pid;
 
@@ -20,7 +21,7 @@ static void	execute_with_redirections(t_command *cmd, t_shell *shell)
 	if (pid == 0)
 	{
 		setup_child_signals();
-		exit(handle_child_process_single(cmd, shell));
+		exit(handle_child_process_single(cmd, shell, tokens));
 	}
 	else if (pid > 0)
 		handle_parent_process(pid, shell);
@@ -31,13 +32,14 @@ static void	execute_with_redirections(t_command *cmd, t_shell *shell)
 	}
 }
 
-static void	process_single_command(t_command *cmd, t_shell *shell)
+static void	process_single_command(t_command *cmd, t_shell *shell,
+	t_token *tokens)
 {
 	if (cmd->argc == 0)
 	{
 		if (cmd->redir_count > 0)
 		{
-			if (!apply_redirections(cmd))
+			if (!apply_redirections(cmd, shell, tokens))
 				shell->last_status = 1;
 			else
 				shell->last_status = 0;
@@ -45,7 +47,7 @@ static void	process_single_command(t_command *cmd, t_shell *shell)
 		return ;
 	}
 	if (cmd->redir_count > 0)
-		execute_with_redirections(cmd, shell);
+		execute_with_redirections(cmd, shell, tokens);
 	else
 	{
 		if (is_builtin(cmd->args))
@@ -69,9 +71,9 @@ static void	process_input_line(char *line, t_shell *shell)
 	if (pipeline)
 	{
 		if (pipeline->next)
-			execute_pipeline(pipeline, shell);
+			execute_pipeline(pipeline, shell, tokens);
 		else
-			process_single_command(pipeline, shell);
+			process_single_command(pipeline, shell, tokens);
 		free_pipeline(pipeline);
 	}
 	free_tokens(tokens);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 13:43:19 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/19 23:07:29 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_token
 	bool	is_pipe;
 	bool	is_redirection;
 	int		redir_type;
+    bool    quoted;   // NOVO: true se o token veio de aspas explícitas
 }	t_token;
 
 /*============================================================================
@@ -106,7 +107,8 @@ char	*filename;	para << será o delimitador
 typedef struct s_redirection
 {
 	int		type;
-	char	*filename;
+	char	*filename;		// delimitador no caso de heredoc
+	bool	allow_expand;	// novo: herdado do token
 }	t_redirection;
 
 /*============================================================================
@@ -188,6 +190,7 @@ typedef struct s_quote_data
 {
 	char	**token;
 	bool	*allow_expand;
+	bool    *quoted;       // <-- novo campo
 }	t_quote_data;
 
 /*============================================================================
@@ -230,11 +233,14 @@ char		**dup_env(char **envp);
 
 /* execution
 execute_pip_ext1.c */
-void		handle_child_process(t_command *cmd, int input_fd,
-				int pipe_fd[2], t_shell *shell);
+//void		handle_child_process(t_command *cmd, int input_fd,
+//				int pipe_fd[2], t_shell *shell, t_token *tokens);
+void	handle_child_process(t_command *cmd, t_process_data *data,
+	t_shell *shell, t_token *tokens);
 
 /* execute_pipeline.c */
-void		execute_pipeline(t_command *pipeline, t_shell *shell);
+//void		execute_pipeline(t_command *pipeline, t_shell *shell);
+void		execute_pipeline(t_command *pipeline, t_shell *shell, t_token *tokens);
 
 /* external_ext.c */
 void		exec_child(char *path, char **argv, char **envp);
@@ -249,7 +255,8 @@ char		*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell);
 char		*find_command_path(char *command, char **envp);
 
 /*		redirections.c */
-int			apply_redirections(t_command *cmd);
+//int			apply_redirections(t_command *cmd);
+int	apply_redirections(t_command *cmd, t_shell *shell, t_token *tokens);
 
 /* redirections_ext.c */
 int			open_output_file(char *filename, int append);
@@ -273,7 +280,8 @@ t_token		*shell_split_line_quotes(char *line);
 /* tokens_ext1.c */
 bool		expand_token_array(t_token_data *data);
 bool		process_special_char(char *line, int *i, t_token_data *data);
-char		*extract_quoted(const char *line, int *i, bool *allow_expand);
+//char		*extract_quoted(const char *line, int *i, bool *allow_expand);
+char    *extract_quoted(const char *line, int *i, bool *allow_expand, bool *quoted);
 
 /* tokens_ext2.c */
 bool		process_word_token(char *line, int *i, t_token_data *data);
@@ -304,7 +312,7 @@ char		*ft_strjoin_free(char *s1, char *s2, int mode);
 void		free_pipeline(t_command *pipeline);
 
 /* main_ext.c */
-int			handle_child_process_single(t_command *cmd, t_shell *shell);
+int			handle_child_process_single(t_command *cmd, t_shell *shell, t_token *tokens);
 void		handle_parent_process(pid_t pid, t_shell *shell);
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);
@@ -319,5 +327,6 @@ void		setup_wait_signals(void);
 void		ft_getcwd(char *buf, size_t size);
 void		printbanner(void);
 bool		is_spaces(char c);
+
 
 #endif
