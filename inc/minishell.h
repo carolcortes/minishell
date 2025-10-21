@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/20 22:13:15 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:19:44 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ typedef struct s_quote_data
 {
 	char	**token;
 	bool	*allow_expand;
-	bool    *quoted;       // <-- novo campo
+	bool	*quoted;	// <-- novo campo
 }	t_quote_data;
 
 /*============================================================================
@@ -328,8 +328,8 @@ void		setup_wait_signals(void);
 
 /* utils.c */
 void		ft_getcwd(char *buf, size_t size);
-void		printbanner(void);
 bool		is_spaces(char c);
+int			get_token_count(t_token **args);
 
 
 #endif
