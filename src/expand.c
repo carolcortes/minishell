@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 23:40:05 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/20 22:18:54 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,64 +15,6 @@
 static char	*handle_env_var(const char *str, int *i, char *result,
 				t_shell *shell);
 static char	*handle_literal_char(const char *str, int *i, char *result);
-
-static char	*get_env_value(char **envp, const char *key)
-{
-	int		i;
-	size_t	keylen;
-
-	if (!envp || !key)
-		return (NULL);
-	keylen = ft_strlen(key);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], key, keylen) == 0 && envp[i][keylen] == '=')
-			return (envp[i] + keylen + 1);
-		i++;
-	}
-	return (NULL);
-}
-
-static char	*handle_env_var(const char *str, int *i, char *result,
-	t_shell *shell)
-{
-	int		start;
-	char	*var_name;
-	char	*var_value;
-	char	*value_dup;
-
-	(void)shell;
-	(*i)++;
-	start = *i;
-	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
-		(*i)++;
-	var_name = ft_substr(str, start, *i - start);
-	if (!var_name)
-		return (NULL);
-	var_value = get_env_value(shell->envp, var_name);
-	free(var_name);
-	if (var_value)
-	{
-		value_dup = ft_strdup(var_value);
-		if (!value_dup)
-			return (NULL);
-		result = ft_strjoin_free(result, value_dup, 3);
-	}
-	return (result);
-}
-
-static char	*handle_literal_char(const char *str, int *i, char *result)
-{
-	char	*char_str;
-
-	char_str = ft_substr(str, *i, 1);
-	if (!char_str)
-		return (NULL);
-	result = ft_strjoin_free(result, char_str, 3);
-	(*i)++;
-	return (result);
-}
 
 char	*expand_variables(const char *str, t_shell *shell)
 {
@@ -106,13 +48,17 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	int		i;
 	char	*expanded;
+	char	*original;
+	bool	had_var;
 
-	i = 0;
-	while (tokens[i].value)
+	i = -1;
+	while (tokens[++i].value)
 	{
 		if (tokens[i].allow_expand)
 		{
-			expanded = expand_variables(tokens[i].value, shell);
+			original = tokens[i].value;
+			had_var = token_has_variable(original);
+			expanded = expand_variables(original, shell);
 			if (!expanded)
 			{
 				printf("Error: memory allocation failed during expansion\n");
@@ -120,8 +66,50 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 			}
 			free(tokens[i].value);
 			tokens[i].value = expanded;
+			if (expanded[0] != '\0' || !had_var)
+				tokens[i].allow_expand = false;
 		}
-		i++;
 	}
 	remove_empty_expanded_tokens(tokens);
+}
+
+/* uses shared env_get_value from env_utils.c */
+
+static char	*handle_literal_char(const char *str, int *i, char *result)
+{
+	char	*char_str;
+
+	char_str = ft_substr(str, *i, 1);
+	if (!char_str)
+		return (NULL);
+	result = ft_strjoin_free(result, char_str, 3);
+	(*i)++;
+	return (result);
+}
+
+static char	*handle_env_var(const char *str, int *i, char *result,
+	t_shell *shell)
+{
+	int		start;
+	char	*var_name;
+	char	*var_value;
+	char	*value_dup;
+
+	(*i)++;
+	start = *i;
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+		(*i)++;
+	var_name = ft_substr(str, start, *i - start);
+	if (!var_name)
+		return (NULL);
+	var_value = env_get_value(shell->envp, var_name);
+	free(var_name);
+	if (var_value)
+	{
+		value_dup = ft_strdup(var_value);
+		if (!value_dup)
+			return (NULL);
+		result = ft_strjoin_free(result, value_dup, 3);
+	}
+	return (result);
 }

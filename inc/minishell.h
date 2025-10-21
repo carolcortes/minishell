@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 23:07:29 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/20 22:13:15 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,9 @@ void		expand_tokens(t_token *tokens, t_shell *shell);
 /* expand_ext.c */
 bool		token_has_variable(const char *str);
 void		remove_empty_expanded_tokens(t_token *tokens);
+
+/* environment.c */
+char		*env_get_value(char **envp, const char *key);
 
 /* free.c */
 void		free_strings(char **arr);
