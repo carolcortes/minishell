@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/21 22:43:19 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/22 23:11:40 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,8 @@ t_token		*shell_split_line_quotes(char *line);
 /* tokens_ext1.c */
 bool		expand_token_array(t_token_data *data);
 bool		process_special_char(char *line, int *i, t_token_data *data);
+int			dquote_append_qs(const char *line, int *i, char **result);
+int			dquote_append_dollar(const char *line, int *i, char **result);
 char		*extract_quoted(const char *line, int *i, bool *allow_expand,
 				bool *quoted);
 
@@ -288,15 +290,18 @@ char		*extract_quoted(const char *line, int *i, bool *allow_expand,
 bool		process_word_token(char *line, int *i, t_token_data *data);
 
 /* tokens_ext3.c */
-bool		is_special_char(char c);
+int			append_one_char_generic(const char *str, int *i, char **result);
+int			dquote_backslash_append(const char *line, int *i, char **result);
 t_token		create_pipe_token(void);
 t_token		create_redirection_token(char *value, int type);
-
-/* redir_parse_ext.c */
-void		add_redirection(t_command *cmd, int type, char *filename);
+char		*extract_quoted_loop(const char *line, int *i, char quote,
+				char *result);
 
 /* redir_parse.c */
 void		extract_redirections(t_command *cmd, t_shell *shell);
+
+/* redir_parse_ext.c */
+void		add_redirection(t_command *cmd, int type, char *filename);
 
 /* expand.c */
 char		*expand_variables(const char *str, t_shell *shell);
@@ -305,6 +310,7 @@ void		expand_tokens(t_token *tokens, t_shell *shell);
 /* expand_ext.c */
 bool		token_has_variable(const char *str);
 void		remove_empty_expanded_tokens(t_token *tokens);
+void		expand_single_token(struct s_token *tok, struct s_shell *shell);
 
 /* environment.c */
 char		*env_get_value(char **envp, const char *key);
@@ -332,5 +338,6 @@ void		setup_wait_signals(void);
 void		ft_getcwd(char *buf, size_t size);
 bool		is_spaces(char c);
 int			get_token_count(t_token **args);
+bool		is_special_char(char c);
 
 #endif

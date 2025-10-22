@@ -6,7 +6,7 @@
 #    By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 22:54:08 by cade-oli          #+#    #+#              #
-#    Updated: 2025/10/20 22:11:43 by cade-oli         ###   ########.fr        #
+#    Updated: 2025/10/22 23:11:42 by cade-oli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ FILES			= 	main.c main_ext.c signals.c utils.c expand.c expand_ext.c free.c envi
 					parsing/tokens.c parsing/pipeline.c parsing/pipeline_ext.c \
 					parsing/redir_parse.c parsing/redir_parse_ext.c \
 					parsing/tokens_ext1.c parsing/tokens_ext2.c parsing/tokens_ext3.c \
+					parsing/tokens_ext4.c \
 					execution/execute_pipeline.c execution/execute_pip_ext1.c \
 					execution/external_ext.c\
 					execution/external.c execution/exec_utils.c execution/path.c \

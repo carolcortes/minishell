@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 23:22:35 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/21 22:19:32 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/22 22:51:10 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,9 @@ int	get_token_count(t_token **tokens)
 	while (tokens[count])
 		count++;
 	return (count);
+}
+
+bool	is_special_char(char c)
+{
+	return (c == '|' || c == '>' || c == '<');
 }

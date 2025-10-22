@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_ext1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:50:13 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 23:24:47 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/10/22 22:50:01 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,22 +86,14 @@ char	*extract_quoted(const char *line, int *i, bool *allow_expand,
 	bool *quoted)
 {
 	char	quote;
-	int		start;
 	char	*result;
 
 	quote = line[*i];
-	if (quote == '\'')
-		*allow_expand = false;
-	else if (quote == '"')
-		*allow_expand = true;
+	*allow_expand = (quote == '"');
 	*quoted = true;
 	(*i)++;
-	start = *i;
-	while (line[*i] && line[*i] != quote)
-		(*i)++;
-	if (!line[*i])
+	result = ft_strdup("");
+	if (!result)
 		return (NULL);
-	result = ft_substr(line, start, *i - start);
-	(*i)++;
-	return (result);
+	return (extract_quoted_loop(line, i, quote, result));
 }
