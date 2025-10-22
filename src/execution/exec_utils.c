@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:18:08 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 20:35:01 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:19:56 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,13 @@ bool	is_builtin(t_token **args)
 	return (false);
 }
 
-static int	count_tokens(t_token **tokens)
-{
-	int	count;
-
-	count = 0;
-	if (!tokens)
-		return (0);
-	while (tokens[count])
-		count++;
-	return (count);
-}
-
 char	**tokens_to_argv(t_token **tokens)
 {
 	int		i;
 	int		count;
 	char	**argv;
 
-	count = count_tokens(tokens);
+	count = get_token_count(tokens);
 	argv = malloc(sizeof(char *) * (count + 1));
 	if (!argv)
 		return (NULL);

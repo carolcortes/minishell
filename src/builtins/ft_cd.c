@@ -6,7 +6,7 @@
 /*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:28:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/20 22:36:55 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:19:56 by cade-oli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,42 +38,63 @@ static int	update_pwd_vars(char **envp, const char *oldpwd, const char *newpwd)
 	return (status != 0);
 }
 
-static int	cd_target_from_home(char **envp, char **target)
+static int	cd_target_from_key(char **envp, const char *key,
+				char **target, int *print_after)
 {
-	*target = env_get_value(envp, "HOME");
+	*target = env_get_value(envp, key);
 	if (!*target)
 	{
-		fprintf(stderr, "minishell: cd: HOME not set\n");
+		fprintf(stderr, "minishell: cd: %s not set\n", key);
 		return (1);
 	}
+	if (print_after && ft_strcmp(key, "OLDPWD") == 0)
+		*print_after = 1;
 	return (0);
 }
 
-static int	cd_target_from_oldpwd(char **envp, char **target, int *print_after)
+static int	cd_handle_dash_option(t_token **args,
+				char **envp, char **target, int *print_after)
 {
-	*target = env_get_value(envp, "OLDPWD");
-	if (!*target)
+	int	argc;
+
+	argc = get_token_count(args);
+	if (ft_strcmp(args[1]->value, "--") == 0)
 	{
-		fprintf(stderr, "minishell: cd: OLDPWD not set\n");
-		return (1);
+		if (argc == 2)
+			return (cd_target_from_key(envp, "HOME", target, print_after));
+		else if (argc == 3)
+		{
+			*target = args[2]->value;
+			return (0);
+		}
+		return (fprintf(stderr, "minishell: cd: too many arguments\n"), 1);
 	}
-	*print_after = 1;
-	return (0);
+	if (ft_strcmp(args[1]->value, "-") == 0)
+	{
+		if (argc > 2)
+			return (fprintf(stderr, "minishell: cd: too many arguments\n"), 1);
+		return (cd_target_from_key(envp, "OLDPWD", target, print_after));
+	}
+	return (-1);
 }
 
 static int	cd_resolve_target(t_token **args, char **envp,
 					char **target, int *print_after)
 {
+	int	argc;
+	int	status;
+
 	*print_after = 0;
-	if (args[2])
+	argc = get_token_count(args);
+	if (argc == 1)
+		return (cd_target_from_key(envp, "HOME", target, print_after));
 	{
-		fprintf(stderr, "minishell: cd: too many arguments\n");
-		return (1);
+		status = cd_handle_dash_option(args, envp, target, print_after);
+		if (status != -1)
+			return (status);
 	}
-	if (!args[1] || (args[1] && ft_strcmp(args[1]->value, "--") == 0))
-		return (cd_target_from_home(envp, target));
-	if (ft_strcmp(args[1]->value, "-") == 0)
-		return (cd_target_from_oldpwd(envp, target, print_after));
+	if (argc > 2)
+		return (fprintf(stderr, "minishell: cd: too many arguments\n"), 1);
 	*target = args[1]->value;
 	return (0);
 }
