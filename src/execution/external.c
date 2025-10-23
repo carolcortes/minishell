@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 13:33:54 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/23 12:50:55 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	exec_from_env(char **argv, t_shell *shell);
  * @return Final status code to store in shell->last_status.
  */
 
-int	execute_external(t_token **args, t_shell *shell)
+/*int	execute_external(t_token **args, t_shell *shell)
 {
 	char	**argv;
 
@@ -52,7 +52,68 @@ int	execute_external(t_token **args, t_shell *shell)
 	if (ft_strchr(argv[0], '/'))
 		return (exec_with_path(argv, shell));
 	return (exec_from_env(argv, shell));
+}*/
+
+static bool	is_assignment(char *str)
+{
+	int	i;
+
+	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
+		return (false);
+	i = 1;
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+		i++;
+	return (str[i] == '=');
 }
+
+int	execute_external(t_token **args, t_shell *shell)
+{
+	char	**argv;
+	int		i;
+	bool	all_assignments = true;
+
+	argv = tokens_to_argv(args);
+	if (!argv)
+		return (1);
+
+	// 🔍 verificar se todos os argumentos são VAR=VAL
+	i = 0;
+	while (argv[i])
+	{
+		if (!is_assignment(argv[i]))
+		{
+			all_assignments = false;
+			break;
+		}
+		i++;
+	}
+
+	// ✅ caso especial: só atribuições → atualiza env e sai
+	if (all_assignments)
+	{
+		i = 0;
+		while (argv[i])
+		{
+			add_or_update_env(argv[i], shell->envp);
+			i++;
+		}
+		free_strings(argv);
+		shell->last_status = 0;
+		return (0);
+	}
+
+	// 🔁 comportamento normal (comando externo)
+	if (argv[0][0] == '\0')
+	{
+		fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
+		free_strings(argv);
+		return (127);
+	}
+	if (ft_strchr(argv[0], '/'))
+		return (exec_with_path(argv, shell));
+	return (exec_from_env(argv, shell));
+}
+
 
 static int	exec_parent(pid_t pid, char *path, char **argv)
 {
