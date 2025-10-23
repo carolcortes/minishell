@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_ext.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:41:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 20:34:00 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/23 13:24:09 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,49 @@ void	exec_child(char *path, char **argv, char **envp)
 	if (errno == ENOENT)
 		exit(127);
 	exit(126);
+}
+
+bool	is_assignment(char *str)
+{
+	int	i;
+
+	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
+		return (false);
+	i = 1;
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+		i++;
+	return (str[i] == '=');
+}
+
+bool	check_all_assignments(char **argv)
+{
+	int		i;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (!is_assignment(argv[i]))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+void	process_assignments(char **argv, t_shell *shell)
+{
+	int		i;
+
+	i = 0;
+	while (argv[i])
+	{
+		add_or_update_env(argv[i], shell->envp);
+		i++;
+	}
+}
+
+int	handle_empty_command(char **argv)
+{
+	fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
+	free_strings(argv);
+	return (127);
 }
