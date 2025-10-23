@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 13:33:54 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/23 13:32:22 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,21 @@ static int	exec_from_env(char **argv, t_shell *shell);
 int	execute_external(t_token **args, t_shell *shell)
 {
 	char	**argv;
+	bool	all_assignments;
 
 	argv = tokens_to_argv(args);
 	if (!argv)
 		return (1);
-	if (argv[0][0] == '\0')
+	all_assignments = check_all_assignments(argv);
+	if (all_assignments)
 	{
-		fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
+		process_assignments(argv, shell);
 		free_strings(argv);
-		return (127);
+		shell->last_status = 0;
+		return (0);
 	}
+	if (argv[0][0] == '\0')
+		return (handle_empty_command(argv));
 	if (ft_strchr(argv[0], '/'))
 		return (exec_with_path(argv, shell));
 	return (exec_from_env(argv, shell));
