@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/22 23:11:40 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/23 21:30:17 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,10 @@ void		execute_pipeline(t_command *pipeline,
 
 /* external_ext.c */
 void		exec_child(char *path, char **argv, char **envp);
+bool		is_assignment(char *str);
+bool		check_all_assignments(char **argv);
+void		process_assignments(char **argv, t_shell *shell);
+int			handle_empty_command(char **argv);
 
 /* external.c */
 int			execute_external(t_token **args, t_shell *shell);
