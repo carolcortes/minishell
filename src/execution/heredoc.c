@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 23:01:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/20 23:13:43 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/26 18:24:00 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	write_until_delimiter(int fd, char *delimiter,
  * @return Allocated path to the temp file, or NULL on error.
  */
 
-char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
+/*char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
 {
 	char	*filename;
 	int		fd;
@@ -39,7 +39,31 @@ char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
 	write_until_delimiter(fd, delimiter, allow_expand, shell);
 	close(fd);
 	return (filename);
+}*/
+
+char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
+{
+	char	*filename;
+	int		fd;
+
+	// ✅ Se o delimitador for string vazia, encerra imediatamente
+	if (!delimiter || delimiter[0] == '\0')
+	{
+		filename = create_tmpfile(&fd);
+		if (!filename)
+			return (NULL);
+		close(fd);
+		return (filename);
+	}
+
+	filename = create_tmpfile(&fd);
+	if (!filename)
+		return (NULL);
+	write_until_delimiter(fd, delimiter, allow_expand, shell);
+	close(fd);
+	return (filename);
 }
+
 
 static char	*create_tmpfile(int *fd)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ext.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:35:00 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/22 22:40:31 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/10/26 18:07:02 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	expand_single_token(t_token *tok, t_shell *shell)
 		tok->allow_expand = false;
 }
 
-void	remove_empty_expanded_tokens(t_token *tokens)
+/*void	remove_empty_expanded_tokens(t_token *tokens)
 {
 	int	i;
 	int	j;
@@ -68,6 +68,40 @@ void	remove_empty_expanded_tokens(t_token *tokens)
 			tokens[j] = tokens[i];
 		i++;
 		j++;
+	}
+	tokens[j].value = NULL;
+}*/
+
+
+void	remove_empty_expanded_tokens(t_token *tokens)
+{
+	int	i;
+	int	j;
+	bool	prev_is_heredoc;
+
+	i = 0;
+	j = 0;
+	prev_is_heredoc = false;
+	while (tokens[i].value)
+	{
+		if (prev_is_heredoc)
+		{
+			// ⚠️ sempre manter o token após '<<' — mesmo se estiver vazio
+			tokens[j++] = tokens[i];
+			prev_is_heredoc = false;
+		}
+		else if (tokens[i].is_redirection && tokens[i].redir_type == 4)
+		{
+			// ⚠️ heredoc redirection — lembrar que o próximo token é especial
+			tokens[j++] = tokens[i];
+			prev_is_heredoc = true;
+		}
+		else if (tokens[i].value[0] != '\0')
+		{
+			// mantém tokens normais não vazios
+			tokens[j++] = tokens[i];
+		}
+		i++;
 	}
 	tokens[j].value = NULL;
 }
