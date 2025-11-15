@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:48 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/26 18:37:38 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/15 15:52:15 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 	return (1);
 }*/
 
-static int	validate_redirection_syntax(t_command *cmd, int i)
+/*static int	validate_redirection_syntax(t_command *cmd, int i)
 {
 	if (cmd->argc == 0 || !cmd->args[0])
 	{
@@ -92,7 +92,23 @@ static int	validate_redirection_syntax(t_command *cmd, int i)
 		return (0);
 	}
 	return (1);
+}*/
+
+static int validate_redirection_syntax(t_command *cmd, int i)
+{
+    // heredoc SEMPRE precisa de um token a seguir
+    if (!cmd->args[i + 1])
+    {
+        printf("minishell: syntax error near unexpected token `newline'\n");
+        return (0);
+    }
+
+    // NÃO verificar se cmd->argc == 0
+    // heredoc SEM comando é VÁLIDO e abre normalmente.
+
+    return (1);
 }
+
 
 /*static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 {
@@ -139,7 +155,7 @@ static int	validate_redirection_syntax(t_command *cmd, int i)
 }
 */
 
-static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
+/*static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 {
 	int		type;
 	char	*target;
@@ -170,8 +186,55 @@ static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 		add_redirection(cmd, type, target);
 	remove_args(cmd, i, 2);
 	return (1);
-}
+}*/
 
+static int process_redirection_token(t_command *cmd, int i, t_shell *shell)
+{
+    int     type;
+    char    *target;
+    char    *expanded;
+    bool    allow_expand;
+
+    if (!validate_redirection_syntax(cmd, i))
+        return (0);
+
+    type = cmd->args[i]->redir_type;
+    target = cmd->args[i + 1]->value;
+
+    if (type == 4) // HEREDOC
+    {
+        allow_expand = !cmd->args[i + 1]->quoted;
+
+        /*if (allow_expand)
+            expanded = expand_variables(target, shell);
+        else
+            expanded = ft_strdup(target);*/
+
+		// NUNCA expanda o delimitador aqui
+		expanded = ft_strdup(target);
+		allow_expand = !cmd->args[i+1]->quoted;
+		//////////////////////////////
+
+        if (!expanded)
+            return (0);
+
+        // 🚨 IMPORTANTE: RODAR O HEREDOC ANTES DE REMOVER OS TOKENS
+        if (!handle_heredoc_redirection(cmd, expanded, allow_expand, shell))
+        {
+            free(expanded);
+            return (0);
+        }
+
+        free(expanded);
+    }
+    else
+        add_redirection(cmd, type, target);
+
+    // 🚨 REMOVER OS TOKENS APENAS DEPOIS DO HEREDOC JÁ TER SIDO PROCESSADO
+    remove_args(cmd, i, 2);
+
+    return (1);
+}
 
 void	extract_redirections(t_command *cmd, t_shell *shell)
 {

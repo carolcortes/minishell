@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:35:00 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/26 18:07:02 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/15 17:45:12 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	expand_single_token(t_token *tok, t_shell *shell)
 }*/
 
 
-void	remove_empty_expanded_tokens(t_token *tokens)
+/*void	remove_empty_expanded_tokens(t_token *tokens)
 {
 	int	i;
 	int	j;
@@ -104,4 +104,25 @@ void	remove_empty_expanded_tokens(t_token *tokens)
 		i++;
 	}
 	tokens[j].value = NULL;
+}*/
+
+void remove_empty_expanded_tokens(t_token *tokens)
+{
+    int r = 0, w = 0;
+
+    while (tokens[r].value)
+    {
+        bool is_delimiter =
+            (r > 0 &&
+             tokens[r - 1].is_redirection &&
+             tokens[r - 1].redir_type == 4);
+
+        if (is_delimiter || tokens[r].value[0] != '\0')
+        {
+            tokens[w] = tokens[r];
+            w++;
+        }
+        r++;
+    }
+    tokens[w].value = NULL;
 }
