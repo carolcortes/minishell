@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:35:00 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/11/15 17:45:12 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:04:23 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,80 +49,25 @@ void	expand_single_token(t_token *tok, t_shell *shell)
 		tok->allow_expand = false;
 }
 
-/*void	remove_empty_expanded_tokens(t_token *tokens)
+void	remove_empty_expanded_tokens(t_token *tokens)
 {
-	int	i;
-	int	j;
+	int		r;
+	int		w;
+	bool	is_delimiter;
 
-	i = 0;
-	j = 0;
-	while (tokens[i].value)
+	r = 0;
+	w = 0;
+	while (tokens[r].value)
 	{
-		if (tokens[i].value[0] == '\0' && !tokens[i].quoted)
+		is_delimiter = (r > 0
+				&& tokens[r - 1].is_redirection
+				&& tokens[r - 1].redir_type == 4);
+		if (is_delimiter || tokens[r].value[0] != '\0')
 		{
-			free(tokens[i].value);
-			i++;
-			continue ;
+			tokens[w] = tokens[r];
+			w++;
 		}
-		if (i != j)
-			tokens[j] = tokens[i];
-		i++;
-		j++;
+		r++;
 	}
-	tokens[j].value = NULL;
-}*/
-
-
-/*void	remove_empty_expanded_tokens(t_token *tokens)
-{
-	int	i;
-	int	j;
-	bool	prev_is_heredoc;
-
-	i = 0;
-	j = 0;
-	prev_is_heredoc = false;
-	while (tokens[i].value)
-	{
-		if (prev_is_heredoc)
-		{
-			// ⚠️ sempre manter o token após '<<' — mesmo se estiver vazio
-			tokens[j++] = tokens[i];
-			prev_is_heredoc = false;
-		}
-		else if (tokens[i].is_redirection && tokens[i].redir_type == 4)
-		{
-			// ⚠️ heredoc redirection — lembrar que o próximo token é especial
-			tokens[j++] = tokens[i];
-			prev_is_heredoc = true;
-		}
-		else if (tokens[i].value[0] != '\0')
-		{
-			// mantém tokens normais não vazios
-			tokens[j++] = tokens[i];
-		}
-		i++;
-	}
-	tokens[j].value = NULL;
-}*/
-
-void remove_empty_expanded_tokens(t_token *tokens)
-{
-    int r = 0, w = 0;
-
-    while (tokens[r].value)
-    {
-        bool is_delimiter =
-            (r > 0 &&
-             tokens[r - 1].is_redirection &&
-             tokens[r - 1].redir_type == 4);
-
-        if (is_delimiter || tokens[r].value[0] != '\0')
-        {
-            tokens[w] = tokens[r];
-            w++;
-        }
-        r++;
-    }
-    tokens[w].value = NULL;
+	tokens[w].value = NULL;
 }
