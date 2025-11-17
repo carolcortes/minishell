@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 23:35:31 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/17 00:14:09 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	handle_parent_process(pid_t pid, t_shell *shell)
 	}
 }
 
-char	*shell_read_line(void)
+/*char	*shell_read_line(void)
 {
 	char	*line;
 
@@ -53,6 +53,20 @@ char	*shell_read_line(void)
 	}
 	if (*line)
 		add_history(line);
+	return (line);
+}*/
+
+char	*shell_read_line(void)
+{
+	char	*line;
+
+	line = readline("minishell$> ");
+	if (!line)
+		return (NULL);
+
+	// ⬇️ Aqui está a correção do pipe no final
+	line = read_multiline_pipe(line);
+
 	return (line);
 }
 
@@ -94,4 +108,25 @@ void	print_pipeline(t_command *pipeline)
 		cmd = cmd->next;
 	}
 	printf("==========================\n");
+}
+
+///////////////////////////
+char	*read_multiline_pipe(char *line)
+{
+	char	*extra;
+	char	*joined;
+
+	while (line && ft_strlen(line) > 0
+		&& line[ft_strlen(line) - 1] == '|')
+	{
+		extra = readline("> ");
+		if (!extra)
+			return (line); // Ctrl-D
+
+		joined = ft_strjoin(line, extra);
+		free(line);
+		free(extra);
+		line = joined;
+	}
+	return (line);
 }
