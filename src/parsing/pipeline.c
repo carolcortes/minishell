@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/23 21:27:36 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 21:37:17 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,58 +31,6 @@ static t_command	*create_new_command(t_token *tokens, int i, int arg_count)
 	new_cmd->next = NULL;
 	new_cmd->prev = NULL;
 	return (new_cmd);
-}
-
-/*
-
-static int	add_command_to_pipeline(t_token *tokens, int *i,
-	t_command **first, t_command **current)
-{
-	int			arg_count;
-	t_command	*new_cmd;
-
-	arg_count = count_args_until_pipe(tokens, *i);
-	if (arg_count == 0)
-	{
-		printf("minishell: syntax error near unexpected token `|'\n");
-		return (0);
-	}
-	if (tokens[*i].is_redirection && !tokens[*i + 1].value)
-	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
-		return (0);
-	}
-	new_cmd = create_new_command(tokens, *i, arg_count);
-	if (!new_cmd)
-		return (0);
-	if (!*first)
-		*first = new_cmd;
-	if (*current)
-	{
-		(*current)->next = new_cmd;
-		new_cmd->prev = *current;
-	}
-	*current = new_cmd;
-	*i += arg_count;
-	if (tokens[*i].is_pipe)
-		(*i)++;
-	return (1);
-}
-*/
-
-static int	validate_pipe_count(t_token *tokens, int i, int arg_count)
-{
-	if (arg_count == 0)
-	{
-		printf("minishell: syntax error near unexpected token `|'\n");
-		return (0);
-	}
-	if (tokens[i].is_redirection && !tokens[i + 1].value)
-	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
-		return (0);
-	}
-	return (1);
 }
 
 static int	add_command_to_pipeline(t_token *tokens, int *i,
@@ -151,73 +99,6 @@ static t_command	*remove_empty_commands(t_command *pipeline)
 		cur = next;
 	}
 	return (head);
-}
-
-/*
-
-t_command	*parse_pipeline(t_token *tokens, t_shell *shell)
-{
-	t_command	*first;
-	t_command	*current;
-	int			i;
-
-	if (tokens[0].is_pipe)
-	{
-		printf("minishell: syntax error near unexpected token `|'\n");
-		return (NULL);
-	}
-	if (!tokens || !tokens[0].value)
-		return (NULL);
-	first = NULL;
-	current = NULL;
-	i = 0;
-	while (tokens[i].value)
-	{
-		if (tokens[0].is_pipe)
-		{
-			printf("minishell: syntax error near unexpected token `|'\n");
-			return (NULL);
-		}
-		if (tokens[i].is_pipe)
-		{
-			if (!tokens[i + 1].value || tokens[i + 1].is_pipe)
-			{
-				printf("minishell: syntax error near unexpected token `|'\n");
-				return (NULL);
-			}
-		}
-		if (!add_command_to_pipeline(tokens, &i, &first, &current))
-			break ;
-	}
-	if (!extract_redirections_from_pipeline(first, shell))
-	{
-		free_pipeline(first);
-		return (NULL);
-	}
-	return (remove_empty_commands(first));
-}
-
-*/
-static int	validate_initial_pipe(t_token *tokens)
-{
-	if (tokens && tokens[0].is_pipe)
-	{
-		printf("minishell: syntax error near unexpected token `|'\n");
-		return (0);
-	}
-	return (1);
-}
-
-static int	validate_pipe_position(t_token *tokens, int i)
-{
-	if (!tokens[i].is_pipe)
-		return (1);
-	if (!tokens[i + 1].value || tokens[i + 1].is_pipe)
-	{
-		printf("minishell: syntax error near unexpected token `|'\n");
-		return (0);
-	}
-	return (1);
 }
 
 t_command	*parse_pipeline(t_token *tokens, t_shell *shell)

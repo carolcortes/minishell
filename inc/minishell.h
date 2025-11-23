@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/11/23 18:40:22 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 21:39:04 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,6 +275,9 @@ char		**tokens_to_argv(t_token **tokens);
    pipeline_ext.c */
 t_token		**copy_command_args(t_token *tokens, int start, int count);
 int			count_args_until_pipe(t_token *tokens, int start_index);
+int			validate_pipe_count(t_token *tokens, int i, int arg_count);
+int			validate_initial_pipe(t_token *tokens);
+int			validate_pipe_position(t_token *tokens, int i);
 
 /* pipeline.c */
 t_command	*parse_pipeline(t_token *tokens, t_shell *shell);
