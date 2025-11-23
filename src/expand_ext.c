@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ext.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:35:00 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/22 22:40:31 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:04:23 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,23 +51,23 @@ void	expand_single_token(t_token *tok, t_shell *shell)
 
 void	remove_empty_expanded_tokens(t_token *tokens)
 {
-	int	i;
-	int	j;
+	int		r;
+	int		w;
+	bool	is_delimiter;
 
-	i = 0;
-	j = 0;
-	while (tokens[i].value)
+	r = 0;
+	w = 0;
+	while (tokens[r].value)
 	{
-		if (tokens[i].value[0] == '\0' && !tokens[i].quoted)
+		is_delimiter = (r > 0
+				&& tokens[r - 1].is_redirection
+				&& tokens[r - 1].redir_type == 4);
+		if (is_delimiter || tokens[r].value[0] != '\0')
 		{
-			free(tokens[i].value);
-			i++;
-			continue ;
+			tokens[w] = tokens[r];
+			w++;
 		}
-		if (i != j)
-			tokens[j] = tokens[i];
-		i++;
-		j++;
+		r++;
 	}
-	tokens[j].value = NULL;
+	tokens[w].value = NULL;
 }

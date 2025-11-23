@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/22 22:40:24 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/11/15 23:32:05 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,30 @@ char	*expand_variables(const char *str, t_shell *shell)
 	return (result);
 }
 
-void	expand_tokens(t_token *tokens, t_shell *shell)
+/*void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	int		i;
 
 	i = -1;
 	while (tokens[++i].value)
 		expand_single_token(&tokens[i], shell);
+	remove_empty_expanded_tokens(tokens);
+}*/
+
+void	expand_tokens(t_token *tokens, t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (tokens[i].value)
+	{
+		if (i > 0 && tokens[i - 1].is_redirection
+			&& tokens[i - 1].redir_type == 4)
+			;
+		else if (!tokens[i].quoted)
+			expand_single_token(&tokens[i], shell);
+		i++;
+	}
 	remove_empty_expanded_tokens(tokens);
 }
 

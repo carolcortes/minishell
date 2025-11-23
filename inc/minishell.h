@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/23 21:30:17 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/17 00:08:14 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,6 +306,7 @@ void		extract_redirections(t_command *cmd, t_shell *shell);
 
 /* redir_parse_ext.c */
 void		add_redirection(t_command *cmd, int type, char *filename);
+void		remove_args(t_command *cmd, int start, int count);
 
 /* expand.c */
 char		*expand_variables(const char *str, t_shell *shell);
@@ -332,6 +333,7 @@ void		handle_parent_process(pid_t pid, t_shell *shell);
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);
 void		print_pipeline(t_command *pipeline);
+char		*read_multiline_pipe(char *line);
 
 /* signals.c */
 void		setup_signals(void);

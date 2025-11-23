@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 23:01:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/20 23:13:43 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/11/16 00:05:46 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ char	*handle_heredoc(char *delimiter, bool allow_expand, t_shell *shell)
 	char	*filename;
 	int		fd;
 
+	if (!delimiter || delimiter[0] == '\0')
+	{
+		filename = create_tmpfile(&fd);
+		if (!filename)
+			return (NULL);
+		close(fd);
+		return (filename);
+	}
 	filename = create_tmpfile(&fd);
 	if (!filename)
 		return (NULL);
