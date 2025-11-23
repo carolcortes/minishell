@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/23 17:42:35 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 18:22:10 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,62 +33,26 @@ static t_command	*create_new_command(t_token *tokens, int i, int arg_count)
 	return (new_cmd);
 }
 
-/*static int	add_command_to_pipeline(t_token *tokens, int *i,
-	t_command **first, t_command **current)
-{
-	int			arg_count;
-	t_command	*new_cmd;
-
-	arg_count = count_args_until_pipe(tokens, *i);
-	if (arg_count == 0 || (tokens[*i].is_redirection && !tokens[*i + 1].value))
-	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
-		return (0);
-	}
-	new_cmd = create_new_command(tokens, *i, arg_count);
-	if (!new_cmd)
-		return (0);
-	if (!*first)
-		*first = new_cmd;
-	if (*current)
-	{
-		(*current)->next = new_cmd;
-		new_cmd->prev = *current;
-	}
-	*current = new_cmd;
-	*i += arg_count;
-	return (1);
-}*/
-
 static int	add_command_to_pipeline(t_token *tokens, int *i,
 	t_command **first, t_command **current)
 {
 	int			arg_count;
 	t_command	*new_cmd;
 
-	/* Quantos argumentos até o próximo pipe */
 	arg_count = count_args_until_pipe(tokens, *i);
-
-	/* SE count == 0 → comando vazio: erro de sintaxe */
 	if (arg_count == 0)
 	{
 		printf("minishell: syntax error near unexpected token `|'\n");
 		return (0);
 	}
-
-	/* Proteção: redireção sem target */
 	if (tokens[*i].is_redirection && !tokens[*i + 1].value)
 	{
 		printf("minishell: syntax error near unexpected token `newline'\n");
 		return (0);
 	}
-
-	/* Criar o comando */
 	new_cmd = create_new_command(tokens, *i, arg_count);
 	if (!new_cmd)
 		return (0);
-
-	/* Inserir no pipeline */
 	if (!*first)
 		*first = new_cmd;
 	if (*current)
@@ -97,18 +61,13 @@ static int	add_command_to_pipeline(t_token *tokens, int *i,
 		new_cmd->prev = *current;
 	}
 	*current = new_cmd;
-
-	/* Avançar o índice */
 	*i += arg_count;
-
-	/* Se houver pipe, avançar mais um */
 	if (tokens[*i].is_pipe)
 		(*i)++;
-
 	return (1);
 }
 
-/*static void	extract_redirections_from_pipeline(t_command *pipeline,
+static int	extract_redirections_from_pipeline(t_command *pipeline,
 	t_shell *shell)
 {
 	t_command	*current;
@@ -116,24 +75,11 @@ static int	add_command_to_pipeline(t_token *tokens, int *i,
 	current = pipeline;
 	while (current)
 	{
-		extract_redirections(current, shell);
+		if (!extract_redirections(current, shell))
+			return (0);
 		current = current->next;
 	}
-}*/
-
-static int extract_redirections_from_pipeline(t_command *pipeline,
-    t_shell *shell)
-{
-    t_command *current;
-
-    current = pipeline;
-    while (current)
-    {
-        if (!extract_redirections(current, shell))
-            return (0);   // <--- NEW
-        current = current->next;
-    }
-    return (1);
+	return (1);
 }
 
 static t_command	*remove_empty_commands(t_command *pipeline)
@@ -169,15 +115,11 @@ t_command	*parse_pipeline(t_token *tokens, t_shell *shell)
 	t_command	*current;
 	int			i;
 
-	///////////////
 	if (tokens[0].is_pipe)
 	{
 		printf("minishell: syntax error near unexpected token `|'\n");
 		return (NULL);
 	}
-
-
-	///////////////
 	if (!tokens || !tokens[0].value)
 		return (NULL);
 	first = NULL;
@@ -185,19 +127,11 @@ t_command	*parse_pipeline(t_token *tokens, t_shell *shell)
 	i = 0;
 	while (tokens[i].value)
 	{
-		//////////////
 		if (tokens[0].is_pipe)
 		{
 			printf("minishell: syntax error near unexpected token `|'\n");
 			return (NULL);
 		}
-		///////////////////////
-		/*if (tokens[i].is_pipe)
-		{
-			i++;
-			continue ;
-		}*/
-
 		if (tokens[i].is_pipe)
 		{
 			if (!tokens[i + 1].value || tokens[i + 1].is_pipe)
@@ -206,19 +140,13 @@ t_command	*parse_pipeline(t_token *tokens, t_shell *shell)
 				return (NULL);
 			}
 		}
-
-
 		if (!add_command_to_pipeline(tokens, &i, &first, &current))
 			break ;
 	}
-	//extract_redirections_from_pipeline(first, shell);
-
 	if (!extract_redirections_from_pipeline(first, shell))
 	{
 		free_pipeline(first);
 		return (NULL);
 	}
-
-	//
 	return (remove_empty_commands(first));
 }

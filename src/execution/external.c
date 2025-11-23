@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/23 16:31:59 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 18:15:33 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,19 +104,16 @@ static int	exec_with_path(char **argv, t_shell *shell)
 	if (access(argv[0], F_OK) != 0)
 	{
 		fprintf(stderr, "minishell: %s: No such file or directory\n", argv[0]);
-		//fprintf(stderr, "%s: No such file or directory\n", argv[0]);
 		return (free_strings(argv), 127);
 	}
 	if (stat(argv[0], &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 	{
 		fprintf(stderr, "minishell: %s: Is a directory\n", argv[0]);
-		//fprintf(stderr, "%s: Is a directory\n", argv[0]);
 		return (free_strings(argv), 126);
 	}
 	if (access(argv[0], X_OK) != 0)
 	{
 		fprintf(stderr, "minishell: %s: Permission denied\n", argv[0]);
-		//fprintf(stderr, "%s: Permission denied\n", argv[0]);
 		free_strings(argv);
 		return (126);
 	}
@@ -133,7 +130,6 @@ static int	exec_from_env(char **argv, t_shell *shell)
 	path = find_command_path(argv[0], shell->envp);
 	if (!path)
 	{
-		//fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
 		fprintf(stderr, "%s: command not found\n", argv[0]);
 		free_strings(argv);
 		return (127);

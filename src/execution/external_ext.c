@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:41:53 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/23 16:34:10 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 18:16:45 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	exec_child(char *path, char **argv, char **envp)
 	setup_child_signals();
 	execve(path, argv, envp);
 	perror("minishell");
-//	perror("");
 	free(path);
 	free_strings(argv);
 	if (errno == ENOENT)
@@ -81,7 +80,6 @@ void	process_assignments(char **argv, t_shell *shell)
 int	handle_empty_command(char **argv)
 {
 	fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
-//	fprintf(stderr, "%s: command not found\n", argv[0]);
 	free_strings(argv);
 	return (127);
 }
