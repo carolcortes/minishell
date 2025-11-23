@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/11/23 17:43:46 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 18:40:22 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,14 +327,16 @@ void		free_tokens(t_token *tokens);
 char		*ft_strjoin_free(char *s1, char *s2, int mode);
 void		free_pipeline(t_command *pipeline);
 
-/* main_ext.c */
-int			handle_child_process_single(t_command *cmd, t_shell *shell,
-				t_token *tokens);
-void		handle_parent_process(pid_t pid, t_shell *shell);
+/* main_ext1.c */
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);
 void		print_pipeline(t_command *pipeline);
 char		*read_multiline_pipe(char *line);
+
+/* main_ext2.c */
+int			handle_child_process_single(t_command *cmd, t_shell *shell,
+				t_token *tokens);
+void		handle_parent_process(pid_t pid, t_shell *shell);
 
 /* signals.c */
 void		setup_signals(void);
