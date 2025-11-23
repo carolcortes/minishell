@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/11/17 00:08:14 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:43:46 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,7 +302,8 @@ char		*extract_quoted_loop(const char *line, int *i, char quote,
 				char *result);
 
 /* redir_parse.c */
-void		extract_redirections(t_command *cmd, t_shell *shell);
+//void		extract_redirections(t_command *cmd, t_shell *shell);
+int			extract_redirections(t_command *cmd, t_shell *shell);
 
 /* redir_parse_ext.c */
 void		add_redirection(t_command *cmd, int type, char *filename);

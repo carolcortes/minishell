@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/17 00:35:20 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:42:35 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ static int	add_command_to_pipeline(t_token *tokens, int *i,
 	return (1);
 }
 
-
-static void	extract_redirections_from_pipeline(t_command *pipeline,
+/*static void	extract_redirections_from_pipeline(t_command *pipeline,
 	t_shell *shell)
 {
 	t_command	*current;
@@ -120,6 +119,21 @@ static void	extract_redirections_from_pipeline(t_command *pipeline,
 		extract_redirections(current, shell);
 		current = current->next;
 	}
+}*/
+
+static int extract_redirections_from_pipeline(t_command *pipeline,
+    t_shell *shell)
+{
+    t_command *current;
+
+    current = pipeline;
+    while (current)
+    {
+        if (!extract_redirections(current, shell))
+            return (0);   // <--- NEW
+        current = current->next;
+    }
+    return (1);
 }
 
 static t_command	*remove_empty_commands(t_command *pipeline)
@@ -197,6 +211,14 @@ t_command	*parse_pipeline(t_token *tokens, t_shell *shell)
 		if (!add_command_to_pipeline(tokens, &i, &first, &current))
 			break ;
 	}
-	extract_redirections_from_pipeline(first, shell);
+	//extract_redirections_from_pipeline(first, shell);
+
+	if (!extract_redirections_from_pipeline(first, shell))
+	{
+		free_pipeline(first);
+		return (NULL);
+	}
+
+	//
 	return (remove_empty_commands(first));
 }

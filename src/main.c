@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 23:16:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 18:01:15 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ static void	process_input_line(char *line, t_shell *shell)
 	if (!tokens)
 		return ;
 	expand_tokens(tokens, shell);
-	pipeline = parse_pipeline(tokens, shell);
+
+	/*pipeline = parse_pipeline(tokens, shell);
 	if (pipeline)
 	{
 		if (pipeline->next)
@@ -75,7 +76,23 @@ static void	process_input_line(char *line, t_shell *shell)
 		else
 			process_single_command(pipeline, shell, tokens);
 		free_pipeline(pipeline);
+	}*/
+
+	pipeline = parse_pipeline(tokens, shell);
+
+	if (!pipeline)
+	{
+		shell->last_status = 2;  // Bash usa 2 para syntax error
+		free_tokens(tokens);
+		return;
 	}
+
+	if (pipeline->next)
+		execute_pipeline(pipeline, shell, tokens);
+	else
+		process_single_command(pipeline, shell, tokens);
+
+	free_pipeline(pipeline);
 	free_tokens(tokens);
 }
 

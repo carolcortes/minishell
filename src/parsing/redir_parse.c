@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:48 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/16 00:31:40 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:45:22 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	process_redirection_token(t_command *cmd, int i, t_shell *shell)
 	return (1);
 }
 
-void	extract_redirections(t_command *cmd, t_shell *shell)
+/*void	extract_redirections(t_command *cmd, t_shell *shell)
 {
 	int	i;
 
@@ -87,4 +87,25 @@ void	extract_redirections(t_command *cmd, t_shell *shell)
 		else
 			i++;
 	}
+}*/
+
+int extract_redirections(t_command *cmd, t_shell *shell)
+{
+	int i;
+
+	if (!cmd || !cmd->args)
+		return (1);
+
+	i = 0;
+	while (i < cmd->argc && cmd->args[i])
+	{
+		if (cmd->args[i]->is_redirection)
+		{
+			if (!process_redirection_token(cmd, i, shell))
+				return (0);    // <---- NEW: sinalizar erro
+		}
+		else
+			i++;
+	}
+	return (1);
 }
