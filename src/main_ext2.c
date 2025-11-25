@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:36:21 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/23 18:40:04 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/25 22:15:56 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,25 @@ void	handle_parent_process(pid_t pid, t_shell *shell)
 		if (WTERMSIG(status) == SIGQUIT)
 			write(2, "Quit (core dumped)\n", 19);
 		shell->last_status = 128 + WTERMSIG(status);
+	}
+}
+
+void	execute_with_redirections(t_command *cmd, t_shell *shell,
+	t_token *tokens)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		setup_child_signals();
+		exit(handle_child_process_single(cmd, shell, tokens));
+	}
+	else if (pid > 0)
+		handle_parent_process(pid, shell);
+	else
+	{
+		perror("minishell: fork");
+		shell->last_status = 1;
 	}
 }
