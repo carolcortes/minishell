@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:48 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/25 21:15:13 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/25 21:42:38 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static int	handle_heredoc_redirection(t_command *cmd,
 	tmpfile = handle_heredoc(target, allow_expand, shell);
 	if (!tmpfile)
 		return (0);
-	//add_redirection(cmd, 3, tmpfile);
 	add_redirection(cmd, 4, tmpfile);
 	free(tmpfile);
 	return (1);

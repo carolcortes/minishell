@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/24 22:01:03 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/25 21:46:57 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,8 @@ t_command	*parse_pipeline(t_token *tokens, t_shell *shell)
 	t_command	*current;
 	int			i;
 
-	/////////////////////
 	if (!validate_initial_pipe(tokens))
-		//return (NULL);
-		return ((t_command *)-1);  // -1 sinaliza ERRO real
-	/////////////////////
+		return ((t_command *)-1);
 	if (!tokens || !tokens[0].value)
 		return (NULL);
 	first = NULL;
