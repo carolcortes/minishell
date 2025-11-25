@@ -6,11 +6,22 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/23 18:39:58 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/24 23:20:16 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+/*char	*shell_read_line(void)
+{
+	char	*line;
+
+	line = readline("minishell$> ");
+	if (!line)
+		return (NULL);
+	line = read_multiline_pipe(line);
+	return (line);
+}*/
 
 char	*shell_read_line(void)
 {
@@ -20,6 +31,9 @@ char	*shell_read_line(void)
 	if (!line)
 		return (NULL);
 	line = read_multiline_pipe(line);
+	/* só adicionar ao histórico depois de processar multiline */
+	if (line && *line)
+		add_history(line);
 	return (line);
 }
 
@@ -63,7 +77,7 @@ void	print_pipeline(t_command *pipeline)
 	printf("==========================\n");
 }
 
-char	*read_multiline_pipe(char *line)
+/*char	*read_multiline_pipe(char *line)
 {
 	char	*extra;
 	char	*joined;
@@ -75,6 +89,29 @@ char	*read_multiline_pipe(char *line)
 		if (!extra)
 			return (line);
 		joined = ft_strjoin(line, extra);
+		free(line);
+		free(extra);
+		line = joined;
+	}
+	return (line);
+}*/
+
+char	*read_multiline_pipe(char *line)
+{
+	char	*extra;
+	char	*tmp;
+	char	*joined;
+
+	while (line && ft_strlen(line) > 0
+		&& line[ft_strlen(line) - 1] == '|')
+	{
+		extra = readline("> ");
+		if (!extra)
+			break ;
+		/* garante espaço entre linhas para não colar tokens */
+		tmp = ft_strjoin(line, " ");
+		joined = ft_strjoin(tmp, extra);
+		free(tmp);
 		free(line);
 		free(extra);
 		line = joined;
