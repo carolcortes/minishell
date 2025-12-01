@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:18:42 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 23:31:22 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/25 21:47:23 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,26 @@ static int	apply_input_redirection(t_redirection *redir)
 static int	process_single_redirection(t_redirection *redir,
 	t_shell *shell, t_token *tokens)
 {
+	int	fd;
+
 	(void)tokens;
 	(void)shell;
 	if (redir->type == 1 || redir->type == 2)
 		return (apply_output_redirection(redir));
 	else if (redir->type == 3)
 		return (apply_input_redirection(redir));
+	else if (redir->type == 4)
+	{
+		fd = open(redir->filename, O_RDONLY);
+		if (fd == -1)
+			return (0);
+		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			close(fd);
+			return (0);
+		}
+		close(fd);
+		return (1);
+	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/11/17 00:08:14 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/01 20:06:33 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,6 +275,9 @@ char		**tokens_to_argv(t_token **tokens);
    pipeline_ext.c */
 t_token		**copy_command_args(t_token *tokens, int start, int count);
 int			count_args_until_pipe(t_token *tokens, int start_index);
+int			validate_pipe_count(t_token *tokens, int i, int arg_count);
+int			validate_initial_pipe(t_token *tokens);
+int			validate_pipe_position(t_token *tokens, int i);
 
 /* pipeline.c */
 t_command	*parse_pipeline(t_token *tokens, t_shell *shell);
@@ -302,7 +305,8 @@ char		*extract_quoted_loop(const char *line, int *i, char quote,
 				char *result);
 
 /* redir_parse.c */
-void		extract_redirections(t_command *cmd, t_shell *shell);
+//void		extract_redirections(t_command *cmd, t_shell *shell);
+int			extract_redirections(t_command *cmd, t_shell *shell);
 
 /* redir_parse_ext.c */
 void		add_redirection(t_command *cmd, int type, char *filename);
@@ -326,14 +330,18 @@ void		free_tokens(t_token *tokens);
 char		*ft_strjoin_free(char *s1, char *s2, int mode);
 void		free_pipeline(t_command *pipeline);
 
-/* main_ext.c */
-int			handle_child_process_single(t_command *cmd, t_shell *shell,
-				t_token *tokens);
-void		handle_parent_process(pid_t pid, t_shell *shell);
+/* main_ext1.c */
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);
 void		print_pipeline(t_command *pipeline);
 char		*read_multiline_pipe(char *line);
+
+/* main_ext2.c */
+int			handle_child_process_single(t_command *cmd, t_shell *shell,
+				t_token *tokens);
+void		handle_parent_process(pid_t pid, t_shell *shell);
+void	execute_with_redirections(t_command *cmd, t_shell *shell,
+				t_token *tokens);
 
 /* signals.c */
 void		setup_signals(void);

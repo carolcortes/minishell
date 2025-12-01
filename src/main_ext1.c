@@ -1,60 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_ext.c                                         :+:      :+:    :+:   */
+/*   main_ext1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/17 00:14:09 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/01 21:27:57 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-int	handle_child_process_single(t_command *cmd, t_shell *shell, t_token *tokens)
-{
-	if (!apply_redirections(cmd, shell, tokens))
-		return (1);
-	if (is_builtin(cmd->args))
-		return (exec_builtin(cmd->args, shell->envp));
-	else
-		return (execute_external(cmd->args, shell));
-}
-
-void	handle_parent_process(pid_t pid, t_shell *shell)
-{
-	int	status;
-
-	setup_wait_signals();
-	waitpid(pid, &status, 0);
-	setup_signals();
-	if (WIFEXITED(status))
-		shell->last_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGINT)
-			write(1, "\n", 1);
-		if (WTERMSIG(status) == SIGQUIT)
-			write(2, "Quit (core dumped)\n", 19);
-		shell->last_status = 128 + WTERMSIG(status);
-	}
-}
-
-/*char	*shell_read_line(void)
-{
-	char	*line;
-
-	line = readline("minishell$> ");
-	if (!line)
-	{
-		printf("exit\n");
-		return (NULL);
-	}
-	if (*line)
-		add_history(line);
-	return (line);
-}*/
 
 char	*shell_read_line(void)
 {
@@ -63,10 +19,9 @@ char	*shell_read_line(void)
 	line = readline("minishell$> ");
 	if (!line)
 		return (NULL);
-
-	// ⬇️ Aqui está a correção do pipe no final
 	line = read_multiline_pipe(line);
-
+	if (line && *line)
+		add_history(line);
 	return (line);
 }
 
@@ -110,10 +65,10 @@ void	print_pipeline(t_command *pipeline)
 	printf("==========================\n");
 }
 
-///////////////////////////
 char	*read_multiline_pipe(char *line)
 {
 	char	*extra;
+	char	*tmp;
 	char	*joined;
 
 	while (line && ft_strlen(line) > 0
@@ -121,9 +76,10 @@ char	*read_multiline_pipe(char *line)
 	{
 		extra = readline("> ");
 		if (!extra)
-			return (line); // Ctrl-D
-
-		joined = ft_strjoin(line, extra);
+			break ;
+		tmp = ft_strjoin(line, " ");
+		joined = ft_strjoin(tmp, extra);
+		free(tmp);
 		free(line);
 		free(extra);
 		line = joined;

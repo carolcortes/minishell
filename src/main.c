@@ -6,31 +6,11 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 23:16:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/11/25 22:17:29 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-static void	execute_with_redirections(t_command *cmd, t_shell *shell,
-	t_token *tokens)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		setup_child_signals();
-		exit(handle_child_process_single(cmd, shell, tokens));
-	}
-	else if (pid > 0)
-		handle_parent_process(pid, shell);
-	else
-	{
-		perror("minishell: fork");
-		shell->last_status = 1;
-	}
-}
 
 static void	process_single_command(t_command *cmd, t_shell *shell,
 	t_token *tokens)
@@ -39,10 +19,7 @@ static void	process_single_command(t_command *cmd, t_shell *shell,
 	{
 		if (cmd->redir_count > 0)
 		{
-			if (!apply_redirections(cmd, shell, tokens))
-				shell->last_status = 1;
-			else
-				shell->last_status = 0;
+			apply_redirections(cmd, shell, tokens);
 		}
 		return ;
 	}
@@ -57,6 +34,27 @@ static void	process_single_command(t_command *cmd, t_shell *shell,
 	}
 }
 
+static void	handle_pipeline_result(t_command *p, t_shell *s, t_token *t)
+{
+	if (p == (t_command *)-1)
+	{
+		s->last_status = 2;
+		free_tokens(t);
+		return ;
+	}
+	if (!p)
+	{
+		free_tokens(t);
+		return ;
+	}
+	if (p->next)
+		execute_pipeline(p, s, t);
+	else
+		process_single_command(p, s, t);
+	free_pipeline(p);
+	free_tokens(t);
+}
+
 static void	process_input_line(char *line, t_shell *shell)
 {
 	t_token		*tokens;
@@ -68,15 +66,7 @@ static void	process_input_line(char *line, t_shell *shell)
 		return ;
 	expand_tokens(tokens, shell);
 	pipeline = parse_pipeline(tokens, shell);
-	if (pipeline)
-	{
-		if (pipeline->next)
-			execute_pipeline(pipeline, shell, tokens);
-		else
-			process_single_command(pipeline, shell, tokens);
-		free_pipeline(pipeline);
-	}
-	free_tokens(tokens);
+	handle_pipeline_result(pipeline, shell, tokens);
 }
 
 static void	main_loop(t_shell *shell)
