@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/03 20:11:52 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/03 20:19:08 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,89 +17,6 @@ static char	*handle_env_var(const char *str, int *i, char *result,
 static char	*handle_literal_char(const char *str, int *i, char *result);
 static int	append_next(const char *str, int *i, t_shell *shell,
 				char **result);
-
-/*char	*expand_variables(const char *str, t_shell *shell)
-{
-	int		i;
-	char	*result;
-
-	i = 0;
-	result = ft_strdup("");
-	if (!result)
-		return (NULL);
-	while (str[i])
-		if (!append_next(str, &i, shell, &result))
-			return (NULL);
-	return (result);
-}
-
-char	**split_on_whitespace(const char *s)
-{
-	char	**res;
-	int		count;
-
-	if (!s)
-		return (NULL);
-	count = count_words(s);
-	res = malloc(sizeof(char *) * (count + 1));
-	if (!res)
-		return (NULL);
-	return (fill_split(s, res));
-}*/
-
-/*void	insert_split_tokens(t_token *tokens, int index, char **words)
-{
-	int		i;
-	int		k;
-
-	if (!words || !words[0])
-		return ;
-	free(tokens[index].value);
-	tokens[index].value = words[0];
-	tokens[index].quoted = false;
-	tokens[index].allow_expand = false;
-	k = 1;
-	while (words[k])
-	{
-		i = 0;
-		while (tokens[i].value)
-			i++;
-		tokens[i].value = words[k];
-		tokens[i].quoted = false;
-		tokens[i].allow_expand = false;
-		tokens[i + 1].value = NULL;
-		k++;
-	}
-}*/
-
-/*static int	skip_heredoc(t_token *tokens, int i)
-{
-	if (i > 0 && tokens[i - 1].is_redirection
-		&& tokens[i - 1].redir_type == 4)
-		return (1);
-	return (0);
-}
-
-static void	handle_expansion(t_token *token, t_shell *shell)
-{
-	if (token->allow_expand)
-		expand_single_token(token, shell);
-}
-
-static void	split_and_insert(t_token *tokens, int i)
-{
-	char	**words;
-
-	if (tokens[i].quoted || !tokens[i].value)
-		return ;
-	if (!ft_strchr(tokens[i].value, ' '))
-		return ;
-	words = split_on_whitespace(tokens[i].value);
-	if (!words)
-		return ;
-	insert_split_tokens(tokens, i, words);
-	free(words);
-}*/
 
 void	expand_tokens(t_token *tokens, t_shell *shell)
 {

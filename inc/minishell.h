@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/03 20:13:17 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/03 20:17:46 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,7 +305,6 @@ char		*extract_quoted_loop(const char *line, int *i, char quote,
 				char *result);
 
 /* redir_parse.c */
-//void		extract_redirections(t_command *cmd, t_shell *shell);
 int			extract_redirections(t_command *cmd, t_shell *shell);
 
 /* redir_parse_ext.c */
@@ -316,8 +315,6 @@ void		remove_args(t_command *cmd, int start, int count);
 bool		token_has_variable(const char *str);
 void		expand_single_token(struct s_token *tok, struct s_shell *shell);
 void		remove_empty_expanded_tokens(t_token *tokens);
-//
-//char		*expand_variables(const char *str, t_shell *shell);
 char		**split_on_whitespace(const char *s);
 void		insert_split_tokens(t_token *tokens, int index, char **words);
 
@@ -330,9 +327,6 @@ void		split_and_insert(t_token *tokens, int i);
 
 /* expand.c */
 void		expand_tokens(t_token *tokens, t_shell *shell);
-//void		insert_split_tokens(t_token *tokens, int index, char **words);
-//int			append_next(const char *str, int *i, t_shell *shell,
-//				char **result);
 
 /* environment.c */
 char		*env_get_value(char **envp, const char *key);
