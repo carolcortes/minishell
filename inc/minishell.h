@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/01 20:06:33 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/03 20:17:46 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,24 +305,32 @@ char		*extract_quoted_loop(const char *line, int *i, char quote,
 				char *result);
 
 /* redir_parse.c */
-//void		extract_redirections(t_command *cmd, t_shell *shell);
 int			extract_redirections(t_command *cmd, t_shell *shell);
 
 /* redir_parse_ext.c */
 void		add_redirection(t_command *cmd, int type, char *filename);
 void		remove_args(t_command *cmd, int start, int count);
 
-/* expand.c */
-char		*expand_variables(const char *str, t_shell *shell);
-void		expand_tokens(t_token *tokens, t_shell *shell);
-
-/* expand_ext.c */
+/* expand_ext1.c */
 bool		token_has_variable(const char *str);
-void		remove_empty_expanded_tokens(t_token *tokens);
 void		expand_single_token(struct s_token *tok, struct s_shell *shell);
+void		remove_empty_expanded_tokens(t_token *tokens);
+char		**split_on_whitespace(const char *s);
+void		insert_split_tokens(t_token *tokens, int index, char **words);
+
+/* expand_ext2.c */
+int			count_words(const char *s);
+char		**fill_split(const char *s, char **res);
+int			skip_heredoc(t_token *tokens, int i);
+void		handle_expansion(t_token *token, t_shell *shell);
+void		split_and_insert(t_token *tokens, int i);
+
+/* expand.c */
+void		expand_tokens(t_token *tokens, t_shell *shell);
 
 /* environment.c */
 char		*env_get_value(char **envp, const char *key);
+char		*expand_variables(const char *str, t_shell *shell);
 
 /* free.c */
 void		free_strings(char **arr);

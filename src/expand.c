@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/15 23:32:05 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/03 20:19:08 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,6 @@ static char	*handle_literal_char(const char *str, int *i, char *result);
 static int	append_next(const char *str, int *i, t_shell *shell,
 				char **result);
 
-char	*expand_variables(const char *str, t_shell *shell)
-{
-	int		i;
-	char	*result;
-
-	i = 0;
-	result = ft_strdup("");
-	if (!result)
-		return (NULL);
-	while (str[i])
-		if (!append_next(str, &i, shell, &result))
-			return (NULL);
-	return (result);
-}
-
-/*void	expand_tokens(t_token *tokens, t_shell *shell)
-{
-	int		i;
-
-	i = -1;
-	while (tokens[++i].value)
-		expand_single_token(&tokens[i], shell);
-	remove_empty_expanded_tokens(tokens);
-}*/
-
 void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	int	i;
@@ -50,11 +25,13 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 	i = 0;
 	while (tokens[i].value)
 	{
-		if (i > 0 && tokens[i - 1].is_redirection
-			&& tokens[i - 1].redir_type == 4)
-			;
-		else if (!tokens[i].quoted)
-			expand_single_token(&tokens[i], shell);
+		if (skip_heredoc(tokens, i))
+		{
+			i++;
+			continue ;
+		}
+		handle_expansion(&tokens[i], shell);
+		split_and_insert(tokens, i);
 		i++;
 	}
 	remove_empty_expanded_tokens(tokens);
@@ -115,10 +92,27 @@ static int	append_next(const char *str, int *i, t_shell *shell,
 		*result = ft_strjoin_free(*result, tmp, 3);
 		*i += 2;
 	}
+	else if (str[*i] == '$' && ft_isdigit(str[*i + 1]))
+		*i += 2;
 	else if (str[*i] == '$'
 		&& (ft_isalpha(str[*i + 1]) || str[*i + 1] == '_'))
 		*result = handle_env_var(str, i, *result, shell);
 	else
 		*result = handle_literal_char(str, i, *result);
 	return (*result != NULL);
+}
+
+char	*expand_variables(const char *str, t_shell *shell)
+{
+	int		i;
+	char	*result;
+
+	i = 0;
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	while (str[i])
+		if (!append_next(str, &i, shell, &result))
+			return (NULL);
+	return (result);
 }

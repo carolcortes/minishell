@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_ext.c                                       :+:      :+:    :+:   */
+/*   expand_ext1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/19 13:35:00 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/11/16 00:04:23 by cgross-s         ###   ########.fr       */
+/*   Created: 2025/12/03 19:31:20 by cgross-s          #+#    #+#             */
+/*   Updated: 2025/12/03 20:13:19 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,43 @@ void	remove_empty_expanded_tokens(t_token *tokens)
 		r++;
 	}
 	tokens[w].value = NULL;
+}
+
+char	**split_on_whitespace(const char *s)
+{
+	char	**res;
+	int		count;
+
+	if (!s)
+		return (NULL);
+	count = count_words(s);
+	res = malloc(sizeof(char *) * (count + 1));
+	if (!res)
+		return (NULL);
+	return (fill_split(s, res));
+}
+
+void	insert_split_tokens(t_token *tokens, int index, char **words)
+{
+	int		i;
+	int		k;
+
+	if (!words || !words[0])
+		return ;
+	free(tokens[index].value);
+	tokens[index].value = words[0];
+	tokens[index].quoted = false;
+	tokens[index].allow_expand = false;
+	k = 1;
+	while (words[k])
+	{
+		i = 0;
+		while (tokens[i].value)
+			i++;
+		tokens[i].value = words[k];
+		tokens[i].quoted = false;
+		tokens[i].allow_expand = false;
+		tokens[i + 1].value = NULL;
+		k++;
+	}
 }
