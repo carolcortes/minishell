@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/03 10:27:07 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/03 16:57:00 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*expand_variables(const char *str, t_shell *shell)
 	return (result);
 }
 
-void	expand_tokens(t_token *tokens, t_shell *shell)
+/*void	expand_tokens(t_token *tokens, t_shell *shell)
 {
 	int	i;
 
@@ -43,8 +43,112 @@ void	expand_tokens(t_token *tokens, t_shell *shell)
 		if (i > 0 && tokens[i - 1].is_redirection
 			&& tokens[i - 1].redir_type == 4)
 			;
-		else if (!tokens[i].quoted)
+	////////////////////////////////////////////////
+		//else if (!tokens[i].quoted)
+		//	expand_single_token(&tokens[i], shell);
+		else
 			expand_single_token(&tokens[i], shell);
+	////////////////////////////////////////////////
+		i++;
+	}
+	remove_empty_expanded_tokens(tokens);
+}*/
+
+static char	**split_on_whitespace(const char *s)
+{
+	char	**res;
+	int		count;
+	int		i;
+	int		start;
+
+	if (!s)
+		return (NULL);
+	count = 0;
+	i = 0;
+	while (s[i])
+	{
+		while (s[i] && ft_isspace(s[i]))
+			i++;
+		if (s[i])
+		{
+			count++;
+			while (s[i] && !ft_isspace(s[i]))
+				i++;
+		}
+	}
+	res = malloc(sizeof(char *) * (count + 1));
+	if (!res)
+		return (NULL);
+	i = 0;
+	count = 0;
+	while (s[i])
+	{
+		while (s[i] && ft_isspace(s[i]))
+			i++;
+		if (!s[i])
+			break ;
+		start = i;
+		while (s[i] && !ft_isspace(s[i]))
+			i++;
+		res[count++] = ft_substr(s, start, i - start);
+	}
+	res[count] = NULL;
+	return (res);
+}
+
+static void	insert_split_tokens(t_token *tokens, int index, char **words)
+{
+	int		i;
+	int		k;
+
+	if (!words || !words[0])
+		return ;
+	free(tokens[index].value);
+	tokens[index].value = words[0];
+	tokens[index].quoted = false;
+	tokens[index].allow_expand = false;
+
+	k = 1;
+	while (words[k])
+	{
+		i = 0;
+		while (tokens[i].value)
+			i++;
+		tokens[i].value = words[k];
+		tokens[i].quoted = false;
+		tokens[i].allow_expand = false;
+		tokens[i + 1].value = NULL;
+		k++;
+	}
+}
+
+void	expand_tokens(t_token *tokens, t_shell *shell)
+{
+	int		i;
+	char	**words;
+
+	i = 0;
+	while (tokens[i].value)
+	{
+		if (i > 0 && tokens[i - 1].is_redirection
+			&& tokens[i - 1].redir_type == 4)
+		{
+			i++;
+			continue ;
+		}
+		if (tokens[i].allow_expand)
+			expand_single_token(&tokens[i], shell);
+		if (!tokens[i].quoted
+			&& tokens[i].value
+			&& ft_strchr(tokens[i].value, ' '))
+		{
+			words = split_on_whitespace(tokens[i].value);
+			if (words)
+			{
+				insert_split_tokens(tokens, i, words);
+				free(words);
+			}
+		}
 		i++;
 	}
 	remove_empty_expanded_tokens(tokens);
