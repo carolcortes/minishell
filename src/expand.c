@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/03 19:03:22 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/03 20:11:52 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	*handle_literal_char(const char *str, int *i, char *result);
 static int	append_next(const char *str, int *i, t_shell *shell,
 				char **result);
 
-char	*expand_variables(const char *str, t_shell *shell)
+/*char	*expand_variables(const char *str, t_shell *shell)
 {
 	int		i;
 	char	*result;
@@ -33,113 +33,6 @@ char	*expand_variables(const char *str, t_shell *shell)
 	return (result);
 }
 
-/*void	expand_tokens(t_token *tokens, t_shell *shell)
-{
-	int	i;
-
-	i = 0;
-	while (tokens[i].value)
-	{
-		if (i > 0 && tokens[i - 1].is_redirection
-			&& tokens[i - 1].redir_type == 4)
-			;
-	////////////////////////////////////////////////
-		//else if (!tokens[i].quoted)
-		//	expand_single_token(&tokens[i], shell);
-		else
-			expand_single_token(&tokens[i], shell);
-	////////////////////////////////////////////////
-		i++;
-	}
-	remove_empty_expanded_tokens(tokens);
-}*/
-
-/*static char	**split_on_whitespace(const char *s)
-{
-	char	**res;
-	int		count;
-	int		i;
-	int		start;
-
-	if (!s)
-		return (NULL);
-	count = 0;
-	i = 0;
-	while (s[i])
-	{
-		while (s[i] && ft_isspace(s[i]))
-			i++;
-		if (s[i])
-		{
-			count++;
-			while (s[i] && !ft_isspace(s[i]))
-				i++;
-		}
-	}
-	res = malloc(sizeof(char *) * (count + 1));
-	if (!res)
-		return (NULL);
-	i = 0;
-	count = 0;
-	while (s[i])
-	{
-		while (s[i] && ft_isspace(s[i]))
-			i++;
-		if (!s[i])
-			break ;
-		start = i;
-		while (s[i] && !ft_isspace(s[i]))
-			i++;
-		res[count++] = ft_substr(s, start, i - start);
-	}
-	res[count] = NULL;
-	return (res);
-}*/
-
-static int	count_words(const char *s)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	i = 0;
-	while (s[i])
-	{
-		while (s[i] && ft_isspace(s[i]))
-			i++;
-		if (s[i])
-		{
-			count++;
-			while (s[i] && !ft_isspace(s[i]))
-				i++;
-		}
-	}
-	return (count);
-}
-
-static char	**fill_split(const char *s, char **res)
-{
-	int	i;
-	int	start;
-	int	idx;
-
-	i = 0;
-	idx = 0;
-	while (s[i])
-	{
-		while (s[i] && ft_isspace(s[i]))
-			i++;
-		if (!s[i])
-			break ;
-		start = i;
-		while (s[i] && !ft_isspace(s[i]))
-			i++;
-		res[idx++] = ft_substr(s, start, i - start);
-	}
-	res[idx] = NULL;
-	return (res);
-}
-
 char	**split_on_whitespace(const char *s)
 {
 	char	**res;
@@ -152,9 +45,9 @@ char	**split_on_whitespace(const char *s)
 	if (!res)
 		return (NULL);
 	return (fill_split(s, res));
-}
+}*/
 
-static void	insert_split_tokens(t_token *tokens, int index, char **words)
+/*void	insert_split_tokens(t_token *tokens, int index, char **words)
 {
 	int		i;
 	int		k;
@@ -177,41 +70,9 @@ static void	insert_split_tokens(t_token *tokens, int index, char **words)
 		tokens[i + 1].value = NULL;
 		k++;
 	}
-}
-
-/*void	expand_tokens(t_token *tokens, t_shell *shell)
-{
-	int		i;
-	char	**words;
-
-	i = 0;
-	while (tokens[i].value)
-	{
-		if (i > 0 && tokens[i - 1].is_redirection
-			&& tokens[i - 1].redir_type == 4)
-		{
-			i++;
-			continue ;
-		}
-		if (tokens[i].allow_expand)
-			expand_single_token(&tokens[i], shell);
-		if (!tokens[i].quoted
-			&& tokens[i].value
-			&& ft_strchr(tokens[i].value, ' '))
-		{
-			words = split_on_whitespace(tokens[i].value);
-			if (words)
-			{
-				insert_split_tokens(tokens, i, words);
-				free(words);
-			}
-		}
-		i++;
-	}
-	remove_empty_expanded_tokens(tokens);
 }*/
 
-static int	skip_heredoc(t_token *tokens, int i)
+/*static int	skip_heredoc(t_token *tokens, int i)
 {
 	if (i > 0 && tokens[i - 1].is_redirection
 		&& tokens[i - 1].redir_type == 4)
@@ -238,7 +99,7 @@ static void	split_and_insert(t_token *tokens, int i)
 		return ;
 	insert_split_tokens(tokens, i, words);
 	free(words);
-}
+}*/
 
 void	expand_tokens(t_token *tokens, t_shell *shell)
 {
@@ -322,4 +183,19 @@ static int	append_next(const char *str, int *i, t_shell *shell,
 	else
 		*result = handle_literal_char(str, i, *result);
 	return (*result != NULL);
+}
+
+char	*expand_variables(const char *str, t_shell *shell)
+{
+	int		i;
+	char	*result;
+
+	i = 0;
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	while (str[i])
+		if (!append_next(str, &i, shell, &result))
+			return (NULL);
+	return (result);
 }
