@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:15:24 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/11/23 18:15:33 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/07 18:34:27 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,16 @@ static int	exec_from_env(char **argv, t_shell *shell)
 	char	*path;
 
 	path = find_command_path(argv[0], shell->envp);
+	if (path && ft_strcmp(path, "NO_PATH") == 0)
+	{
+		fprintf(stderr, "minishell: %s: No such file or directory\n", argv[0]);
+		free(path);
+		free_strings(argv);
+		return (127);
+	}
 	if (!path)
 	{
-		fprintf(stderr, "%s: command not found\n", argv[0]);
+		fprintf(stderr, "minishell: %s: command not found\n", argv[0]);
 		free_strings(argv);
 		return (127);
 	}
