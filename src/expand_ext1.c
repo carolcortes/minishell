@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 19:31:20 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/14 14:34:05 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:46:19 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	expand_single_token(t_token *tok, t_shell *shell)
 		tok->allow_expand = false;
 }
 
-/*void	remove_empty_expanded_tokens(t_token *tokens)
+void	remove_empty_expanded_tokens(t_token *tokens)
 {
 	int		r;
 	int		w;
@@ -70,9 +70,9 @@ void	expand_single_token(t_token *tok, t_shell *shell)
 		r++;
 	}
 	tokens[w].value = NULL;
-}*/
+}
 
-void	remove_empty_expanded_tokens(t_token *tokens)
+/*void	remove_empty_expanded_tokens(t_token *tokens)
 {
 	int		r;
 	int		w;
@@ -98,7 +98,7 @@ void	remove_empty_expanded_tokens(t_token *tokens)
 		r++;
 	}
 	tokens[w].value = NULL;
-}
+}*/
 
 char	**split_on_whitespace(const char *s)
 {
