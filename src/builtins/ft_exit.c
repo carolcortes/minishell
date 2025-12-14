@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/14 16:36:01 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/14 21:49:52 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	numeric_error(const char *s)
 	exit(2);
 }
 
-/*int	ft_exit(t_token **args, char **envp)
+int	ft_exit(t_token **args, char **envp)
 {
 	long			val;
 	unsigned char	code;
@@ -77,7 +77,7 @@ static void	numeric_error(const char *s)
 
 	(void)envp;
 	if (!args || !args[0])
-		exit(0);
+		return (-1);
 	arg_index = 1;
 	if (args[1] && ft_strcmp(args[1]->value, "--") == 0)
 		arg_index = 2;
@@ -91,37 +91,6 @@ static void	numeric_error(const char *s)
 	{
 		if (!is_valid_numeric(args[arg_index]->value, &val))
 			numeric_error(args[arg_index]->value);
-		code = (unsigned char)val;
-		exit(code);
-	}
-	exit(0);
-}*/
-
-int	ft_exit(t_token **args, char **envp)
-{
-	long			val;
-	unsigned char	code;
-	int				arg_index;
-
-	(void)envp;
-	if (!args || !args[0])
-		return (-1);
-
-	arg_index = 1;
-	if (args[1] && ft_strcmp(args[1]->value, "--") == 0)
-		arg_index = 2;
-
-	if (args[arg_index] && args[arg_index + 1]
-		&& is_valid_numeric(args[arg_index]->value, &val))
-	{
-		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
-		return (1);
-	}
-
-	if (args[arg_index])
-	{
-		if (!is_valid_numeric(args[arg_index]->value, &val))
-			numeric_error(args[arg_index]->value); // continua exit(2)
 		code = (unsigned char)val;
 		return (-(code + 1));
 	}

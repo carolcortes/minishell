@@ -6,13 +6,13 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/14 18:29:55 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/14 21:45:47 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	process_single_command(t_command *cmd, t_shell *shell,
+/*static void	process_single_command(t_command *cmd, t_shell *shell,
 	t_token *tokens)
 {
 	if (cmd->argc == 0)
@@ -27,8 +27,6 @@ static void	process_single_command(t_command *cmd, t_shell *shell,
 		execute_with_redirections(cmd, shell, tokens);
 	else
 	{
-	//	if (is_builtin(cmd->args))
-	//		shell->last_status = exec_builtin(cmd->args, shell->envp);
 		if (is_builtin(cmd->args))
 		{
 			int	status;
@@ -47,10 +45,31 @@ static void	process_single_command(t_command *cmd, t_shell *shell,
 			}
 			shell->last_status = status;
 		}
-
 		else
 			shell->last_status = execute_external(cmd->args, shell);
 	}
+}*/
+
+static void	process_single_command(t_command *cmd, t_shell *shell,
+	t_token *tokens)
+{
+	int	status;
+
+	if (cmd->argc == 0)
+	{
+		if (cmd->redir_count > 0)
+			apply_redirections(cmd, shell, tokens);
+		return ;
+	}
+	if (cmd->redir_count > 0)
+		return (execute_with_redirections(cmd, shell, tokens));
+	if (is_builtin(cmd->args))
+	{
+		status = exec_builtin(cmd->args, shell->envp);
+		handle_builtin_exit(cmd, shell, tokens, status);
+	}
+	else
+		shell->last_status = execute_external(cmd->args, shell);
 }
 
 static void	handle_pipeline_result(t_command *p, t_shell *s, t_token *t)
