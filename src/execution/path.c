@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:43:07 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/18 20:27:22 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/12/07 18:44:31 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static char	*check_explicit_path(char *command);
  *         For explicit paths without execute permission, returns
  *         the literal string "PERMISSION_DENIED".
  */
+
 char	*find_command_path(char *command, char **envp)
 {
 	char	*path_env;
@@ -39,7 +40,7 @@ char	*find_command_path(char *command, char **envp)
 		return (check_explicit_path(command));
 	path_env = get_path_env(envp);
 	if (!path_env)
-		return (NULL);
+		return (ft_strdup("NO_PATH"));
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
