@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/11/25 22:17:29 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:29:55 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,27 @@ static void	process_single_command(t_command *cmd, t_shell *shell,
 		execute_with_redirections(cmd, shell, tokens);
 	else
 	{
+	//	if (is_builtin(cmd->args))
+	//		shell->last_status = exec_builtin(cmd->args, shell->envp);
 		if (is_builtin(cmd->args))
-			shell->last_status = exec_builtin(cmd->args, shell->envp);
+		{
+			int	status;
+
+			status = exec_builtin(cmd->args, shell->envp);
+			if (status < 0)
+			{
+				int	exit_code;
+
+				exit_code = -(status + 1);
+				free_pipeline(cmd);
+				free_tokens(tokens);
+				free_strings(shell->envp);
+				rl_clear_history();
+				exit(exit_code);
+			}
+			shell->last_status = status;
+		}
+
 		else
 			shell->last_status = execute_external(cmd->args, shell);
 	}
