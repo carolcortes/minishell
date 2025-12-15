@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 19:31:20 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/14 20:59:07 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/15 22:52:33 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,11 @@ void	insert_split_tokens(t_token *tokens, int index, char **words)
 	tokens[index].value = words[0];
 	tokens[index].quoted = false;
 	tokens[index].allow_expand = false;
+	///
+	tokens[index].is_pipe = false;
+	tokens[index].is_redirection = false;
+	tokens[index].redir_type = 0;
+	///
 	k = 1;
 	while (words[k])
 	{
@@ -106,6 +111,11 @@ void	insert_split_tokens(t_token *tokens, int index, char **words)
 		tokens[i].value = words[k];
 		tokens[i].quoted = false;
 		tokens[i].allow_expand = false;
+		///
+		tokens[i].is_pipe = false;
+		tokens[i].is_redirection = false;
+		tokens[i].redir_type = 0;
+		///
 		tokens[i + 1].value = NULL;
 		k++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_ext3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 11:26:14 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/22 23:02:01 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/12/15 23:50:32 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ t_token	create_pipe_token(void)
 	pipe_token.is_pipe = true;
 	pipe_token.is_redirection = false;
 	pipe_token.redir_type = 0;
+	//
+	pipe_token.quoted = false;
+	//
 	return (pipe_token);
 }
 
@@ -33,6 +36,9 @@ t_token	create_redirection_token(char *value, int type)
 	token.is_pipe = false;
 	token.is_redirection = true;
 	token.redir_type = type;
+	//
+	token.quoted = false;
+	//
 	return (token);
 }
 
