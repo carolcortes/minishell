@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/14 21:45:47 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/16 19:55:18 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,37 @@
 	}
 }*/
 
-static void	process_single_command(t_command *cmd, t_shell *shell,
+/*static void	process_single_command(t_command *cmd, t_shell *shell,
+	t_token *tokens)
+{
+	int	status;
+
+	if (cmd->argc == 0)
+	{
+		if (cmd->redir_count > 0)
+			apply_redirections(cmd, shell, tokens);
+		return ;
+	}
+	////
+	if (cmd->redir_count > 0)
+		return (execute_with_redirections(cmd, shell, tokens));
+	//if (cmd->redir_count > 0)
+	//{
+	//	execute_with_redirections(cmd, shell, tokens);
+	//	return ;
+	//}
+	if (is_builtin(cmd->args))
+	{
+		status = exec_builtin(cmd->args, shell->envp);
+		handle_builtin_exit(cmd, shell, tokens, status);
+	}
+	else
+		shell->last_status = execute_external(cmd->args, shell);
+}*/
+
+static void	process_single_command(
+	t_command *cmd,
+	t_shell *shell,
 	t_token *tokens)
 {
 	int	status;
@@ -62,7 +92,10 @@ static void	process_single_command(t_command *cmd, t_shell *shell,
 		return ;
 	}
 	if (cmd->redir_count > 0)
-		return (execute_with_redirections(cmd, shell, tokens));
+	{
+		execute_with_redirections(cmd, shell, tokens);
+		return ;
+	}
 	if (is_builtin(cmd->args))
 	{
 		status = exec_builtin(cmd->args, shell->envp);

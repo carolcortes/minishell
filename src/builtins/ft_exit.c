@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/14 21:49:52 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/16 20:21:28 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,17 @@
  * @param args Unused command arguments.
  * @return This function does not return.
  */
+
+void	cleanup_and_exit(t_command *cmd, t_token *tokens,
+		t_shell *shell, int code)
+{
+	free_pipeline(cmd);
+	free_tokens(tokens);
+	free_strings(shell->envp);
+	rl_clear_history();
+	exit(code);
+}
+
 
 /* Helper: parse optional sign, update index and sign; return 0 on failure */
 static int	parse_sign(const char *s, size_t *i, int *sign)
@@ -68,6 +79,11 @@ static void	numeric_error(const char *s)
 	fprintf(stderr, "minishell: exit: %s: numeric argument required\n", s);
 	exit(2);
 }
+
+/*
+** return >= 0 : normal status
+** return <  0 : request shell termination
+*/
 
 int	ft_exit(t_token **args, char **envp)
 {
