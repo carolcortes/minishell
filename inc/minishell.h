@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/16 20:21:24 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 18:02:00 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,6 @@ typedef struct s_token
 }	t_token;
 
 /*============================================================================
-Shell Structure
-==============================================================================
-Represents the shell state, including the environment and the status
-of the last executed command. This struct replaces the use of
-the global variable g_last_status.
-char	**envp;          // ambiente duplicado
-int		last_status;	// substitui g_last_status
-=============================================================================*/
-typedef struct s_shell
-{
-	char	**envp;
-	int		last_status;
-}	t_shell;
-
-/*============================================================================
 Builtin Structure
 ==============================================================================
 Represents a builtin command. It allows the shell to quickly call
@@ -145,6 +130,22 @@ typedef struct s_command
 	struct s_command	*next;
 	struct s_command	*prev;
 }	t_command;
+
+/*============================================================================
+Shell Structure
+==============================================================================
+Represents the shell state, including the environment and the status
+of the last executed command. This struct replaces the use of
+the global variable g_last_status.
+char	**envp;          // ambiente duplicado
+int		last_status;	// substitui g_last_status
+=============================================================================*/
+typedef struct s_shell
+{
+	char		**envp;
+	int			last_status;
+	t_command	*first_pipeline_command;	//first command of pipeline
+}	t_shell;
 
 /*============================================================================
 Execution Data Structure

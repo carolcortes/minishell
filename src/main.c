@@ -6,38 +6,38 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:01 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/16 19:55:18 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 18:00:20 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*static void	process_single_command(t_command *cmd, t_shell *shell,
+/*static void	process_single_command(t_command *pipeline, t_shell *shell,
 	t_token *tokens)
 {
-	if (cmd->argc == 0)
+	if (pipeline->argc == 0)
 	{
-		if (cmd->redir_count > 0)
+		if (pipeline->redir_count > 0)
 		{
-			apply_redirections(cmd, shell, tokens);
+			apply_redirections(pipeline, shell, tokens);
 		}
 		return ;
 	}
-	if (cmd->redir_count > 0)
-		execute_with_redirections(cmd, shell, tokens);
+	if (pipeline->redir_count > 0)
+		execute_with_redirections(pipeline, shell, tokens);
 	else
 	{
-		if (is_builtin(cmd->args))
+		if (is_builtin(pipeline->args))
 		{
 			int	status;
 
-			status = exec_builtin(cmd->args, shell->envp);
+			status = exec_builtin(pipeline->args, shell->envp);
 			if (status < 0)
 			{
 				int	exit_code;
 
 				exit_code = -(status + 1);
-				free_pipeline(cmd);
+				free_pipeline(pipeline);
 				free_tokens(tokens);
 				free_strings(shell->envp);
 				rl_clear_history();
@@ -46,84 +46,85 @@
 			shell->last_status = status;
 		}
 		else
-			shell->last_status = execute_external(cmd->args, shell);
+			shell->last_status = execute_external(pipeline->args, shell);
 	}
 }*/
 
-/*static void	process_single_command(t_command *cmd, t_shell *shell,
+/*static void	process_single_command(t_command *pipeline, t_shell *shell,
 	t_token *tokens)
 {
 	int	status;
 
-	if (cmd->argc == 0)
+	if (pipeline->argc == 0)
 	{
-		if (cmd->redir_count > 0)
-			apply_redirections(cmd, shell, tokens);
+		if (pipeline->redir_count > 0)
+			apply_redirections(pipeline, shell, tokens);
 		return ;
 	}
 	////
-	if (cmd->redir_count > 0)
-		return (execute_with_redirections(cmd, shell, tokens));
-	//if (cmd->redir_count > 0)
+	if (pipeline->redir_count > 0)
+		return (execute_with_redirections(pipeline, shell, tokens));
+	//if (pipeline->redir_count > 0)
 	//{
-	//	execute_with_redirections(cmd, shell, tokens);
+	//	execute_with_redirections(pipeline, shell, tokens);
 	//	return ;
 	//}
-	if (is_builtin(cmd->args))
+	if (is_builtin(pipeline->args))
 	{
-		status = exec_builtin(cmd->args, shell->envp);
-		handle_builtin_exit(cmd, shell, tokens, status);
+		status = exec_builtin(pipeline->args, shell->envp);
+		handle_builtin_exit(pipeline, shell, tokens, status);
 	}
 	else
-		shell->last_status = execute_external(cmd->args, shell);
+		shell->last_status = execute_external(pipeline->args, shell);
 }*/
 
 static void	process_single_command(
-	t_command *cmd,
+	t_command *pipeline,
 	t_shell *shell,
 	t_token *tokens)
 {
 	int	status;
 
-	if (cmd->argc == 0)
+	if (pipeline->argc == 0)
 	{
-		if (cmd->redir_count > 0)
-			apply_redirections(cmd, shell, tokens);
+		if (pipeline->redir_count > 0)
+			apply_redirections(pipeline, shell, tokens);
 		return ;
 	}
-	if (cmd->redir_count > 0)
+	if (pipeline->redir_count > 0)
 	{
-		execute_with_redirections(cmd, shell, tokens);
+		execute_with_redirections(pipeline, shell, tokens);
 		return ;
 	}
-	if (is_builtin(cmd->args))
+	if (is_builtin(pipeline->args))
 	{
-		status = exec_builtin(cmd->args, shell->envp);
-		handle_builtin_exit(cmd, shell, tokens, status);
+		status = exec_builtin(pipeline->args, shell->envp);
+		handle_builtin_exit(pipeline, shell, tokens, status);
 	}
 	else
-		shell->last_status = execute_external(cmd->args, shell);
+		shell->last_status = execute_external(pipeline->args, shell);
 }
 
-static void	handle_pipeline_result(t_command *p, t_shell *s, t_token *t)
+static void	handle_pipeline_result(t_command *pipeline, t_shell *shell,
+	t_token *tokens)
 {
-	if (p == (t_command *)-1)
+	if (pipeline == (t_command *)-1)
 	{
-		s->last_status = 2;
-		free_tokens(t);
+		shell->last_status = 2;
+		free_tokens(tokens);
 		return ;
 	}
-	if (!p)
+	if (!pipeline)
 	{
-		free_tokens(t);
+		free_tokens(tokens);
 		return ;
 	}
-	if (p->next)
-		execute_pipeline(p, s, t);
+	if (pipeline->next)
+		execute_pipeline(pipeline, shell, tokens);
 	else
-		process_single_command(p, s, t);
-	free_pipeline(p);
-	free_tokens(t);
+		process_single_command(pipeline, shell, tokens);
+	free_pipeline(pipeline);
+	free_tokens(tokens);
 }
 
 static void	process_input_line(char *line, t_shell *shell)
@@ -170,6 +171,7 @@ int	main(int argc, char **argv, char **envp)
 
 	shell.envp = dup_env(envp);
 	shell.last_status = 0;
+	shell.first_pipeline_command = NULL;
 	if (argc >= 3 && ft_strcmp(argv[1], "-c") == 0)
 	{
 		setup_signals();

@@ -45,8 +45,8 @@ OBJS			= $(SRCS:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
 #==============================================================================#
 CC 		= cc
 CFLAGS	= -Wall -Wextra -Werror
-CFLAGS	+= -g
 CFLAGS	+= -I$(INC_PATH) -I$(LIBFT_PATH)
+CFLAGS  += -g3 -O0
 LDFLAGS = -lreadline -lhistory -lncurses # readline e suas dependências
 # sudo apt-get install libreadline-dev
 
