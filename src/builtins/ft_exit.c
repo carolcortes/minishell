@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/21 18:39:06 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 23:03:44 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,8 @@
  * @return This function does not return.
  */
 
-void	cleanup_and_exit(t_command *cmd, t_token *tokens,
-		t_shell *shell, int code)
+void	cleanup_and_exit(t_token *tokens, t_shell *shell, int code)
 {
-	(void)cmd;
 	free_pipeline(shell->first_pipeline_command);
 	free_tokens(tokens);
 	free_strings(shell->envp);
@@ -84,7 +82,6 @@ static void	numeric_error(const char *s)
 ** return >= 0 : normal status
 ** return <  0 : request shell termination
 */
-
 int	ft_exit(t_token **args, char **envp)
 {
 	long			val;

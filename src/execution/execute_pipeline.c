@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/21 17:58:28 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 22:28:32 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static void	wait_for_children(pid_t last_pid, t_shell *shell);
  * @param shell Shell state (environment, last_status, and signal handling).
 */
 
-//void	execute_pipeline(t_command *pipeline, t_shell *shell)
 void	execute_pipeline(t_command *pipeline, t_shell *shell, t_token *tokens)
 {
 	t_process_data	data;
@@ -91,8 +90,6 @@ static void	update_file_descriptors(int *input_fd, int pipe_fd[2],
 		*input_fd = STDIN_FILENO;
 }
 
-//static int	process_command(t_command *cmd, t_process_data *data,
-//	t_shell *shell)
 static int	process_command(t_command *cmd, t_process_data *data,
 	t_shell *shell, t_token *tokens)
 {

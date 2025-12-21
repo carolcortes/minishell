@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/21 19:07:53 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 23:04:07 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,9 +222,9 @@ int			ft_pwd(t_token **args, char **envp);
 int			ft_export(t_token **args, char **envp);
 int			ft_unset(t_token **args, char **envp);
 int			ft_env(t_token **args, char **envp);
+
 /* ft_exit.c */
-void	cleanup_and_exit(t_command *cmd, t_token *tokens,
-			t_shell *shell, int code);
+void	cleanup_and_exit(t_token *tokens, t_shell *shell, int code);
 int			ft_exit(t_token **args, char **envp);
 
 /* ft_export_ext.c */
