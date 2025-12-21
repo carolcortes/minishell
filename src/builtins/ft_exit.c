@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/21 18:02:42 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 18:39:06 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,12 @@ void	cleanup_and_exit(t_command *cmd, t_token *tokens,
 		t_shell *shell, int code)
 {
 	(void)cmd;
-	//(void)tokens;
-	//(void)shell;
 	free_pipeline(shell->first_pipeline_command);
-	//free_pipeline(cmd);
 	free_tokens(tokens);
 	free_strings(shell->envp);
 	rl_clear_history();
 	exit(code);
 }
-
 
 /* Helper: parse optional sign, update index and sign; return 0 on failure */
 static int	parse_sign(const char *s, size_t *i, int *sign)

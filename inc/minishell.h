@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/21 18:02:00 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 19:07:53 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,7 +320,6 @@ bool		token_has_variable(const char *str);
 void		expand_single_token(struct s_token *tok, struct s_shell *shell);
 void		remove_empty_expanded_tokens(t_token *tokens);
 char		**split_on_whitespace(const char *s);
-void		insert_split_tokens(t_token *tokens, int index, char **words);
 
 /* expand_ext2.c */
 int			count_words(const char *s);
@@ -328,6 +327,9 @@ char		**fill_split(const char *s, char **res);
 int			skip_heredoc(t_token *tokens, int i);
 void		handle_expansion(t_token *token, t_shell *shell);
 void		split_and_insert(t_token *tokens, int i);
+
+/* expand_ext3.c */
+void		insert_split_tokens(t_token *tokens, int index, char **words);
 
 /* expand.c */
 void		expand_tokens(t_token *tokens, t_shell *shell);

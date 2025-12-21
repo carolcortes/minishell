@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 19:32:18 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/15 23:32:31 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 18:37:12 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	split_and_insert(t_token *tokens, int i)
 {
 	char	**words;
 
-	//if (tokens[i].quoted || !tokens[i].value)
 	if (!tokens[i].value || tokens[i].quoted)
 		return ;
 	if (!ft_strchr(tokens[i].value, ' '))

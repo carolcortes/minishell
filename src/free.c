@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 22:35:42 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/21 17:59:22 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 18:42:43 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,3 @@ void	free_pipeline(t_command *pipeline)
 		current = next;
 	}
 }
-
-/*void free_pipeline(t_command *cmd)
-{
-    t_command *next;
-
-    while (cmd)
-    {
-        next = cmd->next;
-        free(cmd->args);
-        free(cmd->redirs);
-        free(cmd);
-        cmd = next;
-    }
-}*/
-

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 20:30:00 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/15 22:18:28 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 18:41:51 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@ static void	initialize_tokens_array(t_token *tokens, int capacity)
 		tokens[i].allow_expand = false;
 		tokens[i].is_pipe = false;
 		tokens[i].is_redirection = false;
-		// o problema é que aqui não fez diferença no vlg
 		tokens[i].redir_type = 0;
 		tokens[i].quoted = false;
-		//
 		i++;
 	}
 }
@@ -91,9 +89,7 @@ t_token	*shell_split_line_quotes(char *line)
 	tokens[data.count].allow_expand = false;
 	tokens[data.count].is_pipe = false;
 	tokens[data.count].is_redirection = false;
-	///
 	tokens[data.count].redir_type = 0;
 	tokens[data.count].quoted = false;
-	///
 	return (tokens);
 }
