@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 22:29:12 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 12:00:10 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 22:35:30 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,6 @@ int	ft_export(t_token **args, char **envp)
 	}
 	return (status);
 }
-
-/*static void	print_env_export(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		printf("declare -x %s\n", envp[i]);
-		i++;
-	}
-}*/
 
 static void	print_env_export(char **envp)
 {

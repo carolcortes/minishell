@@ -6,11 +6,29 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 17:32:55 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/01 21:27:57 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/16 20:00:28 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	handle_builtin_exit(t_command *cmd, t_shell *shell,
+	t_token *tokens, int status)
+{
+	int	exit_code;
+
+	if (status >= 0)
+	{
+		shell->last_status = status;
+		return ;
+	}
+	exit_code = -(status + 1);
+	free_pipeline(cmd);
+	free_tokens(tokens);
+	free_strings(shell->envp);
+	rl_clear_history();
+	exit(exit_code);
+}
 
 char	*shell_read_line(void)
 {

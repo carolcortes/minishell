@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 20:50:56 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/12/01 20:29:14 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 14:15:44 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,10 @@ static t_command	*remove_empty_commands(t_command *pipeline)
 	return (head);
 }
 
+/*
+**first → aponta sempre para o primeiro comando
+**current → aponta para o último comando criado até agora
+*/
 t_command	*parse_pipeline(t_token *tokens, t_shell *shell)
 {
 	t_command	*first;

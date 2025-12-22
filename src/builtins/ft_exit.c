@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cade-oli <cade-oli@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 22:58:04 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/10/19 11:45:39 by cade-oli         ###   ########.fr       */
+/*   Updated: 2025/12/21 23:03:44 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@
  * @param args Unused command arguments.
  * @return This function does not return.
  */
+
+void	cleanup_and_exit(t_token *tokens, t_shell *shell, int code)
+{
+	free_pipeline(shell->first_pipeline_command);
+	free_tokens(tokens);
+	free_strings(shell->envp);
+	rl_clear_history();
+	exit(code);
+}
 
 /* Helper: parse optional sign, update index and sign; return 0 on failure */
 static int	parse_sign(const char *s, size_t *i, int *sign)
@@ -69,6 +78,10 @@ static void	numeric_error(const char *s)
 	exit(2);
 }
 
+/*
+** return >= 0 : normal status
+** return <  0 : request shell termination
+*/
 int	ft_exit(t_token **args, char **envp)
 {
 	long			val;
@@ -77,7 +90,7 @@ int	ft_exit(t_token **args, char **envp)
 
 	(void)envp;
 	if (!args || !args[0])
-		exit(0);
+		return (-1);
 	arg_index = 1;
 	if (args[1] && ft_strcmp(args[1]->value, "--") == 0)
 		arg_index = 2;
@@ -92,7 +105,7 @@ int	ft_exit(t_token **args, char **envp)
 		if (!is_valid_numeric(args[arg_index]->value, &val))
 			numeric_error(args[arg_index]->value);
 		code = (unsigned char)val;
-		exit(code);
+		return (-(code + 1));
 	}
-	exit(0);
+	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 17:05:32 by cade-oli          #+#    #+#             */
-/*   Updated: 2025/12/07 18:32:39 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 23:04:07 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,6 @@ typedef struct s_token
 }	t_token;
 
 /*============================================================================
-Shell Structure
-==============================================================================
-Represents the shell state, including the environment and the status
-of the last executed command. This struct replaces the use of
-the global variable g_last_status.
-char	**envp;          // ambiente duplicado
-int		last_status;	// substitui g_last_status
-=============================================================================*/
-typedef struct s_shell
-{
-	char	**envp;
-	int		last_status;
-}	t_shell;
-
-/*============================================================================
 Builtin Structure
 ==============================================================================
 Represents a builtin command. It allows the shell to quickly call
@@ -145,6 +130,22 @@ typedef struct s_command
 	struct s_command	*next;
 	struct s_command	*prev;
 }	t_command;
+
+/*============================================================================
+Shell Structure
+==============================================================================
+Represents the shell state, including the environment and the status
+of the last executed command. This struct replaces the use of
+the global variable g_last_status.
+char	**envp;          // ambiente duplicado
+int		last_status;	// substitui g_last_status
+=============================================================================*/
+typedef struct s_shell
+{
+	char		**envp;
+	int			last_status;
+	t_command	*first_pipeline_command;	//first command of pipeline
+}	t_shell;
 
 /*============================================================================
 Execution Data Structure
@@ -221,6 +222,9 @@ int			ft_pwd(t_token **args, char **envp);
 int			ft_export(t_token **args, char **envp);
 int			ft_unset(t_token **args, char **envp);
 int			ft_env(t_token **args, char **envp);
+
+/* ft_exit.c */
+void	cleanup_and_exit(t_token *tokens, t_shell *shell, int code);
 int			ft_exit(t_token **args, char **envp);
 
 /* ft_export_ext.c */
@@ -316,7 +320,6 @@ bool		token_has_variable(const char *str);
 void		expand_single_token(struct s_token *tok, struct s_shell *shell);
 void		remove_empty_expanded_tokens(t_token *tokens);
 char		**split_on_whitespace(const char *s);
-void		insert_split_tokens(t_token *tokens, int index, char **words);
 
 /* expand_ext2.c */
 int			count_words(const char *s);
@@ -324,6 +327,9 @@ char		**fill_split(const char *s, char **res);
 int			skip_heredoc(t_token *tokens, int i);
 void		handle_expansion(t_token *token, t_shell *shell);
 void		split_and_insert(t_token *tokens, int i);
+
+/* expand_ext3.c */
+void		insert_split_tokens(t_token *tokens, int index, char **words);
 
 /* expand.c */
 void		expand_tokens(t_token *tokens, t_shell *shell);
@@ -339,6 +345,8 @@ char		*ft_strjoin_free(char *s1, char *s2, int mode);
 void		free_pipeline(t_command *pipeline);
 
 /* main_ext1.c */
+void		handle_builtin_exit(t_command *cmd, t_shell *shell,
+				t_token *tokens, int status);
 char		*shell_read_line(void);
 void		print_tokens(t_token *tokens);
 void		print_pipeline(t_command *pipeline);

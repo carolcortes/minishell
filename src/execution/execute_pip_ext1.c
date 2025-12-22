@@ -6,7 +6,7 @@
 /*   By: cgross-s <cgross-s@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 10:03:36 by cgross-s          #+#    #+#             */
-/*   Updated: 2025/10/19 23:26:55 by cgross-s         ###   ########.fr       */
+/*   Updated: 2025/12/21 23:03:30 by cgross-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,20 @@ static void	apply_pipe_redirections(t_process_data *data, t_command *cmd);
 void	handle_child_process(t_command *cmd, t_process_data *data,
 	t_shell *shell, t_token *tokens)
 {
+	int	status;
+
 	apply_pipe_redirections(data, cmd);
 	if (!apply_redirections(cmd, shell, tokens))
-		exit(1);
+		cleanup_and_exit(tokens, shell, 1);
 	if (is_builtin(cmd->args))
-		exit(exec_builtin(cmd->args, shell->envp));
-	else
-		exit(execute_external(cmd->args, shell));
+	{
+		status = exec_builtin(cmd->args, shell->envp);
+		if (status < 0)
+			cleanup_and_exit(tokens, shell, -(status + 1));
+		cleanup_and_exit(tokens, shell, status);
+	}
+	status = execute_external(cmd->args, shell);
+	cleanup_and_exit(tokens, shell, status);
 }
 
 static void	apply_pipe_redirections(t_process_data *data, t_command *cmd)
